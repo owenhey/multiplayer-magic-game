@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IIndicator : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+namespace Visuals {
+    public interface IIndicator {
+        void Init();
+        void SetPosition(Vector3 position);
+        void SetSize(float size);
+        void SetValid(bool valid);
+        void SetActive(bool active);
     }
 }

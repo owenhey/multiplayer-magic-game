@@ -64,7 +64,7 @@ namespace Player {
         }
 
         private void HandleCamera() {
-            var cam = _refs.Cam;
+            var cam = _refs.CMCam;
             if (!cam) return;
             
             bool active = _inputData.rightClick;

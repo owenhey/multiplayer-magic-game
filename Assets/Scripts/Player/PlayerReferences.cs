@@ -10,16 +10,19 @@ namespace Player {
     public class PlayerReferences : NetworkBehaviour {
         [field:SerializeField] public PlayerMovement PlayerMovement { get; private set; }
         [field:SerializeField] public PlayerModel PlayerModel { get; private set; }
-        [ReadOnly] public CinemachineFreeLook Cam;
+        [ReadOnly] public CinemachineFreeLook CMCam;
+        [ReadOnly] public Camera Cam;
         
         public override void OnStartClient() {
             base.OnStartClient();
             if (!IsOwner) return;
-            Cam = Camera.main.GetComponent<CinemachineFreeLook>();
-            Cam.enabled = true;
+            Cam = Camera.main.GetComponent<Camera>();
+            
+            CMCam = Camera.main.GetComponent<CinemachineFreeLook>();
+            CMCam.enabled = true;
 
-            Cam.Follow = PlayerModel.PlayerBody;
-            Cam.LookAt = PlayerModel.ModelCamTarget;
+            CMCam.Follow = PlayerModel.PlayerBody;
+            CMCam.LookAt = PlayerModel.ModelCamTarget;
         }
     }
 }
