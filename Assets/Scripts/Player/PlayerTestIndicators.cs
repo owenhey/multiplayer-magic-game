@@ -42,7 +42,17 @@ namespace Player{
 
             if (Input.GetKeyUp(KeyCode.Mouse0)) {
                 IndicatorManager.Instance.GetIndicator(IndicatorTypes.Sphere).SetActive(false);
+                Vector3 target = IndicatorManager.Instance.GetIndicator(IndicatorTypes.Sphere).GetTransform().position;
+                StartCoroutine(Teleport(target));
             }
+        }
+
+        private IEnumerator Teleport(Vector3 target) {
+            _refs.PlayerModel.AnimateTwirl(true);
+            yield return new WaitForSeconds(.35f);
+            _refs.PlayerMovement.Warp(target);
+            yield return new WaitForSeconds(.2f);
+            _refs.PlayerModel.AnimateTwirl(false);
         }
     }
 }

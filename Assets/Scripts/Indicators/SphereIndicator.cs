@@ -15,6 +15,10 @@ namespace Visuals{
             meshRend.material = _copiedMaterial;
         }
 
+        public Transform GetTransform() {
+            return transform;
+        }
+
         public void SetPosition(Vector3 position) {
             transform.position = position;
         }

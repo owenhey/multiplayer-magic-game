@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Managing.Logging;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using FishNet.Transporting;
 using UnityEngine;
-using UnityEngine.Serialization;
+using DG.Tweening;
 
 namespace Player {
     public class PlayerModel : NetworkBehaviour {
@@ -49,9 +50,48 @@ namespace Player {
         private void ServerRpcSetColor(Color c) {
             _modelColor = c;
         }
-
+        
         private void ClientHandleColorChange(Color old, Color newColor, bool server) {
             _playerMat.SetColor("_Color_Primary", newColor);
+        }
+
+        [Client(Logging = LoggingType.Error)]
+        public void AnimateTwirl(bool start) {
+            // Start it locally
+            StartTwirl(start);
+            
+            // Send to server to tell others to do it too
+            ServerAnimateTwirl(start);
+        }
+
+        [ServerRpc]
+        private void ServerAnimateTwirl(bool start) {
+            // Don't need to do this on the server, but why not
+            StartTwirl(start);
+
+            ClientAnimateTwirl(start);
+        }
+
+        [ObserversRpc(ExcludeOwner = true)]
+        private void ClientAnimateTwirl(bool start) {
+            StartTwirl(start);
+        }
+
+        private void StartTwirl(bool start) {
+            _playerMat.DOKill();
+            if (start) {
+                _playerMat.SetVector("_TwirlCenterWorldSpace", PlayerBody.transform.position);
+                _playerMat.SetInt("_Twirl", 1);
+                PlayerBody.DOScale(Vector3.zero, .15f).SetDelay(.15f);
+                _playerMat.DOFloat(20, "_TwirlAmount", .35f);
+            }
+            else {
+                _playerMat.SetVector("_TwirlCenterWorldSpace", PlayerBody.transform.position);
+                PlayerBody.DOScale(Vector3.one, .2f);
+                _playerMat.DOFloat(0, "_TwirlAmount", .3f).OnComplete(() => {
+                    _playerMat.SetInt("_Twirl", 0);
+                });
+            }
         }
     }
 }

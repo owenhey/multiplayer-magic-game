@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using DG.Tweening;
 using FishNet.Object;
 using TMPro;
 using UnityEngine.Serialization;
@@ -63,6 +64,11 @@ namespace Player {
             Move(movementVector);
         }
 
+        public void Warp(Vector3 position) {
+            _cc.enabled = false;
+            _cc.transform.DOMove(position, .15f).OnComplete(()=>_cc.enabled = true);
+        }
+
         private void HandleCamera() {
             var cam = _refs.CMCam;
             if (!cam) return;
@@ -91,6 +97,7 @@ namespace Player {
         }
 
         private void Move(Vector3 movementVector){
+            if (_cc.enabled == false) return;
             _currentVelocity = movementVector;
             _cc.Move(movementVector * Time.deltaTime);
         }

@@ -4597,6 +4597,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 3726133492282219349}
   <PlayerMovement>k__BackingField: {fileID: 6707716053342808154}
   <PlayerModel>k__BackingField: {fileID: 9214829115622678224}
+  CMCam: {fileID: 0}
   Cam: {fileID: 0}
 --- !u!114 &9214829115622678224
 MonoBehaviour:
