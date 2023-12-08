@@ -21,6 +21,8 @@ namespace Player {
 
         private Material _playerMat;
 
+        public System.Action<bool> OnTwirl;
+
 
         private void Awake() {
             _player.OnClientStart += InitOwner;
@@ -92,6 +94,7 @@ namespace Player {
                     _playerMat.SetInt("_Twirl", 0);
                 });
             }
+            OnTwirl?.Invoke(start);
         }
     }
 }

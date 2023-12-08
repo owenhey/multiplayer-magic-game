@@ -40,7 +40,9 @@ namespace Audio {
         // Footsteps are: 0 (sprint), 1 is forward, 2 is forward right, etc
 
         public void OnFootstep(int direction) {
-            if (Vector3.Dot(DIRECTION_VECTORS[direction], _movement.GetCurrentVelLocal().normalized) < .75f) return;
+            var currentMovement = _movement.GetCurrentVelLocal();
+            currentMovement.y = 0;
+            if (currentMovement.sqrMagnitude < .25f) return;
 
             previous = (previous + Random.Range(1, _footsteps.Length)) % _footsteps.Length;
 
