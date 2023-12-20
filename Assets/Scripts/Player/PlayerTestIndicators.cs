@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Visuals;
 
-namespace Player{
+namespace PlayerScripts{
     public class PlayerTestIndicators : MonoBehaviour
     {
         [SerializeField] private Player _player;

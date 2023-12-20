@@ -5,10 +5,8 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using FishNet.Transporting;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = Unity.Mathematics.Random;
 
-namespace Player {
+namespace PlayerScripts {
     public class Player : NetworkBehaviour {
         [SyncVar(Channel = Channel.Unreliable, OnChange = nameof(HandleNameChange))]
         public string PlayerName;

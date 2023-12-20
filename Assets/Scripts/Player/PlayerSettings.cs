@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Player {
+namespace PlayerScripts {
     public class PlayerSettings : MonoBehaviour {
         // Start is called before the first frame update
         void Start() {

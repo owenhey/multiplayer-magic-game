@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Player {
+namespace PlayerScripts {
     public class PlayerAudio : MonoBehaviour {
         [SerializeField] private PlayerReferences _refs;
 

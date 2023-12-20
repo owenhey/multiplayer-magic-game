@@ -6,7 +6,7 @@ using FishNet.Object;
 using FishNet.Connection;
 using UnityEngine.Serialization;
 
-namespace Player {
+namespace PlayerScripts {
     public class PlayerReferences : NetworkBehaviour {
         [field:SerializeField] public PlayerMovement PlayerMovement { get; private set; }
         [field:SerializeField] public PlayerModel PlayerModel { get; private set; }

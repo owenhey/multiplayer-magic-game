@@ -12,8 +12,8 @@ namespace FishNet.Demo.AdditiveScenes
             if (!base.IsServer)
                 return;
 
-            Player player = GetPlayerOwnedObject(other);
-            if (player == null)
+            PlayerFishnet playerFishnet = GetPlayerOwnedObject(other);
+            if (playerFishnet == null)
                 return;
 
             /* Create a lookup handle using this objects scene.
@@ -31,14 +31,14 @@ namespace FishNet.Demo.AdditiveScenes
                 },
                 /* Also move the client object to the new scene. 
                 * This step is not required but may be desirable. */
-                MovedNetworkObjects = new NetworkObject[] { player.NetworkObject },
+                MovedNetworkObjects = new NetworkObject[] { playerFishnet.NetworkObject },
                 //Load scenes as additive.
                 ReplaceScenes = ReplaceOption.None,
                 //Set the preferred active scene so the client changes active scenes.
                 PreferredActiveScene = lookupData,
             };
 
-            base.SceneManager.LoadConnectionScenes(player.Owner, sld);
+            base.SceneManager.LoadConnectionScenes(playerFishnet.Owner, sld);
         }
 
         private void OnTriggerExit(Collider other)
@@ -46,8 +46,8 @@ namespace FishNet.Demo.AdditiveScenes
             if (!base.IsServer)
                 return;
 
-            Player player = GetPlayerOwnedObject(other);
-            if (player == null)
+            PlayerFishnet playerFishnet = GetPlayerOwnedObject(other);
+            if (playerFishnet == null)
                 return;
 
             /* Create a lookup handle using this objects scene.
@@ -70,7 +70,7 @@ namespace FishNet.Demo.AdditiveScenes
                 }
             };
 
-            base.SceneManager.UnloadConnectionScenes(player.Owner, sud);
+            base.SceneManager.UnloadConnectionScenes(playerFishnet.Owner, sud);
         }
 
         /// <summary>
@@ -78,18 +78,18 @@ namespace FishNet.Demo.AdditiveScenes
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        private Player GetPlayerOwnedObject(Collider other)
+        private PlayerFishnet GetPlayerOwnedObject(Collider other)
         {
             /* When an object exits this trigger unload the level for the client. */
-            Player player = other.GetComponent<Player>();
+            PlayerFishnet playerFishnet = other.GetComponent<PlayerFishnet>();
             //Not the player object.
-            if (player == null)
+            if (playerFishnet == null)
                 return null;
             //No owner??
-            if (!player.Owner.IsActive)
+            if (!playerFishnet.Owner.IsActive)
                 return null;
 
-            return player;
+            return playerFishnet;
         }
     }
 

@@ -7,7 +7,7 @@ using FishNet.Transporting;
 using UnityEngine;
 using DG.Tweening;
 
-namespace Player {
+namespace PlayerScripts {
     public class PlayerModel : NetworkBehaviour {
         [SerializeField] private Player _player;
 

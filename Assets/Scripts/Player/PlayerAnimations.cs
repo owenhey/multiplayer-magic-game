@@ -6,7 +6,7 @@ using UnityEngine;
 using FishNet.Connection;
 using UnityEngine.Serialization;
 
-namespace Player {
+namespace PlayerScripts {
     public class PlayerAnimations : MonoBehaviour {
         [Header("References")] 
             [SerializeField] private Animator _animator;

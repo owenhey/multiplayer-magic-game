@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace FishNet.Demo.AdditiveScenes
 {
-    public class Player : NetworkBehaviour
+    public class PlayerFishnet : NetworkBehaviour
     {
 
         [SerializeField]

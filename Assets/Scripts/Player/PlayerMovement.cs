@@ -5,9 +5,8 @@ using System;
 using DG.Tweening;
 using FishNet.Object;
 using TMPro;
-using UnityEngine.Serialization;
 
-namespace Player {
+namespace PlayerScripts {
     public class PlayerMovement : NetworkBehaviour
     {
         [Header("Bools")]
