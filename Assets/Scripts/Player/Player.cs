@@ -10,21 +10,25 @@ using Random = Unity.Mathematics.Random;
 
 namespace Player {
     public class Player : NetworkBehaviour {
-        public Action<bool> OnClientStart;
-        
         [SyncVar(Channel = Channel.Unreliable, OnChange = nameof(HandleNameChange))]
         public string PlayerName;
 
         [SerializeField] 
         private TMPro.TextMeshProUGUI NameDisplay;
 
+        private Action<bool> _onClientStart;
+
+        public void RegisterOnClientStartListener(Action<bool> method) {
+            _onClientStart += method;
+        }
+
         public override void OnStartClient() {
             base.OnStartClient();
-            OnClientStart.Invoke(IsOwner);
+            _onClientStart.Invoke(IsOwner);
         }
 
         private void Awake() {
-            OnClientStart += InitOwner;
+            RegisterOnClientStartListener(InitOwner);
         }
 
         private void InitOwner(bool isLocal) {

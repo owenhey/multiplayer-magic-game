@@ -3503,8 +3503,8 @@ MonoBehaviour:
   _unreliableMTU: 1023
   _ipv4BindAddress: 
   _ipv6BindAddress: 
-  _port: 7770
-  _maximumClients: 1
+  _port: 8000
+  _maximumClients: 8
   _clientAddress: localhost
   _timeout: 15
 --- !u!1 &1769068316
@@ -4389,7 +4389,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 787727947}
+  m_Mesh: {fileID: 385242852}
 --- !u!33 &2133290580
 MeshFilter:
   m_ObjectHideFlags: 10

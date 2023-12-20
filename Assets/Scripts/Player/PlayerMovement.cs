@@ -29,6 +29,11 @@ namespace Player {
         private Vector3 _currentVelocity;
         private InputData _inputData = new();
         private Transform _cam;
+        private Transform _ccTrans;
+
+        private void Awake() {
+            _ccTrans = _cc.transform;
+        }
         
         public override void OnStartClient() {
             base.OnStartClient();
@@ -83,13 +88,21 @@ namespace Player {
 
             Cursor.visible = !active;
         }
+
+        public Vector3 GetCurrentPosition() {
+            return _ccTrans.position;
+        }
         
         public Vector3 GetCurrentVel(){
             return _currentVelocity;
         }
 
         public Vector3 GetCurrentVelLocal(){
-            return transform.InverseTransformDirection(GetCurrentVel());
+            return _ccTrans.InverseTransformDirection(GetCurrentVel());
+        }
+
+        public Vector3 InverseTransformDirection(Vector3 worldDirection) {
+            return _ccTrans.InverseTransformDirection(worldDirection);
         }
 
         public void SetMoveAndJump(bool b){
@@ -103,7 +116,7 @@ namespace Player {
         }
 
         private Vector3 GetTargetLookDirection(){
-            if(_inputData.wasd == Vector2.zero) return transform.forward;
+            if(_inputData.wasd == Vector2.zero) return _ccTrans.forward;
             Vector3 camForward = _cam.forward;
             camForward.y = 0;
 
@@ -113,9 +126,9 @@ namespace Player {
         private void LookAt(Vector3 targetLookDirection){
             // Slowly turn towards the target look direction
             Quaternion targetRot = Quaternion.LookRotation(targetLookDirection);
-            Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRot, _rotateSpeed * Time.deltaTime);
+            Quaternion newRotation = Quaternion.RotateTowards(_ccTrans.rotation, targetRot, _rotateSpeed * Time.deltaTime);
             
-            transform.rotation = newRotation;
+            _ccTrans.rotation = newRotation;
         }
 
         // Reads WASD input and moves player accoringly
@@ -128,7 +141,7 @@ namespace Player {
                 if(_inputData.wasd.y > 0 && _inputData.wasd != Vector2.zero){
                     _inputData.wasd = Vector2.up;
                     Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
-                    movementVector += transform.TransformDirection(wasdInputVector3) * _sprintSpeed;
+                    movementVector += _ccTrans.TransformDirection(wasdInputVector3) * _sprintSpeed;
                     _isSprinting = true;
                 }
             }
@@ -137,17 +150,12 @@ namespace Player {
                 dotValue = 1 - (dotValue + 1) * .5f;
                 float finalSpeed = _moveSpeed * _forwardMovementSpeedFactor.Evaluate(dotValue);
                 Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
-                movementVector += transform.TransformDirection(wasdInputVector3) * finalSpeed;
+                movementVector += _ccTrans.TransformDirection(wasdInputVector3) * finalSpeed;
             }
         }
 
         // Handle gravity
         private void Gravity(ref Vector3 movementVector){
-            // movementVector += Physics.gravity * Time.deltaTime;
-            // isGrounded = cc.isGrounded;
-            // if (cc.isGrounded) {
-            //     movementVector.y = -1;
-            // }
             movementVector.y = -10;
         }
 

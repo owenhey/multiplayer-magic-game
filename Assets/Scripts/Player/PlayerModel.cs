@@ -25,7 +25,7 @@ namespace Player {
 
 
         private void Awake() {
-            _player.OnClientStart += InitOwner;
+            _player.RegisterOnClientStartListener(InitOwner);
             InitMaterial();
         }
 

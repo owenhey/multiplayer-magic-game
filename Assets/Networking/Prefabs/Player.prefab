@@ -4390,9 +4390,9 @@ GameObject:
   - component: {fileID: 573415280932483984}
   - component: {fileID: 3347838807021769093}
   - component: {fileID: 6707716053342808154}
+  - component: {fileID: 459770775653816622}
   - component: {fileID: 6011829499077681659}
   - component: {fileID: 6749459404671944547}
-  - component: {fileID: 8812393097707982287}
   - component: {fileID: 6327418418748614120}
   m_Layer: 3
   m_Name: Player Body
@@ -4540,6 +4540,24 @@ MonoBehaviour:
   _rotateSpeed: 360
   _cc: {fileID: 3347838807021769093}
   _refs: {fileID: 1056872705930149825}
+--- !u!114 &459770775653816622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6947449413219042651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fdb97198f129f64c817e9eb6fed898c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 573415280932483984}
+  _player: {fileID: 8286632864543236906}
+  _playerMovement: {fileID: 6707716053342808154}
+  ManuallyUpdate: 0
+  _automaticUpdateTickRate: 0
+  _smoothingTime: 0.15
 --- !u!114 &6011829499077681659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4608,27 +4626,6 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
---- !u!114 &8812393097707982287
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6947449413219042651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8cac635f24954048aad3a6ff9110beb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 5
-  _addedNetworkObject: {fileID: 3726133492282219349}
-  _networkObjectCache: {fileID: 3726133492282219349}
-  IgnoredParameters: []
-  _animator: {fileID: 573415280932483984}
-  _smoothFloats: 1
-  _interpolation: 2
-  _clientAuthoritative: 1
-  _sendToOwner: 0
 --- !u!114 &6327418418748614120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4686,7 +4683,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5274439918284474655}
   - component: {fileID: 8286632864543236906}
-  - component: {fileID: 5464744985475029726}
   - component: {fileID: 189258691414205692}
   - component: {fileID: 1056872705930149825}
   - component: {fileID: 9214829115622678224}
@@ -4736,22 +4732,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 3726133492282219349}
   PlayerName: 
   NameDisplay: {fileID: 6640389976638504512}
---- !u!114 &5464744985475029726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6987246984701191043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fdb97198f129f64c817e9eb6fed898c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 573415280932483984}
-  _player: {fileID: 8286632864543236906}
-  _playerMovement: {fileID: 6707716053342808154}
-  _smoothingTime: 0.15
 --- !u!114 &189258691414205692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4825,7 +4805,6 @@ MonoBehaviour:
   - {fileID: 9214829115622678224}
   - {fileID: 6707716053342808154}
   - {fileID: 6749459404671944547}
-  - {fileID: 8812393097707982287}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:

@@ -11,7 +11,7 @@ namespace Player{
 
         private bool _isLocal;
         private void Awake() {
-            _player.OnClientStart += InitOwner;
+            _player.RegisterOnClientStartListener(InitOwner);
         }
 
         private void InitOwner(bool isLocal) {
