@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace PlayerScripts {
     public class Player : NetworkBehaviour {
+        public PlayerReferences PlayerReferences;
+        
         [SyncVar(Channel = Channel.Unreliable, OnChange = nameof(HandleNameChange))]
         public string PlayerName;
 

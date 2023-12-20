@@ -16,12 +16,13 @@ namespace Interactable{
         public string DisplayText => _displayText;
         
         public void ClientInteract(Player player) {
-            Debug.Log("Interacted with: " + _displayText);
+            Debug.Log("Client calls: " + _displayText);
+            ServerRpcHandleClientInteraction();
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void ServerHandleClientInteraction(NetworkConnection interactingPlayer) {
-            
+        private void ServerRpcHandleClientInteraction(NetworkConnection interactingPlayer = null) {
+            Debug.Log("Server calls: " + _displayText);
         }
     }
 }

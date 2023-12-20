@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 
 namespace PlayerScripts {
     public class PlayerReferences : NetworkBehaviour {
+        [field:SerializeField] public NetworkObject NetworkObj { get; private set; }
         [field:SerializeField] public PlayerMovement PlayerMovement { get; private set; }
         [field:SerializeField] public PlayerModel PlayerModel { get; private set; }
         [ReadOnly] public CinemachineFreeLook CMCam;
