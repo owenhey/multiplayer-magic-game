@@ -15,8 +15,6 @@ namespace Player {
 
         [Header("Settings")] 
             public bool ManuallyUpdate;
-            [Tooltip("If watching for movement, how often should this update the animations")]
-            [Range(0, .5f)] [SerializeField] private float _automaticUpdateTickRate = .05f;
     
         [Header("Stats")] 
             [SerializeField] private float _smoothingTime = .15f;
@@ -24,10 +22,7 @@ namespace Player {
         private Vector3 _acceleration; // Acceleration of the player
         private Vector3 _previousPosition;
         private Vector3 _current;
-        private float _tickTimer = 0;
-        private float _previousTime;
         
-        // Animator values
         private static readonly int _velX = Animator.StringToHash("VelX");
         private static readonly int _velY = Animator.StringToHash("VelY");
         private static readonly int _isMoving = Animator.StringToHash("isMoving");
@@ -39,7 +34,6 @@ namespace Player {
         private void Start() {
             _player.RegisterOnClientStartListener(OnClientStart);
             _previousPosition = _playerMovement.GetCurrentPosition();
-            _previousTime = Time.time;
         }
 
         void LateUpdate() {
@@ -54,14 +48,9 @@ namespace Player {
 
         private void CalculateVelocityAndAnimate() {
             // Figure out the player's velocity with respect to forward direction
-            _tickTimer += Time.deltaTime;
-            if (_tickTimer < _automaticUpdateTickRate) return;
-            _tickTimer = 0;
-
             Vector3 currentPosition = _playerMovement.GetCurrentPosition();
-            Vector3 velocity = (currentPosition - _previousPosition) / (Time.time - _previousTime);
+            Vector3 velocity = (currentPosition - _previousPosition) / (Time.deltaTime);
             velocity = _playerMovement.InverseTransformDirection(velocity);
-            _previousTime = Time.time;
             _previousPosition = currentPosition;
 
             HandleAnimations(velocity);
