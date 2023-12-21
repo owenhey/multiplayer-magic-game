@@ -7,7 +7,7 @@ using FishNet.Object;
 using TMPro;
 
 namespace PlayerScripts {
-    public class PlayerMovement : NetworkBehaviour
+    public class PlayerMovement : NetworkedPlayerScript
     {
         [Header("Bools")]
             [SerializeField] private bool _canMove = true;
@@ -30,13 +30,14 @@ namespace PlayerScripts {
         private Transform _cam;
         private Transform _ccTrans;
 
-        private void Awake() {
+        protected override void Awake() {
+            base.Awake();
             _ccTrans = _cc.transform;
         }
-        
-        public override void OnStartClient() {
+
+        protected override void OnClientStart(bool isOwner) {
             base.OnStartClient();
-            if (IsOwner) {
+            if (isOwner) {
                 _cam = Camera.main.transform;
                 _cam.transform.parent = transform.parent;
             }

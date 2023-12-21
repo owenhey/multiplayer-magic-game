@@ -7,16 +7,16 @@ using FishNet.Connection;
 using UnityEngine.Serialization;
 
 namespace PlayerScripts {
-    public class PlayerReferences : NetworkBehaviour {
+    public class PlayerReferences : LocalPlayerScript {
         [field:SerializeField] public NetworkObject NetworkObj { get; private set; }
         [field:SerializeField] public PlayerMovement PlayerMovement { get; private set; }
         [field:SerializeField] public PlayerModel PlayerModel { get; private set; }
         [ReadOnly] public CinemachineFreeLook CMCam;
         [ReadOnly] public Camera Cam;
-        
-        public override void OnStartClient() {
-            base.OnStartClient();
-            if (!IsOwner) return;
+
+        protected override void OnClientStart(bool isOwner) {
+            base.OnClientStart(isOwner);
+            if (!isOwner) return;
             Cam = Camera.main.GetComponent<Camera>();
             
             CMCam = Camera.main.GetComponent<CinemachineFreeLook>();

@@ -13,5 +13,21 @@ namespace Helpers {
             value = Mathf.Max(baseLow, Mathf.Min(baseHigh, value));
             return endLow + (value - baseLow) * (endHigh - endLow) / (baseHigh - baseLow);
         }
+        
+        /// <summary>
+        /// Also searches the input GameObject for this component
+        /// </summary>
+        public static T FindComponentInParent<T>(this GameObject gameObject) where T : Component{
+            Transform currentTransform = gameObject.transform;
+            while (currentTransform != null){
+                T component = currentTransform.GetComponent<T>();
+                if (component != null)
+                    return component;
+
+                currentTransform = currentTransform.parent;
+            }
+
+            return null;
+        }
     }
 }

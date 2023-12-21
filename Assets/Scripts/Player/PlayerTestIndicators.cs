@@ -4,22 +4,18 @@ using UnityEngine;
 using Visuals;
 
 namespace PlayerScripts{
-    public class PlayerTestIndicators : MonoBehaviour
+    public class PlayerTestIndicators : LocalPlayerScript
     {
-        [SerializeField] private Player _player;
         [SerializeField] private PlayerReferences _refs;
 
         private bool _isLocal;
-        private void Awake() {
-            _player.RegisterOnClientStartListener(InitOwner);
-        }
 
-        private void InitOwner(bool isLocal) {
-            if (!isLocal) {
+        protected override void OnClientStart(bool isOwner) {
+            if (!isOwner) {
                 this.enabled = false;
             }
 
-            _isLocal = isLocal;
+            _isLocal = isOwner;
         }
 
         private void Update() {

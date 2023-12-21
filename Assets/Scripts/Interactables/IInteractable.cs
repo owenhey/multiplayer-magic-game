@@ -8,6 +8,8 @@ namespace Interactable{
         int Order { get; }
         Sprite Icon { get; }
         string DisplayText { get; }
+        
+        float InteractDistance { get; }
 
         /// <summary>
         /// Called from and only on the interacting client to initiate the interaction

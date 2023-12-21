@@ -8,9 +8,7 @@ using UnityEngine;
 using DG.Tweening;
 
 namespace PlayerScripts {
-    public class PlayerModel : NetworkBehaviour {
-        [SerializeField] private Player _player;
-
+    public class PlayerModel : NetworkedPlayerScript {
         [SerializeField] private Material _playerMaterialBase;
         
         [field:SerializeField] public Transform PlayerBody {get; private set; }
@@ -24,8 +22,8 @@ namespace PlayerScripts {
         public System.Action<bool> OnTwirl;
 
 
-        private void Awake() {
-            _player.RegisterOnClientStartListener(InitOwner);
+        protected override void Awake() {
+            base.Awake();
             InitMaterial();
         }
 
@@ -37,8 +35,8 @@ namespace PlayerScripts {
             }
         }
 
-        private void InitOwner(bool isLocal) {
-            if (!isLocal) return;
+        protected override void OnClientStart(bool isOwner) {
+            if (!isOwner) return;
             
             SelectRandomColor();
         }
@@ -55,6 +53,7 @@ namespace PlayerScripts {
         
         private void ClientHandleColorChange(Color old, Color newColor, bool server) {
             _playerMat.SetColor("_Color_Primary", newColor);
+            _playerMat.SetColor("_Color_Metal_Dark", newColor);
         }
 
         [Client(Logging = LoggingType.Error)]

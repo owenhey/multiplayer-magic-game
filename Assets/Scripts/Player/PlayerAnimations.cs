@@ -7,10 +7,9 @@ using FishNet.Connection;
 using UnityEngine.Serialization;
 
 namespace PlayerScripts {
-    public class PlayerAnimations : MonoBehaviour {
+    public class PlayerAnimations : LocalPlayerScript {
         [Header("References")] 
             [SerializeField] private Animator _animator;
-            [SerializeField] private Player _player;
             [SerializeField] private PlayerMovement _playerMovement;
 
         [Header("Settings")] 
@@ -64,8 +63,8 @@ namespace PlayerScripts {
             _animator.SetBool(_isMoving, playerSpeed.sqrMagnitude > 0);
             _animator.SetBool(_isSprinting, _playerMovement._isSprinting);
         }
-        
-        private void OnClientStart(bool isOwner) {
+
+        protected override void OnClientStart(bool isOwner) {
             ManuallyUpdate = isOwner; // Only manually update when you are the owner
         }
     }

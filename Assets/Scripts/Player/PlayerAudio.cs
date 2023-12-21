@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace PlayerScripts {
-    public class PlayerAudio : MonoBehaviour {
+    public class PlayerAudio : LocalPlayerScript {
         [SerializeField] private PlayerReferences _refs;
 
         [Header("Sounds")] 
