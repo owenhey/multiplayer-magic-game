@@ -7,7 +7,7 @@ namespace Spells {
     /// components as it sees fit. Some examples, speed up spell, teleportation, healing, etc.
     /// </summary>
     public abstract class PlayerOverrideSpellEffect : SpellEffectBase {
-        private Player _targetPlayer;
+        protected Player _targetPlayer;
         protected abstract void OnSpellStart();
 
         protected abstract void OnSpellTick(float percent);

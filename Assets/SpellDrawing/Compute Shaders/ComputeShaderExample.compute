@@ -1,0 +1,89 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+#pragma kernel Blur
+#pragma kernel Clear
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Result;
+float4 Color;
+float2 Resolution;
+float Size;
+float2 Point;
+int BlurStepSize;
+int BlurSteps;
+int NumBlurs;
+float FadeSpeed;
+float BlurResistance;
+
+float Distance(float2 a, float2 b){
+    float x = a.x - b.x;
+    float y = a.y - b.y;
+    return sqrt(x * x + y * y);
+}
+
+float Sum(float4 value){
+    return value.x + value.y + value.z + value.a;
+}
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: insert actual code here!
+    float4 color = Result[id.xy];
+    float2 center = Resolution * .5;
+    if(Distance(float2(id.x, id.y), Point) < Size){
+        color = Color;
+    }
+
+    // color = Distance(float2(id.x, id.y), float2(0,0)) / Size;
+
+    Result[id.xy] = color;
+}
+
+float4 SamplePixel(int x, int y){
+    if(x < 0){
+        x = 0;
+    }
+    if(x >= Resolution.x){
+        x = Resolution.x - 1;
+    }
+
+    if(y < 0){
+        y = 0;
+    }
+    if(y >= Resolution.y){
+        y = Resolution.y - 1;
+    }
+
+    return Result[float2(x,y)];
+}
+
+[numthreads(8,8,1)]
+void Blur(uint3 id : SV_DispatchThreadID){
+    for(int x = 0; x < NumBlurs; x++){
+        float4 start = Result[id.xy];
+        float4 total = float4(0,0,0,0);
+        float count = 0;
+        for(int i = -BlurSteps; i < BlurSteps + 1; i++){
+            for(int j = -BlurSteps; j < BlurSteps + 1; j++){
+                if(i == 0 && j == 0){
+                    total += BlurResistance * SamplePixel(id.x + i * BlurStepSize, id.y + j * BlurStepSize);
+                    count += BlurResistance;
+                }
+                else{
+                    total += SamplePixel(id.x + i * BlurStepSize, id.y + j * BlurStepSize);
+                    count++;
+                }
+            }
+        }
+        total /= count;
+        // Result[id.xy] = Sum(start) > Sum(total) ? start : total;
+        Result[id.xy] = total;
+    }
+}
+
+[numthreads(8,8,1)]
+void Clear(uint3 id : SV_DispatchThreadID){
+    Result[id.xy] = Color;
+}

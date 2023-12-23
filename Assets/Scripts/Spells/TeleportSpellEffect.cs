@@ -8,8 +8,6 @@ namespace Spells {
     public class TeleportSpellEffect : PlayerOverrideSpellEffect {
         private bool _warped = false;
         protected override void OnSpellStart() {
-            
-            throw new System.NotImplementedException();
         }
 
         protected override void OnSpellTick(float percent) {
