@@ -32,7 +32,6 @@ namespace PlayerScripts {
         }
 
         private void Update() {
-            Debug.Log("current interactable: " + (CurrentInteractable == null));
             if (Time.time > _lastRaycastTime + _raycastTickDelay) {
                 _lastRaycastTime = Time.time;
                 RaycastForInteractables();

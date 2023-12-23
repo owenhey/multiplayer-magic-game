@@ -10,6 +10,8 @@ namespace UI {
 
         [Header("Settings")] 
         [SerializeField] private float _horizontalOffset;
+        
+        private IInteractable _current;
 
         private void OnEnable() {
             _playerInteract.OnInteractableChange += UpdateInteractable;
@@ -21,21 +23,23 @@ namespace UI {
         }
 
         private void Update() {
+            if (_indicator.Showing == false) return; // No need to do this unless there is something to show
+            
             // Calculates where on the canvas the mouse is, puts it to the right a bit
             RectTransform canvasRect = _playerCanvas.GetComponent<RectTransform>();
             // Convert the mouse position to a point in the canvas
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, null, out Vector2 localPoint)){
-                _indicator.SetPosition(localPoint + Vector2.right * _horizontalOffset); // A tad to the right
+                _indicator.SetPosition(localPoint); // A tad to the right
             }
         }
 
         private void UpdateInteractable() {
-            IInteractable current = _playerInteract.CurrentInteractable;
-            if (current == null) {
+            _current = _playerInteract.CurrentInteractable;
+            if (_current == null) {
                 _indicator.Hide();
                 return;
             }
-            _indicator.Show(current);
+            _indicator.Show(_current);
         }
     }
 }
