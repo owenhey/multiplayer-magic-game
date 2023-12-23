@@ -11,6 +11,7 @@ namespace PlayerScripts {
         [field:SerializeField] public NetworkObject NetworkObj { get; private set; }
         [field:SerializeField] public PlayerMovement PlayerMovement { get; private set; }
         [field:SerializeField] public PlayerModel PlayerModel { get; private set; }
+        [field:SerializeField] public PlayerTimers PlayerTimers { get; private set; }
         [ReadOnly] public CinemachineFreeLook CMCam;
         [ReadOnly] public Camera Cam;
 

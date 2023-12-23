@@ -36,6 +36,11 @@ namespace PlayerScripts {
                 _lastRaycastTime = Time.time;
                 RaycastForInteractables();
             }
+            
+            // See if the player is pressing something
+            if (CurrentInteractable != null && Input.GetKeyDown(KeyCode.Mouse0)) {
+                CurrentInteractable.ClientInteract(_player);
+            }
         }
         
         private void RaycastForInteractables() {
@@ -70,7 +75,6 @@ namespace PlayerScripts {
                     OnInteractableChange?.Invoke();
                 }
             }
-            
         }
 
         protected override void OnClientStart(bool isOwner) {
