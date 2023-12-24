@@ -14,11 +14,11 @@ namespace Spells {
 
         protected abstract void OnSpellEnd();
 
-        public void InitSpell(Player targetPlayer) {
+        public void BeginSpell(Player targetPlayer, float duration) {
             _targetPlayer = targetPlayer;
             OnSpellStart();
             // Let's assume for now that this is the local player (owner)
-            targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer(1, OnSpellEnd, OnSpellTick);
+            targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer(duration, OnSpellEnd, OnSpellTick);
         }
     }
 }

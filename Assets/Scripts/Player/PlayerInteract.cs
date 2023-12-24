@@ -42,6 +42,11 @@ namespace PlayerScripts {
                 CurrentInteractable.ClientInteract(_player);
             }
         }
+
+        private void OnDisable() {
+            CurrentInteractable = null;
+            OnInteractableChange?.Invoke();
+        }
         
         private void RaycastForInteractables() {
             if (_cam == null) return;
