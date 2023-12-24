@@ -7,6 +7,7 @@ namespace PlayerScripts {
     public class PlayerSpellIndicatorHandler : LocalPlayerScript {
         [SerializeField] private LayerMask _areaRaycastLayerMask;
         
+        private PlayerReferences _playerReferences;
         private IIndicator _currentIndicator;
         private SpellIndicatorData _currentIndicatorData;
         private Action<SpellTargetData> _callback;
@@ -15,6 +16,7 @@ namespace PlayerScripts {
         protected override void Awake() {
             base.Awake();
             enabled = false;
+            _playerReferences = _player.PlayerReferences;
         }
         
         public void Setup(SpellIndicatorData indicator, Action<SpellTargetData> spellTargetDataHandler) {
@@ -52,7 +54,7 @@ namespace PlayerScripts {
             {
                 _currentIndicator.SetActive(true);
 
-                Vector3 playerPos = _player.PlayerReferences.PlayerMovement.GetCurrentPosition();
+                Vector3 playerPos = _playerReferences.GetPlayerPosition();
                 float distanceFromPlayer = (playerPos - hit.point).magnitude;
 
                 Vector3 point = hit.point;

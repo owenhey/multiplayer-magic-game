@@ -9,13 +9,19 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 namespace PlayerScripts {
     public class PlayerSpells : LocalPlayerScript {
-        [SerializeField] private PlayerReferences _references;
         [SerializeField] private PlayerSpellIndicatorHandler _indicatorHandler;
         
         [SerializeField] private List<SpellDefinition> _spells;
+
+        private PlayerStateManager _stateManager;
         
         // Mid-cast data
         private SpellDefinition _chosenSpell = null;
+
+        protected override void Awake() {
+            base.Awake();
+            _stateManager = _player.PlayerReferences.PlayerStateManager;
+        }
         
         // To be removed, eventually
         private void Update() {
@@ -32,8 +38,7 @@ namespace PlayerScripts {
 
         public void AttemptCast(SpellDefinition spellChosen) {
             // Disable appropriate components so nothing else can happen
-            enabled = false;
-            _references.PlayerInteract.enabled = false;
+            _stateManager.AddState(PlayerState.CastingSpell);
             
             // Handle targeting and recieve spell cast data
             _chosenSpell = spellChosen;
@@ -44,7 +49,8 @@ namespace PlayerScripts {
             // Handle if the player cancelled it 
             if (spellTargetData.Cancelled == true) {
                 enabled = true;
-                _references.PlayerInteract.enabled = true;
+                _stateManager.RemoveState(PlayerState.CastingSpell);
+                return;
             }
             
             // Create new effect, and send it spell cast data
@@ -63,7 +69,7 @@ namespace PlayerScripts {
                     break;
             }
 
-            enabled = true;
+            _stateManager.RemoveState(PlayerState.CastingSpell);
         }
 
         protected override void OnClientStart(bool isOwner) {

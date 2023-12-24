@@ -5,18 +5,23 @@ using UnityEngine;
 
 namespace PlayerScripts {
     public class PlayerAudio : LocalPlayerScript {
-        [SerializeField] private PlayerReferences _refs;
-
         [Header("Sounds")] 
         [SerializeField] private AudioSource _apparateStart;
         [SerializeField] private AudioSource _apparateEnd;
 
+        private PlayerModel _playerModel;
+
+        protected override void Awake() {
+            base.Awake();
+            _playerModel = _player.PlayerReferences.PlayerModel;
+        }
+
         private void OnEnable() {
-            _refs.PlayerModel.OnTwirl += PlayApparateSound;
+            _playerModel.OnTwirl += PlayApparateSound;
         }
 
         private void OnDisable() {
-            _refs.PlayerModel.OnTwirl += PlayApparateSound;
+            _playerModel.OnTwirl -= PlayApparateSound;
         }
 
         private void PlayApparateSound(bool start) {

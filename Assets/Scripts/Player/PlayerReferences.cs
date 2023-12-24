@@ -9,11 +9,11 @@ using UnityEngine.Serialization;
 namespace PlayerScripts {
     public class PlayerReferences : LocalPlayerScript {
         [field:SerializeField] public NetworkObject NetworkObj { get; private set; }
-        [field:SerializeField] public PlayerMovement PlayerMovement { get; private set; }
-        [field:SerializeField] public PlayerSpells PlayerSpells { get; private set; }
         [field:SerializeField] public PlayerModel PlayerModel { get; private set; }
+        [field:SerializeField] public PlayerStateManager PlayerStateManager { get; private set; }
         [field:SerializeField] public PlayerTimers PlayerTimers { get; private set; }
-        [field:SerializeField] public PlayerInteract PlayerInteract { get; private set; }
+        [field:SerializeField] public PlayerMovement PlayerMovement { get; private set; }
+        
         [ReadOnly] public CinemachineFreeLook CMCam;
         [ReadOnly] public Camera Cam;
 
@@ -27,6 +27,10 @@ namespace PlayerScripts {
 
             CMCam.Follow = PlayerModel.PlayerBody;
             CMCam.LookAt = PlayerModel.ModelCamTarget;
+        }
+
+        public Vector3 GetPlayerPosition() {
+            return PlayerMovement.GetCurrentPosition();
         }
     }
 }

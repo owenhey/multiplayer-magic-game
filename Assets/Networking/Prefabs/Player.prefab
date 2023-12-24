@@ -5263,7 +5263,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
-  _refs: {fileID: 1056872705930149825}
   _apparateStart: {fileID: 2776761921756548973}
   _apparateEnd: {fileID: 3434028754677280254}
 --- !u!1 &6960753304027691506
@@ -5316,6 +5315,7 @@ GameObject:
   - component: {fileID: -8941229978140903528}
   - component: {fileID: -5970099899597951696}
   - component: {fileID: 2092327897885649139}
+  - component: {fileID: 8975781504269218941}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -5387,11 +5387,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
   <NetworkObj>k__BackingField: {fileID: 3726133492282219349}
-  <PlayerMovement>k__BackingField: {fileID: 6707716053342808154}
-  <PlayerSpells>k__BackingField: {fileID: -5970099899597951696}
   <PlayerModel>k__BackingField: {fileID: 9214829115622678224}
+  <PlayerStateManager>k__BackingField: {fileID: 8975781504269218941}
   <PlayerTimers>k__BackingField: {fileID: 2092327897885649139}
-  <PlayerInteract>k__BackingField: {fileID: 2971408110657330839}
+  <PlayerMovement>k__BackingField: {fileID: 6707716053342808154}
   CMCam: {fileID: 0}
   Cam: {fileID: 0}
 --- !u!114 &9214829115622678224
@@ -5499,7 +5498,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
-  _references: {fileID: 1056872705930149825}
   _indicatorHandler: {fileID: -8941229978140903528}
   _spells:
   - {fileID: 11400000, guid: 061618cc6aa12df41824b159e1093763, type: 2}
@@ -5518,6 +5516,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
   _activeTimers: []
+--- !u!114 &8975781504269218941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6987246984701191043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc30b3b6fbfc84ad8b81847254dc2a96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 8286632864543236906}
+  PlayerMovement: {fileID: 6707716053342808154}
+  PlayerSpells: {fileID: -5970099899597951696}
+  PlayerModel: {fileID: 9214829115622678224}
+  PlayerInteract: {fileID: 2971408110657330839}
+  ShowStateCounts: 1
 --- !u!1 &7001116585677132798
 GameObject:
   m_ObjectHideFlags: 0

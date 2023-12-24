@@ -61,7 +61,7 @@ namespace PlayerScripts {
 
                 if (interactable != null) {
                     float distanceToInteractable =
-                        Vector3.Distance(_playerReferences.PlayerMovement.GetCurrentPosition(), hit.point);
+                        Vector3.Distance(_playerReferences.GetPlayerPosition(), hit.point);
                     if (distanceToInteractable <= interactable.InteractDistance) {
                         CurrentInteractable = interactable;
                         OnInteractableChange?.Invoke();
