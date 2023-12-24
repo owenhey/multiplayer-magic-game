@@ -5,8 +5,13 @@ using Visuals;
 
 namespace PlayerScripts {
     public class PlayerSpellIndicatorHandler : LocalPlayerScript {
+        [SerializeField] private LayerMask _areaRaycastLayerMask;
+        
         private IIndicator _currentIndicator;
+        private SpellIndicatorData _currentIndicatorData;
         private Action<SpellTargetData> _callback;
+
+        private Action _updateLoop;
         protected override void Awake() {
             base.Awake();
             enabled = false;
@@ -14,18 +19,40 @@ namespace PlayerScripts {
         
         public void Setup(SpellIndicatorData indicator, Action<SpellTargetData> spellTargetDataHandler) {
             enabled = true;
+            _currentIndicatorData = indicator;
             _currentIndicator = IndicatorManager.Instance.GetIndicator(indicator.Indicator);
             _callback = spellTargetDataHandler;
+
+            switch (indicator.Indicator) {
+                case IndicatorTypes.Sphere:
+                    _updateLoop = AreaIndicatorUpdate;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void Update() {
+            if (_updateLoop != null) _updateLoop();
+        }
+
+        private void AreaIndicatorUpdate() {
             Vector3 mousePosition = Input.mousePosition;
             Ray ray = _player.PlayerReferences.Cam.ScreenPointToRay(mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (Physics.Raycast(ray, out RaycastHit hit, 100, _areaRaycastLayerMask))
             {
                 _currentIndicator.SetActive(true);
-                _currentIndicator.SetPosition(hit.point);
-                _currentIndicator.SetValid(hit.collider.gameObject.layer == 0);
+
+                Vector3 playerPos = _player.PlayerReferences.PlayerMovement.GetCurrentPosition();
+                float distanceFromPlayer = (playerPos - hit.point).magnitude;
+
+                Vector3 point = hit.point;
+                if (distanceFromPlayer > _currentIndicatorData.MaximumRange) {
+                    // Clamp the position vector
+                    Vector3 fromPlayer = point - playerPos;
+                    point = playerPos + Vector3.ClampMagnitude(fromPlayer, _currentIndicatorData.MaximumRange);
+                }
+                _currentIndicator.SetPosition(point);
             }
             else {
                 _currentIndicator.SetActive(false);

@@ -5387,6 +5387,7 @@ MonoBehaviour:
   _player: {fileID: 8286632864543236906}
   <NetworkObj>k__BackingField: {fileID: 3726133492282219349}
   <PlayerMovement>k__BackingField: {fileID: 6707716053342808154}
+  <PlayerSpells>k__BackingField: {fileID: -5970099899597951696}
   <PlayerModel>k__BackingField: {fileID: 9214829115622678224}
   <PlayerTimers>k__BackingField: {fileID: 2092327897885649139}
   <PlayerInteract>k__BackingField: {fileID: 2971408110657330839}
@@ -5481,6 +5482,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
+  _areaRaycastLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &-5970099899597951696
 MonoBehaviour:
   m_ObjectHideFlags: 0

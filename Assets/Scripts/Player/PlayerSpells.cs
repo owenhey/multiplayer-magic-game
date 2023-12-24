@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using Helpers;
 using UnityEngine;
 using Spells;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 namespace PlayerScripts {
     public class PlayerSpells : LocalPlayerScript {
@@ -46,7 +47,6 @@ namespace PlayerScripts {
                 _references.PlayerInteract.enabled = true;
             }
             
-            
             // Create new effect, and send it spell cast data
             var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.EffectId);
             var spellCastData = new SpellCastData {
@@ -62,6 +62,8 @@ namespace PlayerScripts {
                     playerOverride.BeginSpell(spellCastData.TargetData.TargetPlayer, spellCastData.Duration);
                     break;
             }
+
+            enabled = true;
         }
 
         protected override void OnClientStart(bool isOwner) {
