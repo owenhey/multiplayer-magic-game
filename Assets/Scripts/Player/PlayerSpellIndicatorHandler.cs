@@ -7,7 +7,8 @@ namespace PlayerScripts {
     public class PlayerSpellIndicatorHandler : LocalPlayerScript {
         private IIndicator _currentIndicator;
         private Action<SpellTargetData> _callback;
-        private void Awake() {
+        protected override void Awake() {
+            base.Awake();
             enabled = false;
         }
         
@@ -35,7 +36,7 @@ namespace PlayerScripts {
                 var targetData = new SpellTargetData {
                     Cancelled = false,
                     TargetPosition = _currentIndicator.GetTransform().position,
-                    TargetPlayer = null
+                    TargetPlayer = _player
                 };
                 _callback?.Invoke(targetData);
                 _currentIndicator.SetActive(false);
@@ -46,7 +47,7 @@ namespace PlayerScripts {
                 var targetData = new SpellTargetData {
                     Cancelled = true,
                     TargetPosition = default,
-                    TargetPlayer = _player
+                    TargetPlayer = null
                 };
                 _callback?.Invoke(targetData);
                 _currentIndicator.SetActive(false);

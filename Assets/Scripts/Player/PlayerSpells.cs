@@ -54,6 +54,7 @@ namespace PlayerScripts {
                 Damage = 0,
                 Duration = 1
             };
+            spellEffect.Init(spellCastData);
             
             // Cast spell effect to type, and handle accordingly
             switch (spellEffect) {

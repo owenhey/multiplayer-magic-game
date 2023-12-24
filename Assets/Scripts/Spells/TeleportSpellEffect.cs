@@ -9,9 +9,12 @@ namespace Spells {
     public class TeleportSpellEffect : PlayerOverrideSpellEffect {
         private bool _warped = false;
         private PlayerMovement _playerMovement;
+        private PlayerModel _playerModel;
         protected override void OnSpellStart() {
             _playerMovement = _targetPlayer.PlayerReferences.PlayerMovement;
+            _playerModel = _targetPlayer.PlayerReferences.PlayerModel;
             _playerMovement.enabled = false;
+            _playerModel.AnimateTwirl(true);
         }
 
         protected override void OnSpellTick(float percent) {
@@ -22,6 +25,7 @@ namespace Spells {
         }
 
         protected override void OnSpellEnd() {
+            _playerModel.AnimateTwirl(false);
             _targetPlayer.PlayerReferences.PlayerMovement.enabled = true;
         }
     }
