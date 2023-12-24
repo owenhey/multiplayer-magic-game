@@ -5110,6 +5110,7 @@ MonoBehaviour:
   _isSprinting: 0
   _moveSpeed: 4
   _sprintSpeed: 6
+  SpeedMultiplier: 1
   _forwardMovementSpeedFactor:
     serializedVersion: 2
     m_Curve:
@@ -5502,6 +5503,7 @@ MonoBehaviour:
   _indicatorHandler: {fileID: -8941229978140903528}
   _spells:
   - {fileID: 11400000, guid: 061618cc6aa12df41824b159e1093763, type: 2}
+  - {fileID: 11400000, guid: b5269cd9971f5470e8196e681df7c7e2, type: 2}
 --- !u!114 &2092327897885649139
 MonoBehaviour:
   m_ObjectHideFlags: 0

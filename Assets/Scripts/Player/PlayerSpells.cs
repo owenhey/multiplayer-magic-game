@@ -23,7 +23,7 @@ namespace PlayerScripts {
                 AttemptCast(_spells[0]);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2)) {
-                
+                AttemptCast(_spells[1]);
             }
             if (Input.GetKeyDown(KeyCode.Alpha3)) {
                 

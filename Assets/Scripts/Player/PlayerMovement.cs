@@ -5,6 +5,7 @@ using System;
 using DG.Tweening;
 using FishNet.Object;
 using TMPro;
+using UnityEngine.Serialization;
 
 namespace PlayerScripts {
     public class PlayerMovement : NetworkedPlayerScript
@@ -17,6 +18,7 @@ namespace PlayerScripts {
         [Header("Stats")]
             [SerializeField] private float _moveSpeed = 4;
             [SerializeField] private float _sprintSpeed = 6;
+            [FormerlySerializedAs("_speedModifier")] [ReadOnly] public float SpeedMultiplier = 1;
             [Tooltip("Based on the dot between the forward vector and the desired direction, what percentage of the max speed you get.")]
             [SerializeField] private AnimationCurve _forwardMovementSpeedFactor;
             [SerializeField] private float _rotateSpeed = 360;
@@ -142,6 +144,7 @@ namespace PlayerScripts {
                     _inputData.wasd = Vector2.up;
                     Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
                     movementVector += _ccTrans.TransformDirection(wasdInputVector3) * _sprintSpeed;
+                    movementVector *= SpeedMultiplier;
                     _isSprinting = true;
                 }
             }
@@ -151,6 +154,7 @@ namespace PlayerScripts {
                 float finalSpeed = _moveSpeed * _forwardMovementSpeedFactor.Evaluate(dotValue);
                 Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
                 movementVector += _ccTrans.TransformDirection(wasdInputVector3) * finalSpeed;
+                movementVector *= SpeedMultiplier;
             }
         }
 

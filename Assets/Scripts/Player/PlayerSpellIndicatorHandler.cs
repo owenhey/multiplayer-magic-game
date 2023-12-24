@@ -18,6 +18,14 @@ namespace PlayerScripts {
         }
         
         public void Setup(SpellIndicatorData indicator, Action<SpellTargetData> spellTargetDataHandler) {
+            // Handle no indicator
+            if (indicator.TargetType == IndicatorTargetType.None) {
+                SpellTargetData targetData = new();
+                targetData.TargetPlayer = _player;
+                spellTargetDataHandler?.Invoke(targetData);
+                return;
+            }
+            
             enabled = true;
             _currentIndicatorData = indicator;
             _currentIndicator = IndicatorManager.Instance.GetIndicator(indicator.Indicator);
@@ -30,10 +38,11 @@ namespace PlayerScripts {
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            _updateLoop?.Invoke();
         }
 
         private void Update() {
-            if (_updateLoop != null) _updateLoop();
+            _updateLoop?.Invoke();
         }
 
         private void AreaIndicatorUpdate() {
