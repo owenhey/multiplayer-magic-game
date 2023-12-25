@@ -25,7 +25,7 @@ public class ShapeUI : MonoBehaviour
 
     public void SetShape(int index){
         index %= drawingShapes.Count;
-        drawingManager.SetTargetDrawing(drawingShapes[index]);
+        // drawingManager.SetTargetDrawing(drawingShapes[index]);
         shapeText.text = drawingShapes[index].name;
     }
 

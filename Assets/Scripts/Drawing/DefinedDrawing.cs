@@ -35,6 +35,10 @@ public class DefinedDrawing : ScriptableObject
     [Space(20)] 
     public Sprite HelperImage;
 
+    public Vector2 GetStartingMousePosition() {
+        return Points[0].Vector;
+    }
+
     private void OnValidate() {
         #if UNITY_EDITOR
         CalculatedDistance = 0;

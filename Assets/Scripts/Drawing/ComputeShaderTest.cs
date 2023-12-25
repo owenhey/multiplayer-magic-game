@@ -27,8 +27,7 @@ public class ComputeShaderTest : MonoBehaviour
     private int drawIndex;
     private int clearIndex;
 
-    private void Start(){
-
+    private void Awake(){
         myTexture = new RenderTexture(resolution, resolution, 24);
         myTexture.enableRandomWrite = true;
         myTexture.Create();

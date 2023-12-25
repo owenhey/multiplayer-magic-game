@@ -22,7 +22,6 @@ public class DrawingManager : MonoBehaviour {
         [SerializeField] private RectTransform _calculatedDrawingRT;
         [SerializeField] private RectTransform _displayParent;
         [SerializeField] private Image _guideImage;
-        [SerializeField] private RectTransform _cursorImage;
         [SerializeField] private CanvasGroup _cg;
 
     [Header("Debugging")] 
@@ -41,48 +40,38 @@ public class DrawingManager : MonoBehaviour {
     private DrawShapeCallback _callback;
 
 
-    private void Awake() {
-        SetTargetDrawing(_initialDrawing);
-        SetEnabled(false);
+    private void Start() {
+        Hide();
         Instance = this;
     }
 
-    public void SetEnabled(bool enabled) {
-        _content.SetActive(enabled);
+    public void StartDrawing(DefinedDrawing drawing = null, DrawShapeCallback callback = null) {
+        _targetDrawing = drawing;
+        _cg.DOFade(1.0f, .15f).From(0);
+        _fakeMousePos = _displayParent.anchoredPosition;
+        _callback = null;
+        _drawingMechanic.Clear();
+        _callback = callback;
+        ClearDebug();
+    }
 
-        if (enabled) {
-            _cg.DOFade(1.0f, .15f).From(0);
-            _cursorImage.anchoredPosition = _displayParent.anchoredPosition;
-            _fakeMousePos = _displayParent.anchoredPosition;
-            _callback = null;
-            _drawingMechanic.Clear();
-            ClearDebug();
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.W)) {
+            StartDrawing();
         }
     }
 
-    public void SetDrawCallback(DrawShapeCallback callback) {
-        _callback += callback;
+    public void Hide() {
+        _content.SetActive(enabled);
     }
 
-    public void Update() {
-        MoveMouse();
-    }
-
-    private void MoveMouse() {
-        var mouseMove = new Vector3(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"), 0);
-        _fakeMousePos += mouseMove * 20.0f;
-
-        
-        _cursorImage.anchoredPosition = _fakeMousePos;
-    }
-    
-    public void Listen() {
+    private void Listen() {
         _drawingMechanic.OnStartDraw += OnStartDraw;
         _drawingMechanic.OnDraw += OnDraw;
         _drawingMechanic.OnEndDraw += OnEndDraw;
     }
 
-    public void Mute() {
+    private void Mute() {
         _drawingMechanic.OnStartDraw -= OnStartDraw;
         _drawingMechanic.OnDraw -= OnDraw;
         _drawingMechanic.OnEndDraw -= OnEndDraw;
@@ -109,7 +98,7 @@ public class DrawingManager : MonoBehaviour {
         var score = DrawingAssessor.Instance.AssessResults(results);
         Debug.Log(results);
         ShapeQualityPopupManager.Instance.ShowPopup(results, score);
-        SetEnabled(false);
+        Hide();
         _callback?.Invoke(results);
     }
     
@@ -152,11 +141,6 @@ public class DrawingManager : MonoBehaviour {
                 rt.anchoredPosition = _calculatedDrawingRT.sizeDelta * (_targetDrawing.Points[i].Vector - Vector2.one * .5f);
             }
         }
-    }
-    
-    public void SetTargetDrawing(DefinedDrawing drawing) {
-        _targetDrawing = drawing;
-        _guideImage.sprite = drawing.HelperImage;
     }
 
     public void SetSize(float sizeT) {
