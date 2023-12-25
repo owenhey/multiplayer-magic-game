@@ -1,3 +1,4 @@
+using Helpers;
 using PlayerScripts;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace Spells {
     /// </summary>
     public class SpellCastData {
         public SpellTargetData TargetData;
+        public int SpellId;
+        public SpellDefinition SpellDefinition => SpellIder.Instance.GetSpell(SpellId);
         public float Damage;
         public float Duration;
     }

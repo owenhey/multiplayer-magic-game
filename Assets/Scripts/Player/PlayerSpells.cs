@@ -57,8 +57,9 @@ namespace PlayerScripts {
             var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.EffectId);
             var spellCastData = new SpellCastData {
                 TargetData = spellTargetData,
+                SpellId = _chosenSpell.SpellId,
                 Damage = 0,
-                Duration = 1
+                Duration = _chosenSpell.GetAttributeValue("duration")
             };
             spellEffect.Init(spellCastData);
             

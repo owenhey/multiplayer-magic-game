@@ -38,6 +38,11 @@ public class SpellDefinitionEditor : Editor
         // Rest of the inspector
         base.OnInspectorGUI();
         
+        if (GUILayout.Button("Add to SpellIder")) {
+            _spellDefinition.AddToAllSpells();
+        }
+
+        
         serializedObject.Update(); // Always call this at the beginning
 
         if (_attributesProperty != null)
