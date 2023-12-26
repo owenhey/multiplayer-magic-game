@@ -116,7 +116,6 @@ public class BasicDrawingAssessor {
         float distancePercent = Mathf.Abs(_totalDistance - _target.TotalDistance) / _target.TotalDistance;
         float newDistancePercent = Mathf.Abs(_newTotalDistance - _target.TotalDistance) / _target.TotalDistance;
 
-
-        return new DrawingResults(_target, totalTime, averageDistance, distancePercent, newDistancePercent, _completedPointDistances.Count == _lastTargetPointIndex + 1);
+        return new DrawingResults(true, _target, totalTime, averageDistance, distancePercent, newDistancePercent, _completedPointDistances.Count == _lastTargetPointIndex + 1);
     }
 }

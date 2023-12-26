@@ -6,7 +6,8 @@ public enum DrawingResultsAssessorTypes {
     SensitiveTriple
 }
 public class DrawingResults{
-    public DrawingResults(DefinedDrawing definedDrawing, float totalTime, float averageDistance, float percentDistanceError, float newPercentDistanceError, bool completedAllPoints) {
+    public DrawingResults(bool completed, DefinedDrawing definedDrawing = null, float totalTime = 0, float averageDistance = 0, float percentDistanceError = 0, float newPercentDistanceError = 0, bool completedAllPoints = false, float score = 0) {
+        Completed = completed;
         Drawing = definedDrawing;
         TotalTime = totalTime;
         AverageDistance = averageDistance;
@@ -17,29 +18,30 @@ public class DrawingResults{
 
     #region Variables
 
+    public readonly bool Completed;
     public readonly DefinedDrawing Drawing;
     public readonly float TotalTime;
     public readonly float AverageDistance;
     public readonly float PercentDistanceError;
-    public float NewPercentDistanceError;
+    public readonly float NewPercentDistanceError;
     public readonly bool CompletedAllPoints;
+    public float Score;
 
     #endregion
 
-    public float AssessResults(DrawingResultsAssessorTypes type) {
+    public void AssessResults(DrawingResultsAssessorTypes type) {
         switch (type) {
             case DrawingResultsAssessorTypes.SensitiveTriple:
-                return SensitiveTriple();
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+                Score = SensitiveTriple();
+                break;
         }
     }
 
     private float SensitiveTriple() {
-        return (Misc.RemapClamp(AverageDistance, .02f, 0.1f, 1, 0));
+        return Misc.RemapClamp(AverageDistance, .01f, 0.07f, 1, 0);
     }
 
     public override string ToString() {
-        return $"Completed all points: {CompletedAllPoints}, Total Time: {TotalTime}, Average Distance: {AverageDistance}, Percent Distance Error: {PercentDistanceError:P0}";
+        return $"Completed all points: Score: {Score}, {CompletedAllPoints}, Total Time: {TotalTime}, Average Distance: {AverageDistance}, Percent Distance Error: {PercentDistanceError:P0}";
     }
 }

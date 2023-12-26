@@ -37,7 +37,7 @@ public class DrawingAssessor : ScriptableObject {
         _assessor.SetDebugDelegates(frameDebug, indexDebug);
     }
 
-    public float AssessResults(DrawingResults results) {
-        return results.AssessResults(_assessorType);
+    public void AssessResults(DrawingResults results) {
+        results.AssessResults(_assessorType);
     }
 }

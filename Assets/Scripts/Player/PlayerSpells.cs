@@ -17,6 +17,7 @@ namespace PlayerScripts {
         
         // Mid-cast data
         private SpellDefinition _chosenSpell = null;
+        private SpellTargetData _spellTargetData = null;
 
         protected override void Awake() {
             base.Awake();
@@ -52,11 +53,24 @@ namespace PlayerScripts {
                 _stateManager.RemoveState(PlayerState.CastingSpell);
                 return;
             }
+            _spellTargetData = spellTargetData;
             
+            // Now, go to the drawing assessor and see how we did
+            DrawingManager.Instance.StartDrawing(_chosenSpell.Drawing, HandleDrawing);
+        }
+
+        private void HandleDrawing(DrawingResults results) {
+            // If we cancelled / messed up, just cancel here
+            if (results.Completed == false || results.Score < .5f) {
+                enabled = true;
+                _stateManager.RemoveState(PlayerState.CastingSpell);
+                return;
+            }
+
             // Create new effect, and send it spell cast data
             var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.EffectId);
             var spellCastData = new SpellCastData {
-                TargetData = spellTargetData,
+                TargetData = _spellTargetData,
                 SpellId = _chosenSpell.SpellId,
                 Damage = 0,
                 Duration = _chosenSpell.GetAttributeValue("duration")

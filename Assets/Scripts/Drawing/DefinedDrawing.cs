@@ -35,8 +35,8 @@ public class DefinedDrawing : ScriptableObject
     [Space(20)] 
     public Sprite HelperImage;
 
-    public Vector2 GetStartingMousePosition() {
-        return Points[0].Vector;
+    public Vector2 GetStartingPointOffsetInPixels(float canvasSize) {
+        return canvasSize * (Points[0].Vector - Vector2.one * .5f);
     }
 
     private void OnValidate() {

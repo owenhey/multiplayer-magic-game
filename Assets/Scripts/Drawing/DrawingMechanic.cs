@@ -15,7 +15,6 @@ public class DrawingMechanic : MonoBehaviour
     [ReadOnly] public Vector2 totalCanvasSize;
 
     public RectTransform overrideMouse;
-    
 
     public System.Action<Vector2> OnDraw;
     public System.Action OnStartDraw;
@@ -59,7 +58,7 @@ public class DrawingMechanic : MonoBehaviour
         float totalTime = Time.time - startTime;
         if(array.Length < 2) return;
         drawnPoints.Clear();
-        OnEndDraw(array, totalTime);
+        OnEndDraw?.Invoke(array, totalTime);
     }
 
     private void Draw(Vector2 drawnPoint){

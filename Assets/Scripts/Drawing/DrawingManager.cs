@@ -23,15 +23,14 @@ public class DrawingManager : MonoBehaviour {
         [SerializeField] private RectTransform _displayParent;
         [SerializeField] private Image _guideImage;
         [SerializeField] private CanvasGroup _cg;
+        [SerializeField] private RectTransform[] _rts;
 
     [Header("Debugging")] 
         [SerializeField] public bool _debug = false;
         [SerializeField] private RectTransform _debugParent;
         [SerializeField] private RectTransform _showDrawingPointsParent;
         [SerializeField] private GameObject _debugDot;
-
-    [Header("Drawings")] 
-        [SerializeField] private DefinedDrawing _initialDrawing;
+        [SerializeField] private DefinedDrawing _debugDrawing;
     
     private RectTransform _debugSlider;
     private Vector3 _fakeMousePos;
@@ -39,6 +38,7 @@ public class DrawingManager : MonoBehaviour {
     public static DrawingManager Instance;
     private DrawShapeCallback _callback;
 
+    private bool _open;
 
     private void Start() {
         Hide();
@@ -46,37 +46,48 @@ public class DrawingManager : MonoBehaviour {
     }
 
     public void StartDrawing(DefinedDrawing drawing = null, DrawShapeCallback callback = null) {
+        if (drawing == null) {
+            drawing = _debugDrawing;
+        }
         _targetDrawing = drawing;
+
+        // Set the drawing on the mouse
+        Vector2 firstPointOffset = _targetDrawing.GetStartingPointOffsetInPixels(_calculatedDrawingRT.sizeDelta.x);
+        PositionDrawing((Vector2)Input.mousePosition - firstPointOffset);
+        
+        _content.SetActive(true);
         _cg.DOFade(1.0f, .15f).From(0);
-        _fakeMousePos = _displayParent.anchoredPosition;
-        _callback = null;
         _drawingMechanic.Clear();
         _callback = callback;
+        _open = true;
+        
         ClearDebug();
     }
 
+    public void Hide() {
+        _content.SetActive(false);
+        _open = false;
+    }
+
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.W)) {
+        if (_open && Input.GetKeyDown(KeyCode.Mouse1)) {
+            CancelDrawing();
+        }
+        if (Input.GetKeyDown(KeyCode.Space)) {
             StartDrawing();
         }
     }
 
-    public void Hide() {
-        _content.SetActive(enabled);
+    private void CancelDrawing() {
+        var cancelledResults = new DrawingResults(false);
+        Finish(cancelledResults);
     }
 
-    private void Listen() {
-        _drawingMechanic.OnStartDraw += OnStartDraw;
-        _drawingMechanic.OnDraw += OnDraw;
-        _drawingMechanic.OnEndDraw += OnEndDraw;
+    private void PositionDrawing(Vector2 position) {
+        foreach (var rectTransform in _rts) {
+            rectTransform.anchoredPosition = position;
+        }
     }
-
-    private void Mute() {
-        _drawingMechanic.OnStartDraw -= OnStartDraw;
-        _drawingMechanic.OnDraw -= OnDraw;
-        _drawingMechanic.OnEndDraw -= OnEndDraw;
-    }
-
 
     private void OnStartDraw() {
         ClearDebug();
@@ -95,9 +106,14 @@ public class DrawingManager : MonoBehaviour {
 
     private void OnEndDraw(Vector2[] points, float time) {
         var results = DrawingAssessor.Instance.HandleEndDraw();
-        var score = DrawingAssessor.Instance.AssessResults(results);
+        DrawingAssessor.Instance.AssessResults(results);
+        Finish(results);
+    }
+
+    // Can be called either from Cancel or OnEndDraw
+    private void Finish(DrawingResults results) {
         Debug.Log(results);
-        ShapeQualityPopupManager.Instance.ShowPopup(results, score);
+        // ShapeQualityPopupManager.Instance.ShowPopup(results, score);
         Hide();
         _callback?.Invoke(results);
     }
@@ -124,24 +140,6 @@ public class DrawingManager : MonoBehaviour {
             Destroy(_debugParent.GetChild(i).gameObject);
         }
     }
-    
-    private void ToggleShowShapePoints() {
-        if (_showDrawingPointsParent.childCount > 0) {
-            // Hide the dots
-            int childCount = _showDrawingPointsParent.childCount;
-            for(int i = childCount - 1; i >= 0; i--){
-                Destroy(_showDrawingPointsParent.GetChild(i).gameObject);
-            }
-        }
-        else {
-            // Show the dots
-            for (int i = 0; i < _targetDrawing.Points.Count; i++) {
-                var obj = Instantiate(_debugDot, _showDrawingPointsParent);
-                var rt = obj.GetComponent<RectTransform>();
-                rt.anchoredPosition = _calculatedDrawingRT.sizeDelta * (_targetDrawing.Points[i].Vector - Vector2.one * .5f);
-            }
-        }
-    }
 
     public void SetSize(float sizeT) {
         Debug.Log("Size t: " + sizeT);
@@ -150,10 +148,14 @@ public class DrawingManager : MonoBehaviour {
     }
     
     private void OnEnable() {
-        Listen();
+        _drawingMechanic.OnStartDraw += OnStartDraw;
+        _drawingMechanic.OnDraw += OnDraw;
+        _drawingMechanic.OnEndDraw += OnEndDraw;
     }
     
     private void OnDisable() {
-        Mute();
+        _drawingMechanic.OnStartDraw -= OnStartDraw;
+        _drawingMechanic.OnDraw -= OnDraw;
+        _drawingMechanic.OnEndDraw -= OnEndDraw;
     }
 }
