@@ -3087,7 +3087,7 @@ MonoBehaviour:
   _showDrawingPointsParent: {fileID: 679202379}
   _debugDot: {fileID: 4470879603534673611, guid: 115c47249304ffa458516191032deac8,
     type: 3}
-  _initialDrawing: {fileID: 11400000, guid: 85c23c38df5b2ad4a9cf5d4f501f64c1, type: 2}
+  _debugDrawing: {fileID: 0}
 --- !u!4 &1148636841
 Transform:
   m_ObjectHideFlags: 0
@@ -4612,7 +4612,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1788322473
 RectTransform:
   m_ObjectHideFlags: 0

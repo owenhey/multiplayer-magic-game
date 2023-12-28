@@ -1,8 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using DG.Tweening;
+using FishNet.Managing;
+using FishNet.Managing.Client;
+using FishNet.Object;
+using PlayerScripts;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -30,7 +35,6 @@ public class DrawingManager : MonoBehaviour {
         [SerializeField] private RectTransform _debugParent;
         [SerializeField] private RectTransform _showDrawingPointsParent;
         [SerializeField] private GameObject _debugDot;
-        [SerializeField] private DefinedDrawing _debugDrawing;
     
     private RectTransform _debugSlider;
     private Vector3 _fakeMousePos;
@@ -46,14 +50,19 @@ public class DrawingManager : MonoBehaviour {
     }
 
     public void StartDrawing(DefinedDrawing drawing = null, DrawShapeCallback callback = null) {
-        if (drawing == null) {
-            drawing = _debugDrawing;
+        if (drawing != null) {
+            _targetDrawing = drawing;
+            // Set the drawing on the mouse
+            _guideImage.enabled = true;
+            _guideImage.sprite = drawing.HelperImage;
+            Vector2 firstPointOffset = _targetDrawing.GetStartingPointOffsetInPixels(_calculatedDrawingRT.sizeDelta.x);
+            PositionDrawing((Vector2)Input.mousePosition - firstPointOffset);
         }
-        _targetDrawing = drawing;
-
-        // Set the drawing on the mouse
-        Vector2 firstPointOffset = _targetDrawing.GetStartingPointOffsetInPixels(_calculatedDrawingRT.sizeDelta.x);
-        PositionDrawing((Vector2)Input.mousePosition - firstPointOffset);
+        else {
+            // In this case, just position it in the center of the circle. Maybe show the indicator here?
+            _guideImage.enabled = false;
+            PositionDrawing((Vector2)Input.mousePosition);
+        }
         
         _content.SetActive(true);
         _cg.DOFade(1.0f, .15f).From(0);
@@ -91,8 +100,15 @@ public class DrawingManager : MonoBehaviour {
 
     private void OnStartDraw() {
         ClearDebug();
-        
-        DrawingAssessor.Instance.HandleStartDraw(_targetDrawing);
+
+        if (_targetDrawing != null) {
+            DrawingAssessor.Instance.HandleStartDraw(new []{_targetDrawing});
+        }
+        else {
+            // Grab all spells
+            var spells = Player.LocalPlayer.PlayerReferences.PlayerSpells.GetOffCooldownSpells();
+            DrawingAssessor.Instance.HandleStartDraw(spells.Select(x=>x.Drawing).ToArray());
+        }
 
         if (_debug) {
             _debugSlider = Instantiate(_debugDot, _debugParent).GetComponent<RectTransform>();
@@ -113,6 +129,7 @@ public class DrawingManager : MonoBehaviour {
     // Can be called either from Cancel or OnEndDraw
     private void Finish(DrawingResults results) {
         Debug.Log(results);
+        Debug.Log("Chosen the shape: " + results.Drawing.name);
         // ShapeQualityPopupManager.Instance.ShowPopup(results, score);
         Hide();
         _callback?.Invoke(results);

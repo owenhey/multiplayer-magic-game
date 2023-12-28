@@ -10,6 +10,7 @@ namespace PlayerScripts {
     public class PlayerReferences : LocalPlayerScript {
         [field:SerializeField] public NetworkObject NetworkObj { get; private set; }
         [field:SerializeField] public PlayerModel PlayerModel { get; private set; }
+        [field:SerializeField] public PlayerSpells PlayerSpells { get; private set; }
         [field:SerializeField] public PlayerStateManager PlayerStateManager { get; private set; }
         [field:SerializeField] public PlayerTimers PlayerTimers { get; private set; }
         [field:SerializeField] public PlayerMovement PlayerMovement { get; private set; }

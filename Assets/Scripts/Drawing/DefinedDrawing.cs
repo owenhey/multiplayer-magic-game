@@ -38,6 +38,10 @@ public class DefinedDrawing : ScriptableObject
     public Vector2 GetStartingPointOffsetInPixels(float canvasSize) {
         return canvasSize * (Points[0].Vector - Vector2.one * .5f);
     }
+    
+    public Vector2 GetCenterPointInPixels(float canvasSize) {
+        return canvasSize * Vector2.one * .5f;
+    }
 
     private void OnValidate() {
         #if UNITY_EDITOR

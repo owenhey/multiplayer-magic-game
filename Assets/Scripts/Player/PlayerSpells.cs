@@ -90,5 +90,9 @@ namespace PlayerScripts {
         protected override void OnClientStart(bool isOwner) {
             if (!isOwner) enabled = false;
         }
+
+        public SpellDefinition[] GetOffCooldownSpells() {
+            return _spells.ToArray();
+        }
     }
 }
