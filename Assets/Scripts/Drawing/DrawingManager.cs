@@ -82,9 +82,6 @@ public class DrawingManager : MonoBehaviour {
         if (_open && Input.GetKeyDown(KeyCode.Mouse1)) {
             CancelDrawing();
         }
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            StartDrawing();
-        }
     }
 
     private void CancelDrawing() {

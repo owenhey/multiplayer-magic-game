@@ -37,6 +37,7 @@ public class DrawingAssessor : ScriptableObject {
     }
 
     public DrawingResults HandleEndDraw() {
+        
         // Get all the results
         DrawingResults[] results = new DrawingResults[_assessors.Length];
         for (int i = 0; i < _assessors.Length; i++) {

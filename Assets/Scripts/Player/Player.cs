@@ -27,10 +27,6 @@ namespace PlayerScripts {
         public override void OnStartClient() {
             base.OnStartClient();
             _onClientStart.Invoke(IsOwner);
-
-            if (!IsOwner) return;
-            
-            LocalPlayer = this;
         }
 
         private void Awake() {
@@ -40,6 +36,7 @@ namespace PlayerScripts {
         private void InitOwner(bool isLocal) {
             if (!isLocal) return;
 
+            LocalPlayer = this;
             SelectRandomName();
         }
 

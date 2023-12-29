@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using Helpers;
@@ -32,8 +33,8 @@ namespace PlayerScripts {
             if (Input.GetKeyDown(KeyCode.Alpha2)) {
                 AttemptCast(_spells[1]);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha3)) {
-                
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                AttemptGenericCast();
             }
         }
 
@@ -51,6 +52,7 @@ namespace PlayerScripts {
             if (spellTargetData.Cancelled == true) {
                 enabled = true;
                 _stateManager.RemoveState(PlayerState.CastingSpell);
+                ResetState();
                 return;
             }
             _spellTargetData = spellTargetData;
@@ -64,10 +66,44 @@ namespace PlayerScripts {
             if (results.Completed == false || results.Score < .5f) {
                 enabled = true;
                 _stateManager.RemoveState(PlayerState.CastingSpell);
+                ResetState();
                 return;
             }
+            CastSpell();
+        }
+        
+        // Space way
+        private void AttemptGenericCast() {
+            _stateManager.AddState(PlayerState.CastingSpell);
+            DrawingManager.Instance.StartDrawing(null, HandleGenericDrawing);
+        }
 
-            // Create new effect, and send it spell cast data
+        private void HandleGenericDrawing(DrawingResults results) {
+            // Make sure the drawing results are at least somewhat close to reality
+            if (results.Score < .5f) {
+                _stateManager.RemoveState(PlayerState.CastingSpell);
+                ResetState();
+                return;
+            }
+            
+            // Handle targeting and recieve spell cast data
+            _chosenSpell = _spells.FirstOrDefault(x=>x.Drawing == results.Drawing);
+            _indicatorHandler.Setup(_chosenSpell.IndicatorData, HandleGenericIndicator);
+        }
+
+        private void HandleGenericIndicator(SpellTargetData targetData) {
+            if (targetData.Cancelled) {
+                _stateManager.RemoveState(PlayerState.CastingSpell);
+                ResetState();
+                return;
+            }
+            _spellTargetData = targetData;
+            // Here, just cast the spell. Player has already drawn
+            CastSpell();
+        }
+
+        // Casts the chosen spell using the target data
+        private void CastSpell() {
             var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.EffectId);
             var spellCastData = new SpellCastData {
                 TargetData = _spellTargetData,
@@ -83,8 +119,14 @@ namespace PlayerScripts {
                     playerOverride.BeginSpell(spellCastData.TargetData.TargetPlayer, spellCastData.Duration);
                     break;
             }
-
+            
             _stateManager.RemoveState(PlayerState.CastingSpell);
+            ResetState();
+        }
+
+        private void ResetState() {
+            _chosenSpell = null;
+            _spellTargetData = null;
         }
 
         protected override void OnClientStart(bool isOwner) {

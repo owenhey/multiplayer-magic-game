@@ -35,6 +35,10 @@ namespace PlayerScripts {
             _previousPosition = _playerMovement.GetCurrentPosition();
         }
 
+        public void SetAnimationSpeed(float speed) {
+            _animator.speed = speed;
+        }
+
         void LateUpdate() {
             if (ManuallyUpdate) {
                 Vector3 currentSpeed = _playerMovement.GetCurrentVelLocal();
