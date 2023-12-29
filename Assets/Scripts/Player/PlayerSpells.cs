@@ -79,6 +79,11 @@ namespace PlayerScripts {
         }
 
         private void HandleGenericDrawing(DrawingResults results) {
+            if (results.Completed == false) {
+                _stateManager.RemoveState(PlayerState.CastingSpell);
+                ResetState();
+                return;
+            }
             // Make sure the drawing results are at least somewhat close to reality
             if (results.Score < .5f) {
                 _stateManager.RemoveState(PlayerState.CastingSpell);
@@ -117,6 +122,9 @@ namespace PlayerScripts {
             switch (spellEffect) {
                 case PlayerOverrideSpellEffect playerOverride:
                     playerOverride.BeginSpell(spellCastData.TargetData.TargetPlayer, spellCastData.Duration);
+                    break;
+                case SingleCastSpellEffect singleCastSpell:
+                    singleCastSpell.BeginSpell();
                     break;
             }
             

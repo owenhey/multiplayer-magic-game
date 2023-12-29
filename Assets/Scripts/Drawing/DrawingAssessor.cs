@@ -37,7 +37,6 @@ public class DrawingAssessor : ScriptableObject {
     }
 
     public DrawingResults HandleEndDraw() {
-        
         // Get all the results
         DrawingResults[] results = new DrawingResults[_assessors.Length];
         for (int i = 0; i < _assessors.Length; i++) {
@@ -49,7 +48,7 @@ public class DrawingAssessor : ScriptableObject {
         float bestScore = 0;
         int bestIndex = -1;
         for (int i = 0; i < results.Length; i++) {
-            if (results[i].Score > bestScore) {
+            if (results[i].Score >= bestScore) {
                 bestScore = results[i].Score;
                 bestIndex = i;
             }

@@ -126,7 +126,6 @@ public class DrawingManager : MonoBehaviour {
     // Can be called either from Cancel or OnEndDraw
     private void Finish(DrawingResults results) {
         Debug.Log(results);
-        Debug.Log("Chosen the shape: " + results.Drawing.name);
         // ShapeQualityPopupManager.Instance.ShowPopup(results, score);
         Hide();
         _callback?.Invoke(results);

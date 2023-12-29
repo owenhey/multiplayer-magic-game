@@ -22,6 +22,8 @@ namespace Spells {
         [Space(10)] 
         public SpellIndicatorData IndicatorData;
 
+        public GameObject SpellPrefab;
+
         [HideInInspector] public List<SpellAttribute> SpellAttributes = new();
         
         public float GetAttributeValue(string key) {
