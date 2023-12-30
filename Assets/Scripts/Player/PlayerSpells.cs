@@ -54,7 +54,7 @@ namespace PlayerScripts {
             
             // Handle targeting and recieve spell cast data
             _chosenSpell = spellChosen;
-            _indicatorHandler.Setup(spellChosen.IndicatorData, HandleTargetSpellData);
+            _indicatorHandler.Setup(spellChosen.IndicatorData, HandleTargetSpellData, true);
         }
 
         private void HandleTargetSpellData(SpellTargetData spellTargetData) {
@@ -72,6 +72,7 @@ namespace PlayerScripts {
         }
 
         private void HandleDrawing(DrawingResults results) {
+            Debug.Log("Results: " + results);
             // If we cancelled / messed up, just cancel here
             if (results.Completed == false || results.Score < .5f) {
                 enabled = true;
@@ -89,6 +90,7 @@ namespace PlayerScripts {
         }
 
         private void HandleGenericDrawing(DrawingResults results) {
+            Debug.Log("Results: " + results);
             if (results.Completed == false) {
                 _stateManager.RemoveState(PlayerState.CastingSpell);
                 ResetState();
@@ -103,7 +105,7 @@ namespace PlayerScripts {
             
             // Handle targeting and recieve spell cast data
             _chosenSpell = _spells.FirstOrDefault(x=>x.Drawing == results.Drawing);
-            _indicatorHandler.Setup(_chosenSpell.IndicatorData, HandleGenericIndicator);
+            _indicatorHandler.Setup(_chosenSpell.IndicatorData, HandleGenericIndicator, true);
         }
 
         private void HandleGenericIndicator(SpellTargetData targetData) {
@@ -144,7 +146,7 @@ namespace PlayerScripts {
 
         private void SetInstantDraw(bool instantDraw) {
             _instantDrawEnabled = instantDraw;
-            _indicatorHandler.Setup(_instantDrawIndicatorData, HandleTargetInstantDraw);
+            _indicatorHandler.Setup(_instantDrawIndicatorData, HandleTargetInstantDraw, false);
 
             if (!instantDraw) {
                 _indicatorHandler.ForceCancel();
@@ -157,6 +159,9 @@ namespace PlayerScripts {
         }
 
         private void HandleDrawInstantDraw(DrawingResults results) {
+            // Reset the instant draw
+            _indicatorHandler.Setup(_instantDrawIndicatorData, HandleTargetInstantDraw, false);
+            
             Debug.Log("Results: " + results);
             if (results.Completed == false) {
                 _stateManager.RemoveState(PlayerState.CastingSpell);
@@ -173,6 +178,8 @@ namespace PlayerScripts {
             // Handle targeting and recieve spell cast data
             _chosenSpell = _spells.FirstOrDefault(x=>x.Drawing == results.Drawing);
             CastSpell();
+            
+            
         }
 
         private void ResetState() {

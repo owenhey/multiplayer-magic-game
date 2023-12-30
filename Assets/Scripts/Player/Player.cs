@@ -34,7 +34,7 @@ namespace PlayerScripts {
                 PlayerReferences.PlayerStateManager.AddState(PlayerState.MovingCamera);
             }
 
-            if (Input.GetKeyUp(KeyCode.Mouse0)) {
+            if (Input.GetKeyUp(KeyCode.Mouse1)) {
                 PlayerReferences.PlayerStateManager.RemoveState(PlayerState.MovingCamera);
             }
         }

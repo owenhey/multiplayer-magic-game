@@ -18,7 +18,7 @@ namespace Spells {
             }
 
             transform.DOScale(Vector3.one, .5f).From(Vector3.zero);
-            transform.DOMove(hitPosition, 2.0f).SetEase(Ease.InQuint).OnComplete(() => {
+            transform.DOMove(hitPosition, 1.0f).SetEase(Ease.InQuint).OnComplete(() => {
                 transform.DOScale(new Vector3(1.5f, .5f, 1.5f), .1f).SetEase(Ease.OutQuad).OnComplete(() => {
                     transform.DOScale(Vector3.one, .08f).SetEase(Ease.InQuad);
                 });

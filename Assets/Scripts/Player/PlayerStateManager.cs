@@ -36,9 +36,9 @@ namespace PlayerScripts {
             bool interactionEnabled = !(Teleporting || InInventory || Stunned || CastingSpell || MovingCamera); 
             PlayerInteract.enabled = interactionEnabled;
             
-            // Interaction 
-            // bool indicatorsEnabled = !(MovingCamera); 
-            // PlayerIndicators.SetShowIndicators(indicatorsEnabled);
+            // Indicatosrs
+            bool indicatorsEnabled = !(MovingCamera);
+            PlayerIndicators.Hide = !indicatorsEnabled;
         }
 
         private bool Active(PlayerState state) {
@@ -63,6 +63,7 @@ namespace PlayerScripts {
         
         protected override void OnClientStart(bool isOwner) {
             if(!isOwner) Destroy(this);
+            UpdateState();
         }
     }
 }

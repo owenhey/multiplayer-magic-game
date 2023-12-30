@@ -31,4 +31,4 @@ MonoBehaviour:
   TotalDistance: 4
   CalculatedDistance: 4
   TimeTarget: 1
-  HelperImage: {fileID: 21300000, guid: 19ec2df1e65747543988db368a124c65, type: 3}
+  HelperImage: {fileID: 21300000, guid: 6027d9c411b560c4695d87a18707045d, type: 3}

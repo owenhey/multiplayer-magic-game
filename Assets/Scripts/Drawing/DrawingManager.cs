@@ -23,7 +23,6 @@ public class DrawingManager : MonoBehaviour {
     [SerializeField] private GameObject _content;
 
     [Header("Display")] 
-        [SerializeField] private float _drawingSizeRelativeToParent = .76f;
         [SerializeField] private RectTransform _calculatedDrawingRT;
         [SerializeField] private RectTransform _displayParent;
         [SerializeField] private Image _guideImage;
@@ -54,25 +53,32 @@ public class DrawingManager : MonoBehaviour {
 
     public void StartDrawing(DefinedDrawing drawing = null, DrawShapeCallback callback = null, bool offsetShapes = false) {
         if (drawing != null) {
+            SetSize(100);
             _targetDrawing = drawing;
             // Set the drawing on the mouse
             _guideImage.enabled = true;
             _guideImage.sprite = drawing.HelperImage;
-            // Vector2 firstPointOffset = _targetDrawing.GetStartingPointOffsetInPixels(_calculatedDrawingRT.sizeDelta.x);
-            // PositionDrawing((Vector2)Input.mousePosition - firstPointOffset);
-            PositionDrawing((Vector2)Input.mousePosition);
-            _circleImage.enabled = true;
+            Vector2 firstPointOffset = _targetDrawing.GetStartingPointOffsetInPixels(_calculatedDrawingRT.sizeDelta.x);
+            PositionDrawing((Vector2)Input.mousePosition - firstPointOffset);
+            // PositionDrawing((Vector2)Input.mousePosition);
+            _circleImage.enabled = false;
         }
-        else {
+        else if(drawing == null && !offsetShapes) {
+            _targetDrawing = null;
+            SetSize(100);
             // In this case, just position it in the center of the circle. Maybe show the indicator here?
             _guideImage.enabled = false;
             PositionDrawing((Vector2)Input.mousePosition);
             _circleImage.enabled = true;
         }
 
-        if (offsetShapes) {
+        else {
+            _targetDrawing = null;
+            SetSize(500);
+            PositionDrawing((Vector2)Input.mousePosition);
             // PLACEHOLDER FOR THE INSTANT CAST METHOD
-            _circleImage.enabled = true;
+            _guideImage.enabled = false;
+            _circleImage.enabled = false;
             _drawingMechanic.ForceStartDraw();
         }
 
@@ -138,7 +144,6 @@ public class DrawingManager : MonoBehaviour {
 
     private void OnEndDraw(Vector2[] points, float time) {
         var results = DrawingAssessor.Instance.HandleEndDraw();
-        Debug.Log($"Results: {results}");
         Finish(results);
     }
 
@@ -177,8 +182,9 @@ public class DrawingManager : MonoBehaviour {
 
     public void SetSize(float sizeT) {
         Debug.Log("Size t: " + sizeT);
-        _displayParent.sizeDelta = new Vector2(sizeT, sizeT);
-        _calculatedDrawingRT.sizeDelta = new Vector2(sizeT, sizeT) * _drawingSizeRelativeToParent;
+        foreach (var item in _rts) {
+            item.sizeDelta = new Vector2(sizeT, sizeT);
+        }
     }
     
     private void OnEnable() {
