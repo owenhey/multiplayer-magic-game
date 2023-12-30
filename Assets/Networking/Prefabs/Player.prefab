@@ -5501,9 +5501,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
   _indicatorHandler: {fileID: -8941229978140903528}
+  _instantDrawEnabled: 0
   _spells:
+  - {fileID: 11400000, guid: b5269cd9971f5470e8196e681df7c7e2, type: 2}
   - {fileID: 11400000, guid: 061618cc6aa12df41824b159e1093763, type: 2}
-  - {fileID: 11400000, guid: 6be7092796acb4f5a815edea6773ffb2, type: 2}
+  _instantDrawIndicatorData: {fileID: 11400000, guid: 8c42f81f1648a4467b5d3e8ea5a3d97d,
+    type: 2}
 --- !u!114 &2092327897885649139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5535,6 +5538,7 @@ MonoBehaviour:
   PlayerSpells: {fileID: -5970099899597951696}
   PlayerModel: {fileID: 9214829115622678224}
   PlayerInteract: {fileID: 2971408110657330839}
+  PlayerIndicators: {fileID: -8941229978140903528}
   ShowStateCounts: 1
 --- !u!1 &7001116585677132798
 GameObject:

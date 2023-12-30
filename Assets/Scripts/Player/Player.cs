@@ -29,6 +29,16 @@ namespace PlayerScripts {
             _onClientStart.Invoke(IsOwner);
         }
 
+        private void Update() {
+            if (Input.GetKeyDown(KeyCode.Mouse1)) {
+                PlayerReferences.PlayerStateManager.AddState(PlayerState.MovingCamera);
+            }
+
+            if (Input.GetKeyUp(KeyCode.Mouse0)) {
+                PlayerReferences.PlayerStateManager.RemoveState(PlayerState.MovingCamera);
+            }
+        }
+
         private void Awake() {
             RegisterOnClientStartListener(InitOwner);
         }

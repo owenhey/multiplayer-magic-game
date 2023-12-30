@@ -7,12 +7,14 @@ using Helpers;
 using UnityEngine;
 using Spells;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
+using Visuals;
 
 namespace PlayerScripts {
     public class PlayerSpells : LocalPlayerScript {
         [SerializeField] private PlayerSpellIndicatorHandler _indicatorHandler;
-        
+        [SerializeField] private bool _instantDrawEnabled = false;
         [SerializeField] private List<SpellDefinition> _spells;
+        [SerializeField] private SpellIndicatorData _instantDrawIndicatorData;
 
         private PlayerStateManager _stateManager;
         
@@ -33,11 +35,19 @@ namespace PlayerScripts {
             if (Input.GetKeyDown(KeyCode.Alpha2)) {
                 AttemptCast(_spells[1]);
             }
+            if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                AttemptCast(_spells[2]);
+            }
             if (Input.GetKeyDown(KeyCode.Space)) {
                 AttemptGenericCast();
             }
-        }
 
+            // Testing
+            if (Input.GetKeyDown(KeyCode.I)) {
+                SetInstantDraw(!_instantDrawEnabled);
+            }
+        }
+        
         public void AttemptCast(SpellDefinition spellChosen) {
             // Disable appropriate components so nothing else can happen
             _stateManager.AddState(PlayerState.CastingSpell);
@@ -130,6 +140,39 @@ namespace PlayerScripts {
             
             _stateManager.RemoveState(PlayerState.CastingSpell);
             ResetState();
+        }
+
+        private void SetInstantDraw(bool instantDraw) {
+            _instantDrawEnabled = instantDraw;
+            _indicatorHandler.Setup(_instantDrawIndicatorData, HandleTargetInstantDraw);
+
+            if (!instantDraw) {
+                _indicatorHandler.ForceCancel();
+            }
+        }
+
+        private void HandleTargetInstantDraw(SpellTargetData targetData) {
+            _spellTargetData = targetData;
+            DrawingManager.Instance.StartDrawing(null, HandleDrawInstantDraw, true);
+        }
+
+        private void HandleDrawInstantDraw(DrawingResults results) {
+            Debug.Log("Results: " + results);
+            if (results.Completed == false) {
+                _stateManager.RemoveState(PlayerState.CastingSpell);
+                ResetState();
+                return;
+            }
+            // Make sure the drawing results are at least somewhat close to reality
+            if (results.Score < .5f) {
+                _stateManager.RemoveState(PlayerState.CastingSpell);
+                ResetState();
+                return;
+            }
+            
+            // Handle targeting and recieve spell cast data
+            _chosenSpell = _spells.FirstOrDefault(x=>x.Drawing == results.Drawing);
+            CastSpell();
         }
 
         private void ResetState() {

@@ -19,6 +19,7 @@ MonoBehaviour:
   SpellIcon: {fileID: 21300000, guid: 04538a62d9c5d3f4aa2c2c04efcbba2e, type: 3}
   Drawing: {fileID: 11400000, guid: d62d5bb9850337f4a805453a828b4628, type: 2}
   IndicatorData: {fileID: 11400000, guid: 4edd9302c080bc54d80e278307707a51, type: 2}
+  SpellPrefab: {fileID: 0}
   SpellAttributes:
   - Key: duration
     Value: 3

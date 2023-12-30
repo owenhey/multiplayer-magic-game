@@ -32,6 +32,7 @@ namespace PlayerScripts {
             _currentIndicatorData = indicator;
             _currentIndicator = IndicatorManager.Instance.GetIndicator(indicator.Indicator);
             _callback = spellTargetDataHandler;
+            _currentIndicator.SetSize(indicator.Size);
 
             switch (indicator.Indicator) {
                 case IndicatorTypes.Sphere:
@@ -45,6 +46,17 @@ namespace PlayerScripts {
 
         private void Update() {
             _updateLoop?.Invoke();
+        }
+
+        public void ForceCancel() {
+            var targetData = new SpellTargetData {
+                Cancelled = true,
+                TargetPosition = default,
+                TargetPlayer = null
+            };
+            _callback?.Invoke(targetData);
+            _currentIndicator.SetActive(false);
+            enabled = false;
         }
 
         private void AreaIndicatorUpdate() {
@@ -78,19 +90,24 @@ namespace PlayerScripts {
                 };
                 _callback?.Invoke(targetData);
                 _currentIndicator.SetActive(false);
+                _currentIndicator = null;
                 enabled = false;
             }
 
-            if (Input.GetKeyDown(KeyCode.Mouse1)) {
-                var targetData = new SpellTargetData {
-                    Cancelled = true,
-                    TargetPosition = default,
-                    TargetPlayer = null
-                };
-                _callback?.Invoke(targetData);
-                _currentIndicator.SetActive(false);
-                enabled = false;
-            }
+            // if (Input.GetKeyDown(KeyCode.Mouse1)) {
+            //     var targetData = new SpellTargetData {
+            //         Cancelled = true,
+            //         TargetPosition = default,
+            //         TargetPlayer = null
+            //     };
+            //     _callback?.Invoke(targetData);
+            //     _currentIndicator.SetActive(false);
+            //     enabled = false;
+            // }
+        }
+
+        public void SetShowIndicators(bool showIndicators) {
+            _currentIndicator.SetActive(showIndicators);
         }
         
         protected override void OnClientStart(bool isOwner) {

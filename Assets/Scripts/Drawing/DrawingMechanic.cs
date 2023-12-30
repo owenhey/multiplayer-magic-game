@@ -34,7 +34,6 @@ public class DrawingMechanic : MonoBehaviour
     void Update()
     {
         var pointOnCanvas = GetMouseValidity(Input.mousePosition);
-
         if(pointOnCanvas != null){
             if(Input.GetKeyDown(KeyCode.Mouse0)){
                 OnStartDraw?.Invoke();
@@ -42,6 +41,7 @@ public class DrawingMechanic : MonoBehaviour
                 startTime = Time.time;
                 drawingOnCanvas = true;
             }
+            
             if(drawingOnCanvas && Input.GetKey(KeyCode.Mouse0)){
                 Draw(pointOnCanvas.Value);
             }
@@ -50,6 +50,13 @@ public class DrawingMechanic : MonoBehaviour
             SendPoints();
             drawingOnCanvas = false;
         }
+    }
+
+    public void ForceStartDraw() {
+        OnStartDraw?.Invoke();
+        drawnPoints.Clear();
+        startTime = Time.time;
+        drawingOnCanvas = true;
     }
 
     private void SendPoints(){
@@ -63,7 +70,6 @@ public class DrawingMechanic : MonoBehaviour
 
     private void Draw(Vector2 drawnPoint){
         drawnPoints.Add(drawnPoint);
-
         OnDraw?.Invoke(drawnPoint);
     }
 

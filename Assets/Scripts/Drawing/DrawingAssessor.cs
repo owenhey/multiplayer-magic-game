@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Drawing;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Drawing Assessor", menuName = "ScriptableObjects/Singletons/Drawing Assessor", order = 1)]
@@ -20,19 +21,27 @@ public class DrawingAssessor : ScriptableObject {
 
     private static DrawingAssessor _instance;
 
-    private BasicDrawingAssessor[] _assessors;
+    private IDrawingAssessor[] _assessors;
 
     public void HandleStartDraw(DefinedDrawing[] drawings) {
-        _assessors = new BasicDrawingAssessor[drawings.Length];
+        _assessors = new IDrawingAssessor[drawings.Length];
         for (var index = 0; index < drawings.Length; index++) {
             var drawing = drawings[index];
-            _assessors[index] = new BasicDrawingAssessor(drawing);
+            _assessors[index] = new ScalableDrawingAssessor(drawing);
+            // _assessors[index] = new BasicDrawingAssessor(drawing);
         }
     }
 
     public void HandleDraw(in Vector2 point) {
         foreach (var assessor in _assessors) {
             assessor.RegisterPoint(point);
+        }
+    }
+
+    public void HandleDrawTranslated(in Vector2 point, float canvasSize) {
+        // Have to translate points to the assessor's starting point
+        foreach (var assessor in _assessors) {
+            assessor.RegisterPoint(point - assessor.Target.GetStartingPointOffset());
         }
     }
 
@@ -55,15 +64,12 @@ public class DrawingAssessor : ScriptableObject {
         }
         
         return results[bestIndex];
+        // return results[0];
     }
 
     public void SetDebug(DebugPointDelegate frameDebug, DebugPointDelegate indexDebug) {
-        foreach (var item in _assessors) {
-            item.SetDebugDelegates(frameDebug, indexDebug);
-        }
-    }
-
-    public void AssessResults(DrawingResults results) {
-        results.AssessResults(_assessorType);
+        // foreach (var item in _assessors) {
+        //     item.SetDebugDelegates(frameDebug, indexDebug);
+        // }
     }
 }

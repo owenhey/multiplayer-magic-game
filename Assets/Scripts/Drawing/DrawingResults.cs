@@ -3,7 +3,8 @@ using UnityEngine;
 using Helpers;
 
 public enum DrawingResultsAssessorTypes {
-    SensitiveTriple
+    SensitiveTriple,
+    BasicAverageDistance
 }
 public class DrawingResults{
     public DrawingResults(bool completed, DefinedDrawing definedDrawing = null, float totalTime = 0, float averageDistance = 0, float percentDistanceError = 0, float newPercentDistanceError = 0, bool completedAllPoints = false, float score = 0) {
@@ -34,11 +35,18 @@ public class DrawingResults{
             case DrawingResultsAssessorTypes.SensitiveTriple:
                 Score = SensitiveTriple();
                 break;
+            case DrawingResultsAssessorTypes.BasicAverageDistance:
+                Score = BasicAverageDistance();
+                break;
         }
     }
 
     private float SensitiveTriple() {
         return Misc.RemapClamp(AverageDistance, .01f, 0.07f, 1, 0);
+    }
+    
+    private float BasicAverageDistance() {
+        return Misc.RemapClamp(AverageDistance, .05f, 0.2f, 1, 0);
     }
 
     public override string ToString() {

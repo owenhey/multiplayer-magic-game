@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Points:
   - X: 0.5
-    Y: 0.7
+    Y: 1
     time: 0
-  - X: 0.3
-    Y: 0.3
+  - X: 0
+    Y: 0
     time: 0.3333
-  - X: 0.7
-    Y: 0.3
+  - X: 1
+    Y: 0
     time: 0.6666
   - X: 0.5
-    Y: 0.7
+    Y: 1
     time: 1
   TotalDistance: 1.4183073
-  CalculatedDistance: 1.294427
+  CalculatedDistance: 3.2360678
   TimeTarget: 0
   HelperImage: {fileID: 21300000, guid: 19ec2df1e65747543988db368a124c65, type: 3}

@@ -9,6 +9,7 @@ public class SpellIndicatorDataEditor : Editor {
     SerializedProperty indicatorProp;
     SerializedProperty minRangeProp;
     SerializedProperty maxRangeProp;
+    SerializedProperty sizeProp;
 
     private void OnEnable() {
         // Linking the SerializedProperty with the actual class properties
@@ -17,6 +18,7 @@ public class SpellIndicatorDataEditor : Editor {
         indicatorProp = serializedObject.FindProperty("Indicator");
         minRangeProp = serializedObject.FindProperty("MinimumRange");
         maxRangeProp = serializedObject.FindProperty("MaximumRange");
+        sizeProp = serializedObject.FindProperty("Size");
     }
 
     public override void OnInspectorGUI() {
@@ -35,12 +37,14 @@ public class SpellIndicatorDataEditor : Editor {
                 EditorGUILayout.PropertyField(possibleTargetsProp);
                 EditorGUILayout.PropertyField(minRangeProp);
                 EditorGUILayout.PropertyField(maxRangeProp);
+                EditorGUILayout.PropertyField(sizeProp);
                 break;
             case IndicatorTargetType.Area:
                 // Show fields for Area
                 EditorGUILayout.PropertyField(indicatorProp);
                 EditorGUILayout.PropertyField(minRangeProp);
                 EditorGUILayout.PropertyField(maxRangeProp);
+                EditorGUILayout.PropertyField(sizeProp);
                 break;
         }
 

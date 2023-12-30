@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace PlayerScripts {
-    public enum PlayerState { Teleporting, CastingSpell, InInventory, Stunned }
+    public enum PlayerState { MovingCamera, Teleporting, CastingSpell, InInventory, Stunned }
 
     public class PlayerStateManager : LocalPlayerScript {
         [SerializeField] private PlayerMovement PlayerMovement;
         [SerializeField] private PlayerSpells PlayerSpells;
         [SerializeField] private PlayerModel PlayerModel;
         [SerializeField] private PlayerInteract PlayerInteract;
+        [SerializeField] private PlayerSpellIndicatorHandler PlayerIndicators;
         public Dictionary<PlayerState, int> StateCounts { get; private set; }= new Dictionary<PlayerState, int>();
         [HideInInspector] public bool ShowStateCounts;
 
@@ -19,6 +20,7 @@ namespace PlayerScripts {
             bool CastingSpell = Active(PlayerState.CastingSpell);
             bool InInventory = Active(PlayerState.InInventory);
             bool Stunned = Active(PlayerState.Stunned);
+            bool MovingCamera = Active(PlayerState.MovingCamera);
             
             // Main logic here
             
@@ -31,8 +33,12 @@ namespace PlayerScripts {
             PlayerSpells.enabled = spellsEnabled;
             
             // Interaction 
-            bool interactionEnabled = !(Teleporting || InInventory || Stunned || CastingSpell); 
+            bool interactionEnabled = !(Teleporting || InInventory || Stunned || CastingSpell || MovingCamera); 
             PlayerInteract.enabled = interactionEnabled;
+            
+            // Interaction 
+            // bool indicatorsEnabled = !(MovingCamera); 
+            // PlayerIndicators.SetShowIndicators(indicatorsEnabled);
         }
 
         private bool Active(PlayerState state) {

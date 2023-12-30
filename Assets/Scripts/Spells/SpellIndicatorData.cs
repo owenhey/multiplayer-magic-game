@@ -29,5 +29,6 @@ namespace Spells {
         // Both target and area need these
         public float MinimumRange = 0;
         public float MaximumRange = 10.0f;
+        [Range(0, 5)] public float Size = 1.0f;
     }
 }

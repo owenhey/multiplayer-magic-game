@@ -9,7 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56bb282fe8e086a40abc69eac3851673, type: 3}
-  m_Name: Drawing Assessor
+  m_Script: {fileID: 11500000, guid: 6d6938eb0908499bb95b72dcbaa14ba8, type: 3}
+  m_Name: Tiny Circle
   m_EditorClassIdentifier: 
-  _assessorType: 1
+  TargetType: 2
+  PossibleTargets: 0
+  Indicator: 0
+  MinimumRange: 0
+  MaximumRange: 100000
+  Size: 0.5

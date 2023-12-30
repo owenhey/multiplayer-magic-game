@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Drawing;
 using UnityEngine;
 
-public class BasicDrawingAssessor {
+public class BasicDrawingAssessor : IDrawingAssessor{
     private DefinedDrawing _target;
+    public DefinedDrawing Target => _target;
 
     private int _nextPointIndex;
     private float _minimumDistanceToCurrentPoint;

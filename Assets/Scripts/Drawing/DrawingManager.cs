@@ -27,6 +27,7 @@ public class DrawingManager : MonoBehaviour {
         [SerializeField] private RectTransform _calculatedDrawingRT;
         [SerializeField] private RectTransform _displayParent;
         [SerializeField] private Image _guideImage;
+        [SerializeField] private Image _circleImage;
         [SerializeField] private CanvasGroup _cg;
         [SerializeField] private RectTransform[] _rts;
 
@@ -43,27 +44,39 @@ public class DrawingManager : MonoBehaviour {
     private DrawShapeCallback _callback;
 
     private bool _open;
+    private bool _offsetShapes;
+    private bool _enabled;
 
     private void Start() {
         Hide();
         Instance = this;
     }
 
-    public void StartDrawing(DefinedDrawing drawing = null, DrawShapeCallback callback = null) {
+    public void StartDrawing(DefinedDrawing drawing = null, DrawShapeCallback callback = null, bool offsetShapes = false) {
         if (drawing != null) {
             _targetDrawing = drawing;
             // Set the drawing on the mouse
             _guideImage.enabled = true;
             _guideImage.sprite = drawing.HelperImage;
-            Vector2 firstPointOffset = _targetDrawing.GetStartingPointOffsetInPixels(_calculatedDrawingRT.sizeDelta.x);
-            PositionDrawing((Vector2)Input.mousePosition - firstPointOffset);
+            // Vector2 firstPointOffset = _targetDrawing.GetStartingPointOffsetInPixels(_calculatedDrawingRT.sizeDelta.x);
+            // PositionDrawing((Vector2)Input.mousePosition - firstPointOffset);
+            PositionDrawing((Vector2)Input.mousePosition);
+            _circleImage.enabled = true;
         }
         else {
             // In this case, just position it in the center of the circle. Maybe show the indicator here?
             _guideImage.enabled = false;
             PositionDrawing((Vector2)Input.mousePosition);
+            _circleImage.enabled = true;
         }
-        
+
+        if (offsetShapes) {
+            // PLACEHOLDER FOR THE INSTANT CAST METHOD
+            _circleImage.enabled = true;
+            _drawingMechanic.ForceStartDraw();
+        }
+
+        _offsetShapes = offsetShapes;
         _content.SetActive(true);
         _cg.DOFade(1.0f, .15f).From(0);
         _drawingMechanic.Clear();
@@ -114,24 +127,32 @@ public class DrawingManager : MonoBehaviour {
     }
 
     private void OnDraw(Vector2 point) {
-        DrawingAssessor.Instance.HandleDraw(in point);
+        if (_offsetShapes) {
+            DrawingAssessor.Instance.HandleDrawTranslated(in point, _calculatedDrawingRT.sizeDelta.x);
+        }
+        else {
+            DrawingAssessor.Instance.HandleDraw(in point);
+        }
+
     }
 
     private void OnEndDraw(Vector2[] points, float time) {
         var results = DrawingAssessor.Instance.HandleEndDraw();
-        DrawingAssessor.Instance.AssessResults(results);
+        Debug.Log($"Results: {results}");
         Finish(results);
     }
 
     // Can be called either from Cancel or OnEndDraw
     private void Finish(DrawingResults results) {
-        Debug.Log(results);
         // ShapeQualityPopupManager.Instance.ShowPopup(results, score);
         Hide();
         _callback?.Invoke(results);
     }
     
     private void FrameDebug(in Vector2 vec, int index){
+        if (!_debugSlider) {
+            _debugSlider = Instantiate(_debugDot, _debugParent).GetComponent<RectTransform>();
+        }
         _debugSlider.anchoredPosition = _calculatedDrawingRT.sizeDelta * (vec - Vector2.one * .5f);
     }
     
