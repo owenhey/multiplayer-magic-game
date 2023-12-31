@@ -1,3 +1,4 @@
+using FishNet;
 using FishNet.Connection;
 using PlayerScripts;
 using UnityEngine;
@@ -15,8 +16,8 @@ namespace Spells {
 
         protected abstract void OnSpellEnd();
 
-        public void BeginSpell(NetworkConnection targetPlayer, float duration) {
-            _targetPlayer = targetPlayer.FirstObject.GetComponent<Player>();
+        public void BeginSpell(int targetId, float duration) {
+            _targetPlayer = Player.GetPlayerFromClientId(targetId);
             OnSpellStart();
             // Let's assume for now that this is the local player (owner)
             _targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer(duration, OnSpellEnd, OnSpellTick);

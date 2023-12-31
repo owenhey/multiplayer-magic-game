@@ -8,13 +8,14 @@ using UnityEngine;
 namespace Net {
     [System.Serializable]
     public class SpawnablePrefabInitData {
-        public NetworkConnection Owner;
+        public int OwnerId;
         public Vector3 Position;
         public Quaternion Rotation;
     }
     
     public interface INetSpawnable {
-        public void Init(SpawnablePrefabInitData initData);
+        public void SetInitData(SpawnablePrefabInitData data);
+        public void ClientEnableObject();
         public SpawnablePrefabTypes SpawnablePrefabType { get; }
     }
 }

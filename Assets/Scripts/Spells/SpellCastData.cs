@@ -9,7 +9,7 @@ namespace Spells {
     /// </summary>
     public class SpellCastData {
         public SpellTargetData TargetData;
-        public NetworkConnection CastingPlayer;
+        public int CastingPlayerId;
         public int SpellId;
         public SpellDefinition SpellDefinition => SpellIder.Instance.GetSpell(SpellId);
         public float Damage;
@@ -22,6 +22,6 @@ namespace Spells {
     public class SpellTargetData {
         public bool Cancelled;
         public Vector3 TargetPosition;
-        public NetworkConnection TargetPlayer;
+        public int TargetPlayerId;
     }
 }

@@ -128,7 +128,7 @@ namespace PlayerScripts {
         private void CastSpell() {
             var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.EffectId);
             var spellCastData = new SpellCastData {
-                CastingPlayer = _player.LocalConnection,
+                CastingPlayerId = _player.LocalConnection.ClientId,
                 TargetData = _spellTargetData,
                 SpellId = _chosenSpell.SpellId,
                 Damage = 0,
@@ -139,7 +139,7 @@ namespace PlayerScripts {
             // Cast spell effect to type, and handle accordingly
             switch (spellEffect) {
                 case PlayerOverrideSpellEffect playerOverride:
-                    playerOverride.BeginSpell(spellCastData.TargetData.TargetPlayer, spellCastData.Duration);
+                    playerOverride.BeginSpell(spellCastData.TargetData.TargetPlayerId, spellCastData.Duration);
                     break;
                 case SingleCastSpellEffect singleCastSpell:
                     singleCastSpell.BeginSpell();

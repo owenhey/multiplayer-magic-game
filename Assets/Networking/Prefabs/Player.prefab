@@ -5215,7 +5215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be2d6d52cf143d040929aac0606574bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _player: {fileID: 8286632864543236906}
@@ -5331,7 +5331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 3
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _componentConfiguration: 0
@@ -5534,6 +5534,7 @@ MonoBehaviour:
   _networkBehaviours:
   - {fileID: 8286632864543236906}
   - {fileID: 9214829115622678224}
+  - {fileID: 6230999115221547090}
   - {fileID: 6707716053342808154}
   - {fileID: 6749459404671944547}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
@@ -5605,8 +5606,6 @@ MonoBehaviour:
   _instantDrawEnabled: 0
   _spells:
   - {fileID: 11400000, guid: 6be7092796acb4f5a815edea6773ffb2, type: 2}
-  - {fileID: 11400000, guid: 061618cc6aa12df41824b159e1093763, type: 2}
-  - {fileID: 11400000, guid: b5269cd9971f5470e8196e681df7c7e2, type: 2}
   _instantDrawIndicatorData: {fileID: 11400000, guid: 8c42f81f1648a4467b5d3e8ea5a3d97d,
     type: 2}
 --- !u!114 &2092327897885649139
@@ -5654,9 +5653,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c650b2006893a4337acf9a7b18e52fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 3726133492282219349}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 3726133492282219349}
   _player: {fileID: 8286632864543236906}
   SpawnablePrefabs:
   - _type: 0

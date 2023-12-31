@@ -20,6 +20,9 @@ namespace PlayerScripts {
 
         public static Player LocalPlayer;
 
+        private static Dictionary<int, Player> _clientIdToPlayer = new();
+        private static List<Player> _allPlayers = new();
+        
         public void RegisterOnClientStartListener(Action<bool> method) {
             _onClientStart += method;
         }
@@ -29,6 +32,7 @@ namespace PlayerScripts {
             _onClientStart.Invoke(IsOwner);
         }
 
+        private int h;
         private void Update() {
             if (Input.GetKeyDown(KeyCode.Mouse1)) {
                 PlayerReferences.PlayerStateManager.AddState(PlayerState.MovingCamera);
@@ -36,6 +40,10 @@ namespace PlayerScripts {
 
             if (Input.GetKeyUp(KeyCode.Mouse1)) {
                 PlayerReferences.PlayerStateManager.RemoveState(PlayerState.MovingCamera);
+            }
+            
+            if (Input.GetKeyUp(KeyCode.H)) {
+                Debug.Log("H pressed: " + h++);
             }
         }
 
@@ -62,6 +70,25 @@ namespace PlayerScripts {
 
         private void HandleNameChange(string old, string newName, bool server) {
             NameDisplay.text = newName;
+        }
+        
+        public static Player GetPlayerFromClientId(int clientId) {
+            return _clientIdToPlayer[clientId];
+        }
+        
+        public override void OnStartNetwork() {
+            base.OnStartNetwork();
+            AddToStaticData();
+        }
+        
+        private void AddToStaticData() {
+            _allPlayers.Add(this);
+            _clientIdToPlayer.Add(LocalConnection.ClientId, this);
+        }
+
+        private void OnDestroy() {
+            _allPlayers.Remove(this);
+            _clientIdToPlayer.Remove(LocalConnection.ClientId);
         }
     }
 }

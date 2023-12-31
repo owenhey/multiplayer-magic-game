@@ -14,15 +14,15 @@ namespace Spells {
         
         private void SpawnPrefab() {
             INetSpawnable objectToSpawn = _spellCastData.SpellDefinition.SpellPrefab.GetComponent<INetSpawnable>();
-            Player castingPlayer = _spellCastData.CastingPlayer.FirstObject.GetComponent<Player>();
-
+            var netConn = Player.GetPlayerFromClientId(_spellCastData.CastingPlayerId).LocalConnection;
+            Player castingPlayer = netConn.FirstObject.GetComponent<Player>();
+            
             var initData = new SpawnablePrefabInitData {
-                Owner = _spellCastData.CastingPlayer,
+                OwnerId = _spellCastData.CastingPlayerId,
                 Position = _spellCastData.TargetData.TargetPosition,
                 Rotation = Quaternion.identity
             };
-
-            Debug.Log($"Position: " + initData.Position);
+            
             castingPlayer.PlayerReferences.PlayerPrefabSpawner.SpawnPrefabFromClient(objectToSpawn.SpawnablePrefabType, initData);
         }
     }

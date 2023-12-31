@@ -23,13 +23,15 @@ namespace PlayerScripts {
         private void SpawnPrefab(SpawnablePrefabTypes type, SpawnablePrefabInitData spawnData) {
             if (!IsServer) return;
             
+            // Spawn the object on the server
             GameObject objectToSpawn = GetObjectFromType(type);
+            var serverObj = Instantiate(objectToSpawn);
             
-            // var serverObj = Instantiate(objectToSpawn);
-            // serverObj.transform.SetPositionAndRotation(spawnData.Position, spawnData.Rotation);
-            // Spawn(serverObj, spawnData.Owner);
+            // Init
+            INetSpawnable netSpawnable = serverObj.GetComponent<INetSpawnable>();
+            netSpawnable.SetInitData(spawnData);
             
-            var serverObj = Instantiate(objectToSpawn, spawnData.Position, spawnData.Rotation);
+            // Spawn on clients
             Spawn(serverObj);
         }
         
