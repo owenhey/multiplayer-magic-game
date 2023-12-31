@@ -27,7 +27,7 @@ namespace PlayerScripts {
             // Handle no indicator
             if (indicator.TargetType == IndicatorTargetType.None) {
                 SpellTargetData targetData = new();
-                targetData.TargetPlayerId = _player.LocalConnection.ClientId;
+                targetData.TargetPlayerId = _player.OwnerId;
                 spellTargetDataHandler?.Invoke(targetData);
                 return;
             }
@@ -90,7 +90,7 @@ namespace PlayerScripts {
                 var targetData = new SpellTargetData {
                     Cancelled = false,
                     TargetPosition = _currentIndicator.GetTransform().position,
-                    TargetPlayerId = _player.LocalConnection.ClientId
+                    TargetPlayerId = _player.OwnerId
                 };
                 _callback?.Invoke(targetData);
                 _currentIndicator.SetActive(false);

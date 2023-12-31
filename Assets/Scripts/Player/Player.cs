@@ -82,13 +82,14 @@ namespace PlayerScripts {
         }
         
         private void AddToStaticData() {
+            Debug.Log("Owner id:" + OwnerId);
             _allPlayers.Add(this);
-            _clientIdToPlayer.Add(LocalConnection.ClientId, this);
+            _clientIdToPlayer.Add(OwnerId, this);
         }
 
         private void OnDestroy() {
             _allPlayers.Remove(this);
-            _clientIdToPlayer.Remove(LocalConnection.ClientId);
+            _clientIdToPlayer.Remove(OwnerId);
         }
     }
 }
