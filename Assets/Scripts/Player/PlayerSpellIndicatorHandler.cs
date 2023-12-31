@@ -27,7 +27,7 @@ namespace PlayerScripts {
             // Handle no indicator
             if (indicator.TargetType == IndicatorTargetType.None) {
                 SpellTargetData targetData = new();
-                targetData.TargetPlayer = _player;
+                targetData.TargetPlayer = _player.LocalConnection;
                 spellTargetDataHandler?.Invoke(targetData);
                 return;
             }
@@ -90,7 +90,7 @@ namespace PlayerScripts {
                 var targetData = new SpellTargetData {
                     Cancelled = false,
                     TargetPosition = _currentIndicator.GetTransform().position,
-                    TargetPlayer = _player
+                    TargetPlayer = _player.LocalConnection
                 };
                 _callback?.Invoke(targetData);
                 _currentIndicator.SetActive(false);

@@ -49,8 +49,8 @@ namespace PlayerScripts {
         }
 
         // Update is called once per frame
-        void Update()
-        {
+        void Update() {
+            if (_cam == false) return;
             // Get player input
             GetInput();
 

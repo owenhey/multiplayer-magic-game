@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using FishNet;
 using Helpers;
 using UnityEngine;
 using Spells;
@@ -21,6 +22,8 @@ namespace PlayerScripts {
         // Mid-cast data
         private SpellDefinition _chosenSpell = null;
         private SpellTargetData _spellTargetData = null;
+
+        public Action OnSpellMessUp;
 
         protected override void Awake() {
             base.Awake();
@@ -78,6 +81,7 @@ namespace PlayerScripts {
                 enabled = true;
                 _stateManager.RemoveState(PlayerState.CastingSpell);
                 ResetState();
+                OnSpellMessUp?.Invoke();
                 return;
             }
             CastSpell();
@@ -100,6 +104,7 @@ namespace PlayerScripts {
             if (results.Score < .5f) {
                 _stateManager.RemoveState(PlayerState.CastingSpell);
                 ResetState();
+                OnSpellMessUp?.Invoke();
                 return;
             }
             
@@ -123,6 +128,7 @@ namespace PlayerScripts {
         private void CastSpell() {
             var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.EffectId);
             var spellCastData = new SpellCastData {
+                CastingPlayer = _player.LocalConnection,
                 TargetData = _spellTargetData,
                 SpellId = _chosenSpell.SpellId,
                 Damage = 0,
@@ -172,6 +178,7 @@ namespace PlayerScripts {
             if (results.Score < .5f) {
                 _stateManager.RemoveState(PlayerState.CastingSpell);
                 ResetState();
+                OnSpellMessUp?.Invoke();
                 return;
             }
             

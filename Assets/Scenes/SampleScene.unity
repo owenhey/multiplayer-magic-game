@@ -3071,7 +3071,6 @@ MonoBehaviour:
   _drawingMechanic: {fileID: 409355513}
   _targetDrawing: {fileID: 0}
   _content: {fileID: 1788322472}
-  _drawingSizeRelativeToParent: 0.76
   _calculatedDrawingRT: {fileID: 1556485676}
   _displayParent: {fileID: 1788322473}
   _guideImage: {fileID: 1556485674}
