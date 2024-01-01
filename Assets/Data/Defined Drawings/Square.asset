@@ -13,34 +13,22 @@ MonoBehaviour:
   m_Name: Square
   m_EditorClassIdentifier: 
   Points:
-  - X: 0.3
-    Y: 0.7
+  - X: 0
+    Y: 1
     time: 0
-  - X: 0.3
-    Y: 0.5
+  - X: 0
+    Y: 0
+    time: 0.3333
+  - X: 1
+    Y: 0
+    time: 0.6666
+  - X: 1
+    Y: 1
+    time: 0.928
+  - X: 0
+    Y: 1
     time: 1
-  - X: 0.3
-    Y: 0.3
-    time: 0.25
-  - X: 0.5
-    Y: 0.3
-    time: 1
-  - X: 0.7
-    Y: 0.3
-    time: 0.5
-  - X: 0.7
-    Y: 0.5
-    time: 0.75
-  - X: 0.7
-    Y: 0.7
-    time: 1
-  - X: 0.5
-    Y: 0.7
-    time: 1
-  - X: 0.3
-    Y: 0.7
-    time: 1
-  TotalDistance: 1.5999999
-  CalculatedDistance: 1.5999999
-  TimeTarget: 0.45
+  TotalDistance: 4
+  CalculatedDistance: 4
+  TimeTarget: 1
   HelperImage: {fileID: 21300000, guid: 6027d9c411b560c4695d87a18707045d, type: 3}

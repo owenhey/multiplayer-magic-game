@@ -82,7 +82,6 @@ namespace PlayerScripts {
         }
         
         private void AddToStaticData() {
-            Debug.Log("Owner id:" + OwnerId);
             _allPlayers.Add(this);
             _clientIdToPlayer.Add(OwnerId, this);
         }

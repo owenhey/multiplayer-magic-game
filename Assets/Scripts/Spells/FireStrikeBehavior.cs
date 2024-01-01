@@ -36,23 +36,12 @@ namespace Spells {
         }
 
         private void Setup() {
-            _cubeTransform.position = _initData.Position;
+            _cubeTransform.position = _initData.Position + Vector3.up * 20.0f;
             _cubeTransform.rotation = _initData.Rotation;
-            ClientEnableObject();
-            Begin();
         }
 
         private void Begin() {
-            _spawnSound.Play();
-            var cubeStartPos = _cubeTransform.position;
-            Vector3 hitPosition = cubeStartPos;
-            Ray ray = new Ray(cubeStartPos, Vector3.down);
-            RaycastHit hit;
-
-            // Perform the raycast
-            if (Physics.Raycast(ray, out hit, 50, _raycastLayerMask)) {
-                hitPosition = hit.point;
-            }
+            Vector3 hitPosition = _initData.Position;
 
             _cubeTransform.DOScale(Vector3.one, .5f).From(Vector3.zero);
             _cubeTransform.DOMove(hitPosition, 1.0f).SetEase(Ease.InQuint).OnComplete(() => {
@@ -63,8 +52,10 @@ namespace Spells {
             });
 
             _cubeTransform.DOScale(Vector3.zero, .25f).SetEase(Ease.InQuad).SetDelay(4.0f).OnComplete(() => {
-                if(IsServer)
-                    Despawn(gameObject);
+                gameObject.SetActive(false);
+                if (IsServer) {
+                    Despawn(gameObject, DespawnType.Destroy);
+                }
             });
         }
     }

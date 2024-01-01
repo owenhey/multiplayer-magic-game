@@ -64,17 +64,21 @@ namespace Drawing{
                     currentMinPoint = Vector2.zero;
                 }
             }
+            // Add the current smallest distance (the last one)
+            closestPoints.Add(currentMinPoint);
+            
             // Now, figure out average distance between points
-            Debug.Log("Target points count: " + _targetDrawing.Points.Count + ", Closest points count: " + closestPoints.Count);
             float average = 0;
             for (int i = 0; i < _targetDrawing.Points.Count; i++) {
                 if(i < closestPoints.Count)
                     average += _targetDrawing.Points[i].Distance(closestPoints[i]);
                 else {
-                    average += .1f; // TEMPPORARY SO I CAN AT LEAST DRAW A SHAPE
+                    average += 1f;
                 }
             }
             average /= _targetDrawing.Points.Count;
+            
+            Debug.Log($"({_targetDrawing.name}) Target points count: " + _targetDrawing.Points.Count + ", Closest points count: " + closestPoints.Count +  $". {average}");
 
             return new DrawingResults(true, _targetDrawing, 0, average, 0, 0, true);
         }

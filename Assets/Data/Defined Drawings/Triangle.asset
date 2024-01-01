@@ -16,12 +16,21 @@ MonoBehaviour:
   - X: 0.5
     Y: 1
     time: 0
+  - X: 0.25
+    Y: 0.5
+    time: 0.17
   - X: 0
     Y: 0
     time: 0.3333
+  - X: 0.5
+    Y: 0
+    time: 0.525
   - X: 1
     Y: 0
     time: 0.6666
+  - X: 0.75
+    Y: 0.5
+    time: 0.848
   - X: 0.5
     Y: 1
     time: 1
