@@ -10,6 +10,7 @@ namespace Spells {
     public class SpellCastData {
         public SpellTargetData TargetData;
         public int CastingPlayerId;
+        public Player Player => Player.GetPlayerFromClientId(CastingPlayerId);
         public int SpellId;
         public SpellDefinition SpellDefinition => SpellIder.Instance.GetSpell(SpellId);
         public float Damage;

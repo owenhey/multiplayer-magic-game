@@ -9,7 +9,8 @@ using UnityEngine;
 
 namespace PlayerScripts {
     public enum SpawnablePrefabTypes {
-        FireStrike
+        FireStrike,
+        Wall
     }
     
     public class PlayerPrefabSpawner : NetworkedPlayerScript {

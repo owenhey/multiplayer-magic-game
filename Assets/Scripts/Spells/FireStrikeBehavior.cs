@@ -6,18 +6,19 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Net;
 using PlayerScripts;
+using UnityEngine.Serialization;
 
 namespace Spells {
     public class FireStrikeBehavior : NetworkBehaviour, INetSpawnable {
         [SerializeField] private SpawnablePrefabTypes _netSpawnType;
         public SpawnablePrefabTypes SpawnablePrefabType => _netSpawnType;
 
-        [SerializeField] private Transform _cubeTransform;
-        [SerializeField] private LayerMask _raycastLayerMask;
+        [SerializeField] private Transform _contentTransform;
+        [SerializeField] private GameObject _explosionGameObject;
         [SerializeField] private AudioSource _spawnSound;
-        [SerializeField] private AudioSource _slamSound;
+        [SerializeField] private AudioSource _explosionSound;
 
-        [SyncVar]
+        [SyncVar] [ReadOnly]
         private SpawnablePrefabInitData _initData;
 
         public void SetInitData(SpawnablePrefabInitData data) {
@@ -32,26 +33,27 @@ namespace Spells {
         }
 
         public void ClientEnableObject() {
-            _cubeTransform.gameObject.SetActive(true);
+            _contentTransform.gameObject.SetActive(true);
         }
 
         private void Setup() {
-            _cubeTransform.position = _initData.Position + Vector3.up * 20.0f;
-            _cubeTransform.rotation = _initData.Rotation;
+            _contentTransform.position = _initData.Position + Vector3.up * 20.0f;
+            _contentTransform.rotation = _initData.Rotation;
         }
 
         private void Begin() {
             Vector3 hitPosition = _initData.Position;
+            // _spawnSound?.Play();
 
-            _cubeTransform.DOScale(Vector3.one, .5f).From(Vector3.zero);
-            _cubeTransform.DOMove(hitPosition, 1.0f).SetEase(Ease.InQuint).OnComplete(() => {
-                _slamSound.Play();
-                _cubeTransform.DOScale(new Vector3(1.5f, .5f, 1.5f), .1f).SetEase(Ease.OutQuad).OnComplete(() => {
-                    _cubeTransform.DOScale(Vector3.one, .08f).SetEase(Ease.InQuad);
+            _contentTransform.DOScale(Vector3.one, .5f);
+            _contentTransform.DOMove(hitPosition, 1.0f).SetEase(Ease.InQuint).OnComplete(() => {
+                // _explosionSound?.Play();
+                _contentTransform.DOScale(Vector3.one, .11f).OnComplete(() => {
+                    _explosionGameObject.SetActive(true);
                 });
             });
 
-            _cubeTransform.DOScale(Vector3.zero, .25f).SetEase(Ease.InQuad).SetDelay(4.0f).OnComplete(() => {
+            _contentTransform.DOScale(Vector3.one, 0).SetDelay(5.0f).OnComplete(() => {
                 gameObject.SetActive(false);
                 if (IsServer) {
                     Despawn(gameObject, DespawnType.Destroy);

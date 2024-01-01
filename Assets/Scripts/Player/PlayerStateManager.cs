@@ -37,7 +37,7 @@ namespace PlayerScripts {
             PlayerInteract.enabled = interactionEnabled;
             
             // Indicatosrs
-            bool indicatorsEnabled = !(MovingCamera);
+            bool indicatorsEnabled = !(MovingCamera || Teleporting || InInventory || Stunned);
             PlayerIndicators.Hide = !indicatorsEnabled;
         }
 
