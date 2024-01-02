@@ -126,6 +126,7 @@ namespace PlayerScripts {
 
         // Casts the chosen spell using the target data
         private void CastSpell() {
+            Debug.Log($"Casting spell: {_chosenSpell.name}");
             var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.EffectId);
             var spellCastData = new SpellCastData {
                 CastingPlayerId = _player.LocalConnection.ClientId,
@@ -185,8 +186,6 @@ namespace PlayerScripts {
             // Handle targeting and recieve spell cast data
             _chosenSpell = _spells.FirstOrDefault(x=>x.Drawing == results.Drawing);
             CastSpell();
-            
-            
         }
 
         private void ResetState() {
@@ -195,7 +194,7 @@ namespace PlayerScripts {
         }
 
         protected override void OnClientStart(bool isOwner) {
-            if (!isOwner) enabled = false;
+            if (!isOwner) Destroy(this);
         }
 
         public SpellDefinition[] GetOffCooldownSpells() {
