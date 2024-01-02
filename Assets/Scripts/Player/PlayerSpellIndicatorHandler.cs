@@ -66,6 +66,7 @@ namespace PlayerScripts {
         private void AreaIndicatorUpdate() {
             Vector3 mousePosition = Input.mousePosition;
             Ray ray = _player.PlayerReferences.Cam.ScreenPointToRay(mousePosition);
+            Vector3 rayTarget = ray.origin + ray.direction * 50;
             if (Physics.Raycast(ray, out RaycastHit hit, 100, _areaRaycastLayerMask)) {
                 bool showIndicator = !Hide && true;
                 _currentIndicator.SetActive(showIndicator);
@@ -80,6 +81,7 @@ namespace PlayerScripts {
                     point = playerPos + Vector3.ClampMagnitude(fromPlayer, _currentIndicatorData.MaximumRange);
                 }
                 _currentIndicator.SetPosition(point);
+                rayTarget = point;
             }
             else {
                 _currentIndicator.SetActive(false);
@@ -89,7 +91,7 @@ namespace PlayerScripts {
             if (!Hide && Input.GetKeyDown(KeyCode.Mouse0)) {
                 var targetData = new SpellTargetData {
                     Cancelled = false,
-                    TargetPosition = _currentIndicator.GetTransform().position,
+                    TargetPosition = rayTarget,
                     TargetPlayerId = _player.OwnerId
                 };
                 _callback?.Invoke(targetData);

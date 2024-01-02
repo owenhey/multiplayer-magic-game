@@ -6,6 +6,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Net;
 using PlayerScripts;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Serialization;
 
 namespace Spells {
@@ -15,6 +16,7 @@ namespace Spells {
 
         [SerializeField] private Transform _contentTransform;
         [SerializeField] private GameObject _explosionGameObject;
+        [SerializeField] private DecalProjector _decalProjector;
         [SerializeField] private AudioSource _spawnSound;
         [SerializeField] private AudioSource _explosionSound;
 
@@ -38,10 +40,13 @@ namespace Spells {
 
         private void Setup() {
             _contentTransform.position = _initData.Position + Vector3.up * 20.0f;
+            _decalProjector.transform.position = _initData.Position;
             _contentTransform.rotation = _initData.Rotation;
         }
 
         private void Begin() {
+            DOTween.To(()=> _decalProjector.fadeFactor, x=> _decalProjector.fadeFactor = x, .7f, .25f).From(0);
+            
             Vector3 hitPosition = _initData.Position;
             // _spawnSound?.Play();
 
@@ -50,6 +55,10 @@ namespace Spells {
                 // _explosionSound?.Play();
                 _contentTransform.DOScale(Vector3.one, .11f).OnComplete(() => {
                     _explosionGameObject.SetActive(true);
+                    DOTween.To(() => _decalProjector.fadeFactor, x => _decalProjector.fadeFactor = x, 0, .25f).OnComplete(
+                        () => {
+                            _decalProjector.gameObject.SetActive(false);
+                        });
                 });
             });
 

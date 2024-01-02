@@ -33,62 +33,6 @@ Transform:
   - {fileID: 8873947152891486122}
   m_Father: {fileID: 1485923488132671122}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &769109288688848143
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6290366438582152278}
-  - component: {fileID: 6888621423343704742}
-  m_Layer: 0
-  m_Name: Fire Shadow
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6290366438582152278
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 769109288688848143}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.70710707, y: -0, z: -0, w: 0.70710653}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1485923488132671122}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &6888621423343704742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 769109288688848143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: ca01c9baa2f9c4c46a3899600d91e06a, type: 2}
-  m_DrawDistance: 1000
-  m_FadeScale: 0.9
-  m_StartAngleFade: 180
-  m_EndAngleFade: 180
-  m_UVScale: {x: 1, y: 1}
-  m_UVBias: {x: 0, y: 0}
-  m_DecalLayerMask: 1
-  m_ScaleMode: 0
-  m_Offset: {x: 0, y: 0, z: 0}
-  m_Size: {x: 5, y: 5, z: 1}
-  m_FadeFactor: 0
 --- !u!1 &5569929556040501193
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,7 +45,7 @@ GameObject:
   - component: {fileID: 7906388077570866321}
   - component: {fileID: 8264046528775499405}
   m_Layer: 0
-  m_Name: Fire Strike
+  m_Name: Fireball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -120,7 +64,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6290366438582152278}
   - {fileID: 4276230399832535851}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -142,7 +85,7 @@ MonoBehaviour:
   _netSpawnType: 0
   _contentTransform: {fileID: 4276230399832535851}
   _explosionGameObject: {fileID: 2651914489329101232}
-  _decalProjector: {fileID: 6888621423343704742}
+  _decalProjector: {fileID: 0}
   _spawnSound: {fileID: 0}
   _explosionSound: {fileID: 0}
   _initData:
@@ -243,7 +186,7 @@ PrefabInstance:
     - target: {fileID: 4505782969908492691, guid: 025e005272dd84594bb0cfada889a5cd,
         type: 3}
       propertyPath: m_Name
-      value: Calldown
+      value: Projectile
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -314,6 +257,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3885707166325702715, guid: c76893dec218345b8ba2eb517b6e25b0,
+        type: 3}
+      propertyPath: ShapeModule.type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885707166325702715, guid: c76893dec218345b8ba2eb517b6e25b0,
+        type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885707166325702715, guid: c76893dec218345b8ba2eb517b6e25b0,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 6004688515395739136, guid: c76893dec218345b8ba2eb517b6e25b0,
         type: 3}
       propertyPath: m_Name
@@ -322,7 +280,22 @@ PrefabInstance:
     - target: {fileID: 6004688515395739136, guid: c76893dec218345b8ba2eb517b6e25b0,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8203155913524872681, guid: c76893dec218345b8ba2eb517b6e25b0,
+        type: 3}
+      propertyPath: ShapeModule.type
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8203155913524872681, guid: c76893dec218345b8ba2eb517b6e25b0,
+        type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8203155913524872681, guid: c76893dec218345b8ba2eb517b6e25b0,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
