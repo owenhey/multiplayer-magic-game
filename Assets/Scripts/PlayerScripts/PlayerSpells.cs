@@ -194,7 +194,7 @@ namespace PlayerScripts {
         }
 
         protected override void OnClientStart(bool isOwner) {
-            if (!isOwner) Destroy(this);
+            if (!isOwner) enabled = false;
         }
 
         public SpellDefinition[] GetOffCooldownSpells() {

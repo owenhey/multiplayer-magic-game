@@ -15,6 +15,7 @@ namespace PlayerScripts {
         [field:SerializeField] public PlayerStateManager PlayerStateManager { get; private set; }
         [field:SerializeField] public PlayerTimers PlayerTimers { get; private set; }
         [field:SerializeField] public PlayerMovement PlayerMovement { get; private set; }
+        [field:SerializeField] public PlayerStats PlayerStats { get; private set; }
         [field:SerializeField] public PlayerPrefabSpawner PlayerPrefabSpawner { get; private set; }
         
         [ReadOnly] public CinemachineFreeLook CMCam;

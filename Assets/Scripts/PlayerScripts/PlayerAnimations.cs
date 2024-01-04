@@ -39,6 +39,11 @@ namespace PlayerScripts {
             _animator.speed = speed;
         }
 
+        public void SetEnabled(bool e) {
+            enabled = e;
+            _animator.enabled = e;
+        }
+
         void LateUpdate() {
             if (ManuallyUpdate) {
                 Vector3 currentSpeed = _playerMovement.GetCurrentVelLocal();
