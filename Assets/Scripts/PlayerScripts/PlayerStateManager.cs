@@ -14,37 +14,55 @@ namespace PlayerScripts {
         [SerializeField] private PlayerSpellIndicatorHandler PlayerIndicators;
         public Dictionary<PlayerState, int> StateCounts { get; private set; }= new Dictionary<PlayerState, int>();
         [HideInInspector] public bool ShowStateCounts;
+        
+        private bool _teleporting;
+        private bool _castingSpell;
+        private bool _inInventory;
+        private bool _stunned;
+        private bool _movingCamera;
+        private bool _dead;
+
+        private bool _movementEnabled;
+        private bool _spellsEnabled;
+        private bool _interactionEnabled;
+        private bool _indicatorsEnabled;
+        private bool _animatorActive;
+        private bool _collidersActive;
 
         // Main method that handles what is enabled / disabled at any given time
         private void UpdateState() {
-            bool Teleporting = Active(PlayerState.Teleporting);
-            bool CastingSpell = Active(PlayerState.CastingSpell);
-            bool InInventory = Active(PlayerState.InInventory);
-            bool Stunned = Active(PlayerState.Stunned);
-            bool MovingCamera = Active(PlayerState.MovingCamera);
-            bool Dead = Active(PlayerState.Dead);
+            _teleporting = Active(PlayerState.Teleporting);
+            _castingSpell = Active(PlayerState.CastingSpell);
+            _inInventory = Active(PlayerState.InInventory);
+            _stunned = Active(PlayerState.Stunned);
+            _movingCamera = Active(PlayerState.MovingCamera);
+            _dead = Active(PlayerState.Dead);
             
-            // Main logic here
+            // MAIN LOGIC HERE
             
             // Movement 
-            bool movementEnabled = !(Teleporting || InInventory || Stunned || Dead); 
-            PlayerMovement.enabled = movementEnabled;
+            _movementEnabled = !(_teleporting || _inInventory || _stunned || _dead); 
+            PlayerMovement.enabled = _movementEnabled;
 
             // Movement 
-            bool spellsEnabled = !(Teleporting || InInventory || Stunned || CastingSpell || Dead); 
-            PlayerSpells.enabled = spellsEnabled;
+            _spellsEnabled = !(_teleporting || _inInventory || _stunned || _castingSpell || _dead); 
+            PlayerSpells.enabled = _spellsEnabled;
             
             // Interaction 
-            bool interactionEnabled = !(Teleporting || InInventory || Stunned || CastingSpell || MovingCamera || Dead); 
-            PlayerInteract.enabled = interactionEnabled;
+            _interactionEnabled = !(_teleporting || _inInventory || _stunned || _castingSpell || _movingCamera || _dead); 
+            PlayerInteract.enabled = _interactionEnabled;
             
             // Indicatosrs
-            bool indicatorsEnabled = !(MovingCamera || Teleporting || InInventory || Stunned || Dead);
-            PlayerIndicators.Hide = !indicatorsEnabled;
+            _indicatorsEnabled = !(_movingCamera || _teleporting || _inInventory || _stunned || _dead);
+            PlayerIndicators.Hide = !_indicatorsEnabled;
             
             // Animations
-            bool animatorActive = !(Dead);
-            PlayerAnimator.SetEnabled(animatorActive);
+            _animatorActive = !(_dead);
+            PlayerAnimator.SetEnabled(_animatorActive);
+            
+            // Player Collisions
+            _collidersActive = !(_dead);
+            PlayerMovement.SetColliderEnabled(_collidersActive);
         }
 
         private bool Active(PlayerState state) {

@@ -5173,8 +5173,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.09549455
-  m_Center: {x: 0, y: 0.09549455, z: 0}
+  m_Radius: 15.0826025
+  m_Center: {x: -4.90335e-14, y: 7.6912107, z: 0.00000022921596}
 --- !u!54 &1016001242617917245
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6281,7 +6281,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
-  _force: 2.5
   _rbs:
   - {fileID: 1521689327198979350}
   - {fileID: 4359497110864950133}
@@ -6437,6 +6436,7 @@ MonoBehaviour:
   <PlayerMovement>k__BackingField: {fileID: 6707716053342808154}
   <PlayerStats>k__BackingField: {fileID: 5901419383538486834}
   <PlayerPrefabSpawner>k__BackingField: {fileID: 6230999115221547090}
+  _cameraStart: {fileID: 0}
   CMCam: {fileID: 0}
   Cam: {fileID: 0}
 --- !u!114 &9214829115622678224

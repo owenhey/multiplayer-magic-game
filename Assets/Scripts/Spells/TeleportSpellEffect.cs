@@ -17,7 +17,7 @@ namespace Spells {
             _targetPlayer.PlayerReferences.PlayerModel.AnimateTwirl(true);
         }
 
-        protected override void OnSpellTick(float percent) {
+        protected override void OnSpellTick(float percent, float remainingDuration) {
             if (!_warped && percent > .4f) { // %40 way through, lerp the player
                 _warped = true;
                 _targetPlayer.PlayerReferences.PlayerMovement.Warp(_spellCastData.TargetData.TargetPosition);

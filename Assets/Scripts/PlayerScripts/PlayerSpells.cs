@@ -11,19 +11,49 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using Visuals;
 
 namespace PlayerScripts {
+    // Handles the casting / cooldown of a spell
+    public class SpellInstance {
+        public SpellDefinition SpellDefinition { get; }
+        public float RemainingCooldown { get; private set;}
+        public bool Ready => RemainingCooldown <= 0;
+
+        private PlayerTimers _timers;
+
+        public SpellInstance(SpellDefinition d, PlayerTimers timers) {
+            SpellDefinition = d;
+            _timers = timers;
+            
+            RemainingCooldown = -1;
+        }
+
+        public void SetOnCooldown() {
+            _timers.RegisterTimer(SpellDefinition.SpellCooldown, FinishCooldown, OnCooldownTick);
+        }
+
+        private void OnCooldownTick(float percentThrough, float remainingSeconds) {
+            RemainingCooldown = remainingSeconds;
+        }
+
+        private void FinishCooldown() {
+            RemainingCooldown = -1;
+        }
+    }
+    
     public class PlayerSpells : LocalPlayerScript {
         [SerializeField] private PlayerSpellIndicatorHandler _indicatorHandler;
         [SerializeField] private bool _instantDrawEnabled = false;
         [SerializeField] private List<SpellDefinition> _spells;
         [SerializeField] private SpellIndicatorData _instantDrawIndicatorData;
 
+        private List<SpellInstance> _spellInstances;
         private PlayerStateManager _stateManager;
         
         // Mid-cast data
-        private SpellDefinition _chosenSpell = null;
+        private SpellInstance _chosenSpell = null;
         private SpellTargetData _spellTargetData = null;
 
         public Action OnSpellMessUp;
+        public Action<SpellInstance> OnOnCooldownSpellCast;
 
         protected override void Awake() {
             base.Awake();
@@ -33,13 +63,13 @@ namespace PlayerScripts {
         // To be removed, eventually
         private void Update() {
             if (Input.GetKeyDown(KeyCode.Alpha1)) {
-                AttemptCast(_spells[0]);
+                AttemptCast(_spellInstances[0]);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2)) {
-                AttemptCast(_spells[1]);
+                AttemptCast(_spellInstances[1]);
             }
             if (Input.GetKeyDown(KeyCode.Alpha3)) {
-                AttemptCast(_spells[2]);
+                AttemptCast(_spellInstances[2]);
             }
             if (Input.GetKeyDown(KeyCode.Space)) {
                 AttemptGenericCast();
@@ -50,14 +80,31 @@ namespace PlayerScripts {
                 SetInstantDraw(!_instantDrawEnabled);
             }
         }
+
+        /// Only called on the owner
+        private void Init() {
+            // Create all the spell instances
+            _spellInstances = new(_spells.Count);
+            for (int i = 0; i < _spells.Count; i++) {
+                _spellInstances.Add(new SpellInstance(_spells[i], _player.PlayerReferences.PlayerTimers));
+            }
+            
+            // Let's just start with instant draw
+            SetInstantDraw(true);
+        }
         
-        public void AttemptCast(SpellDefinition spellChosen) {
+        private void AttemptCast(SpellInstance spellChosen) {
+            if (!spellChosen.Ready) {
+                OnOnCooldownSpellCast?.Invoke(spellChosen);
+                ResetState();
+                return;
+            }
             // Disable appropriate components so nothing else can happen
             _stateManager.AddState(PlayerState.CastingSpell);
             
             // Handle targeting and recieve spell cast data
             _chosenSpell = spellChosen;
-            _indicatorHandler.Setup(spellChosen.IndicatorData, HandleTargetSpellData, true);
+            _indicatorHandler.Setup(spellChosen.SpellDefinition.IndicatorData, HandleTargetSpellData, true);
         }
 
         private void HandleTargetSpellData(SpellTargetData spellTargetData) {
@@ -71,7 +118,7 @@ namespace PlayerScripts {
             _spellTargetData = spellTargetData;
             
             // Now, go to the drawing assessor and see how we did
-            DrawingManager.Instance.StartDrawing(_chosenSpell.Drawing, HandleDrawing);
+            DrawingManager.Instance.StartDrawing(_chosenSpell.SpellDefinition.Drawing, HandleDrawing);
         }
 
         private void HandleDrawing(DrawingResults results) {
@@ -109,8 +156,14 @@ namespace PlayerScripts {
             }
             
             // Handle targeting and recieve spell cast data
-            _chosenSpell = _spells.FirstOrDefault(x=>x.Drawing == results.Drawing);
-            _indicatorHandler.Setup(_chosenSpell.IndicatorData, HandleGenericIndicator, true);
+            _chosenSpell = _spellInstances.FirstOrDefault(x=>x.SpellDefinition.Drawing == results.Drawing);
+            if (!_chosenSpell.Ready) {
+                OnOnCooldownSpellCast?.Invoke(_chosenSpell);
+                ResetState();
+                return;
+            }
+            
+            _indicatorHandler.Setup(_chosenSpell.SpellDefinition.IndicatorData, HandleGenericIndicator, true);
         }
 
         private void HandleGenericIndicator(SpellTargetData targetData) {
@@ -126,14 +179,22 @@ namespace PlayerScripts {
 
         // Casts the chosen spell using the target data
         private void CastSpell() {
-            Debug.Log($"Casting spell: {_chosenSpell.name}");
-            var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.EffectId);
+            // Handle an on cooldown spell
+            if (!_chosenSpell.Ready) {
+                OnOnCooldownSpellCast?.Invoke(_chosenSpell);
+                Debug.Log("Remaining cooldown: " + _chosenSpell.RemainingCooldown);
+                ResetState();
+                return;
+            }
+            
+            Debug.Log($"Casting spell: {_chosenSpell.SpellDefinition.name}");
+            var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.SpellDefinition.EffectId);
             var spellCastData = new SpellCastData {
                 CastingPlayerId = _player.LocalConnection.ClientId,
                 TargetData = _spellTargetData,
-                SpellId = _chosenSpell.SpellId,
+                SpellId = _chosenSpell.SpellDefinition.SpellId,
                 Damage = 0,
-                Duration = _chosenSpell.GetAttributeValue("duration")
+                Duration = _chosenSpell.SpellDefinition.GetAttributeValue("duration")
             };
             spellEffect.Init(spellCastData);
             
@@ -146,6 +207,9 @@ namespace PlayerScripts {
                     singleCastSpell.BeginSpell();
                     break;
             }
+            
+            // Put the spell on cooldown
+            _chosenSpell.SetOnCooldown();
             
             _stateManager.RemoveState(PlayerState.CastingSpell);
             ResetState();
@@ -184,8 +248,13 @@ namespace PlayerScripts {
             }
             
             // Handle targeting and recieve spell cast data
-            _chosenSpell = _spells.FirstOrDefault(x=>x.Drawing == results.Drawing);
+            _chosenSpell =  _spellInstances.FirstOrDefault(x => x.SpellDefinition.Drawing == results.Drawing);
             CastSpell();
+        }
+
+        private void HandleOnCooldownSpellCast() {
+            _stateManager.RemoveState(PlayerState.CastingSpell);
+            ResetState();
         }
 
         private void ResetState() {
@@ -195,9 +264,11 @@ namespace PlayerScripts {
 
         protected override void OnClientStart(bool isOwner) {
             if (!isOwner) enabled = false;
+
+            Init();
         }
 
-        public SpellDefinition[] GetOffCooldownSpells() {
+        public SpellDefinition[] GetAllEquippedSpells() {
             return _spells.ToArray();
         }
     }

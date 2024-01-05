@@ -76,6 +76,10 @@ namespace PlayerScripts {
             _cc.transform.DOMove(position, .15f).OnComplete(()=>_cc.enabled = true);
         }
 
+        public void SetColliderEnabled(bool e) {
+            _cc.detectCollisions = e;
+        }
+
         private void HandleCamera() {
             var cam = _refs.CMCam;
             if (!cam) return;

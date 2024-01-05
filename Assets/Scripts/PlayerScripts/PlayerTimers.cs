@@ -8,10 +8,10 @@ namespace PlayerScripts {
         private class PlayerTimer {
             [SerializeField] [ReadOnly] private float _remainingDuration;
             public Action OnCompleteAction;
-            private Action<float> _onTickAction;
+            private Action<float, float> _onTickAction;
             private float _totalDuration;
 
-            public PlayerTimer(float duration, Action onComplete, Action<float> onTickAction) {
+            public PlayerTimer(float duration, Action onComplete, Action<float, float> onTickAction) {
                 _remainingDuration = duration;
                 _totalDuration = duration;
                 OnCompleteAction = onComplete;
@@ -23,7 +23,7 @@ namespace PlayerScripts {
             /// </summary>
             public bool Tick(float dt) {
                 _remainingDuration -= dt;
-                _onTickAction?.Invoke(Mathf.Max(0, 1 - _remainingDuration / _totalDuration));
+                _onTickAction?.Invoke(Mathf.Max(0, 1 - _remainingDuration / _totalDuration), _remainingDuration);
                 return _remainingDuration > 0;
             }
         }
@@ -48,8 +48,8 @@ namespace PlayerScripts {
         /// <param name="duration">Total duration</param>
         /// <param name="onComplete"> Called at the end</param>
         /// <param name="onTick"> Called every frame this timer is ticked, with the percentage
-        /// of the way through the timer (like .65f == 65%)</param>
-        public void RegisterTimer(float duration, Action onComplete, Action<float> onTick) {
+        /// of the way through the timer (like .65f == 65%), and how many seconds are left</param>
+        public void RegisterTimer(float duration, Action onComplete, Action<float, float> onTick) {
             var newTimer = new PlayerTimer(duration, onComplete, onTick);
             _activeTimers.Add(newTimer);
         }

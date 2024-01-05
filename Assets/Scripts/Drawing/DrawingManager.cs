@@ -122,7 +122,7 @@ public class DrawingManager : MonoBehaviour {
         }
         else {
             // Grab all spells
-            var spells = Player.LocalPlayer.PlayerReferences.PlayerSpells.GetOffCooldownSpells();
+            var spells = Player.LocalPlayer.PlayerReferences.PlayerSpells.GetAllEquippedSpells();
             DrawingAssessor.Instance.HandleStartDraw(spells.Select(x=>x.Drawing).ToArray());
         }
 

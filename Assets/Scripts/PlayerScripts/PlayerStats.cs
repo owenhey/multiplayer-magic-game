@@ -23,6 +23,9 @@ namespace PlayerScripts {
             if (Input.GetKeyDown(KeyCode.L)) {
                 AffectHealth(Random.Range(-200, -500));
             }
+            if (Input.GetKeyDown(KeyCode.K)) {
+                ServerSpawnPlayer();
+            }
         }
         
         protected override void OnClientStart(bool isOwner) {

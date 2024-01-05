@@ -11,7 +11,7 @@ public class MoveQuickSpellEffect : PlayerOverrideSpellEffect
         _targetPlayer.PlayerReferences.PlayerAnimations.SetAnimationSpeed(1.5f);
     }
 
-    protected override void OnSpellTick(float percent) {
+    protected override void OnSpellTick(float percent, float remainingDuration) {
         
     }
 

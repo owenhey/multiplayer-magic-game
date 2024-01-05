@@ -12,7 +12,7 @@ namespace Spells {
         protected Player _targetPlayer;
         protected abstract void OnSpellStart();
 
-        protected abstract void OnSpellTick(float percent);
+        protected abstract void OnSpellTick(float percent, float remainingDuration);
 
         protected abstract void OnSpellEnd();
 
