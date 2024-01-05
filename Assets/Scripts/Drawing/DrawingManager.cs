@@ -4,198 +4,197 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using DG.Tweening;
-using FishNet.Managing;
-using FishNet.Managing.Client;
-using FishNet.Object;
 using PlayerScripts;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public delegate void DebugPointDelegate(in Vector2 v, int index);
+namespace Drawing {
+    public delegate void DebugPointDelegate(in Vector2 v, int index);
 
-public delegate void DrawShapeCallback(DrawingResults r);
+    public delegate void DrawShapeCallback(DrawingResults r);
 
-public class DrawingManager : MonoBehaviour {
-    public float size;
-    
-    [SerializeField] private DrawingMechanic _drawingMechanic;
-    [SerializeField] [ReadOnly] private DefinedDrawing _targetDrawing;
-    [SerializeField] private GameObject _content;
+    public class DrawingManager : MonoBehaviour {
+        public float size;
 
-    [Header("Display")] 
-        [SerializeField] private RectTransform _calculatedDrawingRT;
+        [SerializeField] private DrawingMechanic _drawingMechanic;
+        [SerializeField] [ReadOnly] private DefinedDrawing _targetDrawing;
+        [SerializeField] private GameObject _content;
+
+        [Header("Display")] [SerializeField] private RectTransform _calculatedDrawingRT;
         [SerializeField] private RectTransform _displayParent;
         [SerializeField] private Image _guideImage;
         [SerializeField] private Image _circleImage;
         [SerializeField] private CanvasGroup _cg;
         [SerializeField] private RectTransform[] _rts;
 
-    [Header("Debugging")] 
-        [SerializeField] public bool _debug = false;
+        [Header("Debugging")] [SerializeField] public bool _debug = false;
         [SerializeField] private RectTransform _debugParent;
         [SerializeField] private RectTransform _showDrawingPointsParent;
         [SerializeField] private GameObject _debugDot;
-    
-    private RectTransform _debugSlider;
-    private Vector3 _fakeMousePos;
 
-    public static DrawingManager Instance;
-    private DrawShapeCallback _callback;
+        private RectTransform _debugSlider;
+        private Vector3 _fakeMousePos;
 
-    private bool _open;
-    private bool _offsetShapes;
-    private bool _enabled;
+        public static DrawingManager Instance;
+        private DrawShapeCallback _callback;
 
-    private void Start() {
-        Hide();
-        Instance = this;
-    }
+        private bool _open;
+        private bool _offsetShapes;
+        private bool _enabled;
 
-    public void StartDrawing(DefinedDrawing drawing = null, DrawShapeCallback callback = null, bool offsetShapes = false) {
-        if (drawing != null) {
-            SetSize(100);
-            _targetDrawing = drawing;
-            // Set the drawing on the mouse
-            _guideImage.enabled = true;
-            _guideImage.sprite = drawing.HelperImage;
-            Vector2 firstPointOffset = _targetDrawing.GetStartingPointOffsetInPixels(_calculatedDrawingRT.sizeDelta.x);
-            PositionDrawing((Vector2)Input.mousePosition - firstPointOffset);
-            // PositionDrawing((Vector2)Input.mousePosition);
-            _circleImage.enabled = false;
-        }
-        else if(drawing == null && !offsetShapes) {
-            _targetDrawing = null;
-            SetSize(100);
-            // In this case, just position it in the center of the circle. Maybe show the indicator here?
-            _guideImage.enabled = false;
-            PositionDrawing((Vector2)Input.mousePosition);
-            _circleImage.enabled = true;
+        private void Start() {
+            Hide();
+            Instance = this;
         }
 
-        else {
-            _targetDrawing = null;
-            SetSize(500);
-            PositionDrawing((Vector2)Input.mousePosition);
-            // PLACEHOLDER FOR THE INSTANT CAST METHOD
-            _guideImage.enabled = false;
-            _circleImage.enabled = false;
-            _drawingMechanic.ForceStartDraw();
+        public void StartDrawing(DefinedDrawing drawing = null, DrawShapeCallback callback = null,
+            bool offsetShapes = false) {
+            if (drawing != null) {
+                SetSize(100);
+                _targetDrawing = drawing;
+                // Set the drawing on the mouse
+                _guideImage.enabled = true;
+                _guideImage.sprite = drawing.HelperImage;
+                Vector2 firstPointOffset =
+                    _targetDrawing.GetStartingPointOffsetInPixels(_calculatedDrawingRT.sizeDelta.x);
+                PositionDrawing((Vector2)Input.mousePosition - firstPointOffset);
+                // PositionDrawing((Vector2)Input.mousePosition);
+                _circleImage.enabled = false;
+            }
+            else if (drawing == null && !offsetShapes) {
+                _targetDrawing = null;
+                SetSize(100);
+                // In this case, just position it in the center of the circle. Maybe show the indicator here?
+                _guideImage.enabled = false;
+                PositionDrawing((Vector2)Input.mousePosition);
+                _circleImage.enabled = true;
+            }
+
+            else {
+                _targetDrawing = null;
+                SetSize(500);
+                PositionDrawing((Vector2)Input.mousePosition);
+                // PLACEHOLDER FOR THE INSTANT CAST METHOD
+                _guideImage.enabled = false;
+                _circleImage.enabled = false;
+                _drawingMechanic.ForceStartDraw();
+            }
+
+            _offsetShapes = offsetShapes;
+            _content.SetActive(true);
+            _cg.DOFade(1.0f, .15f).From(0);
+            _drawingMechanic.Clear();
+            _callback = callback;
+            _open = true;
+
+            ClearDebug();
         }
 
-        _offsetShapes = offsetShapes;
-        _content.SetActive(true);
-        _cg.DOFade(1.0f, .15f).From(0);
-        _drawingMechanic.Clear();
-        _callback = callback;
-        _open = true;
+        public void Hide() {
+            _content.SetActive(false);
+            _open = false;
+        }
+
+        private void Update() {
+            if (_open && Input.GetKeyDown(KeyCode.Mouse1)) {
+                CancelDrawing();
+            }
+        }
+
+        private void CancelDrawing() {
+            var cancelledResults = new DrawingResults(false);
+            Finish(cancelledResults);
+        }
+
+        private void PositionDrawing(Vector2 position) {
+            foreach (var rectTransform in _rts) {
+                rectTransform.anchoredPosition = position;
+            }
+        }
+
+        private void OnStartDraw() {
+            ClearDebug();
+
+            if (_targetDrawing != null) {
+                DrawingAssessor.Instance.HandleStartDraw(new[] { _targetDrawing });
+            }
+            else {
+                // Grab all spells
+                var spells = Player.LocalPlayer.PlayerReferences.PlayerSpells.GetAllEquippedSpells();
+                DrawingAssessor.Instance.HandleStartDraw(spells.Select(x => x.Drawing).ToArray());
+            }
+
+            if (_debug) {
+                _debugSlider = Instantiate(_debugDot, _debugParent).GetComponent<RectTransform>();
+                DrawingAssessor.Instance.SetDebug(FrameDebug, IndexDebug);
+            }
+        }
+
+        private void OnDraw(Vector2 point) {
+            if (_offsetShapes) {
+                DrawingAssessor.Instance.HandleDrawTranslated(in point, _calculatedDrawingRT.sizeDelta.x);
+            }
+            else {
+                DrawingAssessor.Instance.HandleDraw(in point);
+            }
+
+        }
+
+        private void OnEndDraw(Vector2[] points, float time) {
+            var results = DrawingAssessor.Instance.HandleEndDraw();
         
-        ClearDebug();
-    }
-
-    public void Hide() {
-        _content.SetActive(false);
-        _open = false;
-    }
-
-    private void Update() {
-        if (_open && Input.GetKeyDown(KeyCode.Mouse1)) {
-            CancelDrawing();
-        }
-    }
-
-    private void CancelDrawing() {
-        var cancelledResults = new DrawingResults(false);
-        Finish(cancelledResults);
-    }
-
-    private void PositionDrawing(Vector2 position) {
-        foreach (var rectTransform in _rts) {
-            rectTransform.anchoredPosition = position;
-        }
-    }
-
-    private void OnStartDraw() {
-        ClearDebug();
-
-        if (_targetDrawing != null) {
-            DrawingAssessor.Instance.HandleStartDraw(new []{_targetDrawing});
-        }
-        else {
-            // Grab all spells
-            var spells = Player.LocalPlayer.PlayerReferences.PlayerSpells.GetAllEquippedSpells();
-            DrawingAssessor.Instance.HandleStartDraw(spells.Select(x=>x.Drawing).ToArray());
+            Finish(results);
         }
 
-        if (_debug) {
-            _debugSlider = Instantiate(_debugDot, _debugParent).GetComponent<RectTransform>();
-            DrawingAssessor.Instance.SetDebug(FrameDebug, IndexDebug);
-        }
-    }
-
-    private void OnDraw(Vector2 point) {
-        if (_offsetShapes) {
-            DrawingAssessor.Instance.HandleDrawTranslated(in point, _calculatedDrawingRT.sizeDelta.x);
-        }
-        else {
-            DrawingAssessor.Instance.HandleDraw(in point);
+        // Can be called either from Cancel or OnEndDraw
+        private void Finish(DrawingResults results) {
+            _content.SetActive(false);
+            _callback?.Invoke(results);
         }
 
-    }
+        private void FrameDebug(in Vector2 vec, int index) {
+            if (!_debugSlider) {
+                _debugSlider = Instantiate(_debugDot, _debugParent).GetComponent<RectTransform>();
+            }
 
-    private void OnEndDraw(Vector2[] points, float time) {
-        var results = DrawingAssessor.Instance.HandleEndDraw();
-        Finish(results);
-    }
-
-    // Can be called either from Cancel or OnEndDraw
-    private void Finish(DrawingResults results) {
-        // ShapeQualityPopupManager.Instance.ShowPopup(results, score);
-        Hide();
-        _callback?.Invoke(results);
-    }
-    
-    private void FrameDebug(in Vector2 vec, int index){
-        if (!_debugSlider) {
-            _debugSlider = Instantiate(_debugDot, _debugParent).GetComponent<RectTransform>();
+            _debugSlider.anchoredPosition = _calculatedDrawingRT.sizeDelta * (vec - Vector2.one * .5f);
         }
-        _debugSlider.anchoredPosition = _calculatedDrawingRT.sizeDelta * (vec - Vector2.one * .5f);
-    }
-    
-    private void IndexDebug(in Vector2 vec, int index){
-        var obj = Instantiate(_debugDot, _debugParent);
-        var rt = obj.GetComponent<RectTransform>();
-        rt.anchoredPosition = _calculatedDrawingRT.sizeDelta * (vec - Vector2.one * .5f);
-        obj.GetComponent<UnityEngine.UI.Image>().color = new Color(1, .6f, .45f, 1);
-        obj.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = (index + 1).ToString();
 
-        rt.DOScale(Vector3.one * 1.5f, .2f * .5f).From(Vector3.zero).OnComplete(()=>{
-            rt.transform.DOScale(Vector3.one, .2f * .5f);
-        });
-    }
-    
-    private void ClearDebug() {
-        int childCount = _debugParent.childCount;
-        for(int i = childCount - 1; i >= 0; i--){
-            Destroy(_debugParent.GetChild(i).gameObject);
-        }
-    }
+        private void IndexDebug(in Vector2 vec, int index) {
+            var obj = Instantiate(_debugDot, _debugParent);
+            var rt = obj.GetComponent<RectTransform>();
+            rt.anchoredPosition = _calculatedDrawingRT.sizeDelta * (vec - Vector2.one * .5f);
+            obj.GetComponent<UnityEngine.UI.Image>().color = new Color(1, .6f, .45f, 1);
+            obj.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = (index + 1).ToString();
 
-    public void SetSize(float sizeT) {
-        Debug.Log("Size t: " + sizeT);
-        foreach (var item in _rts) {
-            item.sizeDelta = new Vector2(sizeT, sizeT);
+            rt.DOScale(Vector3.one * 1.5f, .2f * .5f).From(Vector3.zero).OnComplete(() => {
+                rt.transform.DOScale(Vector3.one, .2f * .5f);
+            });
         }
-    }
-    
-    private void OnEnable() {
-        _drawingMechanic.OnStartDraw += OnStartDraw;
-        _drawingMechanic.OnDraw += OnDraw;
-        _drawingMechanic.OnEndDraw += OnEndDraw;
-    }
-    
-    private void OnDisable() {
-        _drawingMechanic.OnStartDraw -= OnStartDraw;
-        _drawingMechanic.OnDraw -= OnDraw;
-        _drawingMechanic.OnEndDraw -= OnEndDraw;
+
+        private void ClearDebug() {
+            int childCount = _debugParent.childCount;
+            for (int i = childCount - 1; i >= 0; i--) {
+                Destroy(_debugParent.GetChild(i).gameObject);
+            }
+        }
+
+        public void SetSize(float sizeT) {
+            Debug.Log("Size t: " + sizeT);
+            foreach (var item in _rts) {
+                item.sizeDelta = new Vector2(sizeT, sizeT);
+            }
+        }
+
+        private void OnEnable() {
+            _drawingMechanic.OnStartDraw += OnStartDraw;
+            _drawingMechanic.OnDraw += OnDraw;
+            _drawingMechanic.OnEndDraw += OnEndDraw;
+        }
+
+        private void OnDisable() {
+            _drawingMechanic.OnStartDraw -= OnStartDraw;
+            _drawingMechanic.OnDraw -= OnDraw;
+            _drawingMechanic.OnEndDraw -= OnEndDraw;
+        }
     }
 }
