@@ -5,6 +5,7 @@ using Helpers;
 using Net;
 using PlayerScripts;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Spells {
     public class FireballBehavior : NetworkBehaviour, INetSpawnable {
@@ -13,6 +14,7 @@ namespace Spells {
 
         [SerializeField] private Transform _contentTransform;
         [SerializeField] private GameObject _explosionGameObject;
+        [SerializeField] private VisualEffect _fireballEffect;
         [SerializeField] private AudioSource _spawnSound;
         [SerializeField] private AudioSource _explosionSound;
         [SerializeField] private TriggerListener _trigger;
@@ -58,19 +60,24 @@ namespace Spells {
         private void Setup() {
             Player castingPlayer = Player.GetPlayerFromClientId(_initData.CasterId);
             Vector3 castingPlayerCenterPosition = castingPlayer.PlayerReferences.GetPlayerPosition() + Vector3.up;
-            disToTarget = (_initData.Position - castingPlayerCenterPosition).magnitude;
+
+            Vector3 inFrontOfPlayer = (_initData.Position - castingPlayerCenterPosition).normalized * 2.5f +
+                                      castingPlayerCenterPosition;
+            
+            disToTarget = (_initData.Position - inFrontOfPlayer).magnitude;
                 
-            _contentTransform.position = castingPlayerCenterPosition;
+            _contentTransform.position = inFrontOfPlayer;
             _contentTransform.rotation = _initData.Rotation;
         }
 
         private void Begin() {
             Vector3 hitPosition = _initData.Position;
             // _spawnSound?.Play();
-            float totalTime =  disToTarget / 30.0f;
+            float speed = _initData.SpellDefinition.GetAttributeValue("speed");
+            float totalTime =  disToTarget / speed;
 
             _contentTransform.DOScale(Vector3.one, .15f);
-            _contentTransform.DOMove(hitPosition, totalTime).SetEase(Ease.Linear);
+            _contentTransform.DOMove(hitPosition, totalTime).SetEase(Ease.InCubic);
 
             _contentTransform.DOScale(Vector3.one, 0).SetDelay(5.0f).OnComplete(() => {
                 gameObject.SetActive(false);
@@ -83,6 +90,7 @@ namespace Spells {
         private void ServerExplode() {
             _explosionGameObject.SetActive(true);
             _contentTransform.DOKill();
+            _fireballEffect.Stop();
             ClientExplode();
             Invoke(nameof(DespawnObject), 2);
         }
@@ -94,6 +102,7 @@ namespace Spells {
 
         [ObserversRpc]
         private void ClientExplode() {
+            _fireballEffect.Stop();
             _explosionGameObject.SetActive(true);
         }
     }

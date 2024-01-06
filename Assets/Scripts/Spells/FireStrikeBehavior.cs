@@ -8,6 +8,7 @@ using Net;
 using PlayerScripts;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Serialization;
+using UnityEngine.VFX;
 
 namespace Spells {
     public class FireStrikeBehavior : NetworkBehaviour, INetSpawnable {
@@ -16,6 +17,7 @@ namespace Spells {
 
         [SerializeField] private Transform _contentTransform;
         [SerializeField] private GameObject _explosionGameObject;
+        [SerializeField] private VisualEffect _fireballEffect;
         [SerializeField] private DecalProjector _decalProjector;
         [SerializeField] private AudioSource _spawnSound;
         [SerializeField] private AudioSource _explosionSound;
@@ -45,16 +47,17 @@ namespace Spells {
         }
 
         private void Begin() {
-            DOTween.To(()=> _decalProjector.fadeFactor, x=> _decalProjector.fadeFactor = x, .7f, .25f).From(0);
+            DOTween.To(()=> _decalProjector.fadeFactor, x=> _decalProjector.fadeFactor = x, .7f, .5f).From(0);
             
             Vector3 hitPosition = _initData.Position;
             // _spawnSound?.Play();
 
             _contentTransform.DOScale(Vector3.one, .5f);
-            _contentTransform.DOMove(hitPosition, 1.0f).SetEase(Ease.InQuint).OnComplete(() => {
+            _contentTransform.DOMove(hitPosition, 1.5f).SetEase(Ease.InCubic).OnComplete(() => {
                 // _explosionSound?.Play();
-                _contentTransform.DOScale(Vector3.one, .11f).OnComplete(() => {
+                _contentTransform.DOScale(Vector3.one, .05f).OnComplete(() => {
                     _explosionGameObject.SetActive(true);
+                    _fireballEffect.Stop();
                     DOTween.To(() => _decalProjector.fadeFactor, x => _decalProjector.fadeFactor = x, 0, .25f).OnComplete(
                         () => {
                             _decalProjector.gameObject.SetActive(false);

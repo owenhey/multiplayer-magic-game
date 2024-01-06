@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2248949152855588621}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2918515196118401138}
   - component: {fileID: 6282919635620424103}
   - component: {fileID: 6963963976758790572}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall Spell Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,13 +83,10 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 6963963976758790572}
   _netSpawnType: 1
   _cubeTransform: {fileID: 2248949152855588621}
-  _raycastLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
   _spawnSound: {fileID: 2070255052488357414}
   _slamSound: {fileID: 1993527645417905860}
   _initData:
-    OwnerId: 0
+    CasterId: 0
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &6963963976758790572
@@ -139,7 +136,7 @@ GameObject:
   - component: {fileID: 2070255052488357414}
   - component: {fileID: 1993527645417905860}
   - component: {fileID: 8240047616106519697}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -20,6 +20,7 @@ namespace Spells {
             Player castingPlayer = netConn.FirstObject.GetComponent<Player>();
             
             var initData = new SpawnablePrefabInitData {
+                SpellId = _spellCastData.SpellId,
                 CasterId = _spellCastData.CastingPlayerId,
                 Position = _spellCastData.TargetData.TargetPosition,
                 Rotation = _spawnedObjectRotation

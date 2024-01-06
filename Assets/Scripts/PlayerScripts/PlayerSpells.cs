@@ -221,7 +221,7 @@ namespace PlayerScripts {
             }
             
             // Put the spell on cooldown
-            _chosenSpell.SetOnCooldown();
+            // _chosenSpell.SetOnCooldown();
             
             _stateManager.RemoveState(PlayerState.CastingSpell);
             ResetState();
