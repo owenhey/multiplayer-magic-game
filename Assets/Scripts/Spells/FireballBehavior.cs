@@ -77,7 +77,9 @@ namespace Spells {
             float totalTime =  disToTarget / speed;
 
             _contentTransform.DOScale(Vector3.one, .15f);
-            _contentTransform.DOMove(hitPosition, totalTime).SetEase(Ease.InCubic);
+            _contentTransform.DOMove(hitPosition, totalTime).SetEase(Ease.InCubic).OnComplete(() => {
+                _fireballEffect.Stop();
+            });
 
             _contentTransform.DOScale(Vector3.one, 0).SetDelay(5.0f).OnComplete(() => {
                 gameObject.SetActive(false);
@@ -90,7 +92,6 @@ namespace Spells {
         private void ServerExplode() {
             _explosionGameObject.SetActive(true);
             _contentTransform.DOKill();
-            _fireballEffect.Stop();
             ClientExplode();
             Invoke(nameof(DespawnObject), 2);
         }
@@ -102,7 +103,6 @@ namespace Spells {
 
         [ObserversRpc]
         private void ClientExplode() {
-            _fireballEffect.Stop();
             _explosionGameObject.SetActive(true);
         }
     }
