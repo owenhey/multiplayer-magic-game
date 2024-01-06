@@ -1,6 +1,7 @@
 using Spells;
 using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
 using Visuals;
 
 namespace PlayerScripts {
@@ -88,7 +89,7 @@ namespace PlayerScripts {
             }
             
             // Check for the click
-            if (!Hide && Input.GetKeyDown(KeyCode.Mouse0)) {
+            if (!Hide && Input.GetKeyDown(KeyCode.Mouse0) && !EventSystem.current.IsPointerOverGameObject()) {
                 var targetData = new SpellTargetData {
                     Cancelled = false,
                     TargetPosition = rayTarget,

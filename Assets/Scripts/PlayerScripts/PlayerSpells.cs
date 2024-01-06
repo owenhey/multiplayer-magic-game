@@ -20,6 +20,8 @@ namespace PlayerScripts {
 
         private PlayerTimers _timers;
 
+        public Action OnChange;
+
         public SpellInstance(SpellDefinition d, PlayerTimers timers) {
             SpellDefinition = d;
             _timers = timers;
@@ -29,14 +31,17 @@ namespace PlayerScripts {
 
         public void SetOnCooldown() {
             _timers.RegisterTimer(SpellDefinition.SpellCooldown, FinishCooldown, OnCooldownTick);
+            OnChange?.Invoke();
         }
 
         private void OnCooldownTick(float percentThrough, float remainingSeconds) {
             RemainingCooldown = remainingSeconds;
+            OnChange?.Invoke();
         }
 
         private void FinishCooldown() {
             RemainingCooldown = -1;
+            OnChange?.Invoke();
         }
     }
     
@@ -281,5 +286,7 @@ namespace PlayerScripts {
         public SpellDefinition[] GetAllEquippedSpells() {
             return _spells.ToArray();
         }
+        
+        public List<SpellInstance> SpellInstances => _spellInstances;
     }
 }

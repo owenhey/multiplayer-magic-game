@@ -8,9 +8,11 @@ using UnityEngine;
 namespace PlayerScripts {
     public class PlayerStats : NetworkedPlayerScript {
         [SerializeField] private int _maxHealth = 1000;
+        public int MaxHealth => _maxHealth;
 
         [SyncVar(ReadPermissions = ReadPermission.Observers, WritePermissions = WritePermission.ServerOnly, OnChange = nameof(OnHealthChangeHandler))] 
         [ReadOnly] private int _currentHealth;
+        public int CurrentHealth => _currentHealth;
 
         public System.Action<int> OnHealthChange;
         public System.Action OnPlayerDeath;
