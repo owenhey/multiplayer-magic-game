@@ -25,7 +25,7 @@ namespace Spells {
 
         [SyncVar] [ReadOnly]
         private SpawnablePrefabInitData _initData;
-
+        
         private void Awake() {
             _trigger.OnEnter += HandleCollision;
         }
@@ -91,9 +91,35 @@ namespace Spells {
             });
         }
 
+        [Server]
+        private void DamageInArea() {
+            float radius = _initData.SpellDefinition.GetAttributeValue("damage_radius");
+            float damage = _initData.SpellDefinition.GetAttributeValue("damage");
+            float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
+
+            Physics.OverlapSphereNonAlloc(_contentTransform.position, radius, ColliderBuffer.Buffer);
+            for (int i = 0; i < ColliderBuffer.Buffer.Length; i++) {
+                var col = ColliderBuffer.Buffer[i];
+                if (col == null) break;
+                
+                if (col.gameObject.layer != 3) {
+                    continue;
+                }
+
+                Vector3 damageDirection = col.transform.position - _contentTransform.position;
+                damageDirection.y = 0;
+                damageDirection.Normalize();
+
+                col.GetComponent<PlayerCollider>().PlayerReferences.PlayerStats
+                    .DamageAndKnockback((int)damage, damageDirection * knockback);
+            }
+        }
+
+        [Server]
         private void ServerOnContact(bool explode) {
             if (explode) {
                 _explosionGameObject.SetActive(true);
+                DamageInArea();
             }
 
             _trigger.SetEnabled(false);

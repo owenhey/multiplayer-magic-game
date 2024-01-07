@@ -40,10 +40,6 @@ namespace Spells {
         private void Update() {
             if (!InstanceFinder.IsClient) return;
 
-            if (Input.GetKeyDown(KeyCode.T)) {
-                TurnOff(true);
-            }
-
             _model.localPosition =
                 _modelBaseLocalPosition + Vector3.up * (_hoverAmp * Mathf.Sin(Time.time * _hoverSpeed));
         }

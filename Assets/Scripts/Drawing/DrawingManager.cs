@@ -48,6 +48,10 @@ namespace Drawing {
 
         public void StartDrawing(DefinedDrawing drawing = null, DrawShapeCallback callback = null,
             bool offsetShapes = false) {
+            _cg.DOKill();
+            _cg.alpha = 1;
+            _cg.interactable = true;
+            
             if (drawing != null) {
                 SetSize(100);
                 _targetDrawing = drawing;
@@ -147,7 +151,8 @@ namespace Drawing {
 
         // Can be called either from Cancel or OnEndDraw
         private void Finish(DrawingResults results) {
-            _content.SetActive(false);
+            _cg.interactable = false;
+            _cg.DOFade(0, .5f).SetDelay(.25f).OnComplete(() => _content.SetActive(false));
             _callback?.Invoke(results);
         }
 

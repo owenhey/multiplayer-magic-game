@@ -23,7 +23,7 @@ namespace PlayerScripts {
             if (!IsServer) return;
 
             if (Input.GetKeyDown(KeyCode.L)) {
-                AffectHealth(Random.Range(-200, -500));
+                DamageAndKnockback(Random.Range(5, 10), Vector3.forward * 10);
             }
             if (Input.GetKeyDown(KeyCode.K)) {
                 ServerSpawnPlayer();
@@ -51,8 +51,19 @@ namespace PlayerScripts {
             ClientSpawnPlayer(Owner);
             OnPlayerSpawn?.Invoke();
         }
-        
-        
+
+        [Server]
+        public void DamageAndKnockback(int damage, Vector3 knockback) {
+            // Three parts:
+            // 1) Damage
+            AffectHealth(-damage);
+            
+            // 2) Knockback
+            _player.PlayerReferences.PlayerMovement.ServerKnockback(knockback);
+            
+            // 3) Flash white
+            _player.PlayerReferences.PlayerModel.ServerFlash();
+        }
 
         [TargetRpc]
         private void ClientSpawnPlayer(NetworkConnection targetPlayer = null) {

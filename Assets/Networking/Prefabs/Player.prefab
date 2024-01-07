@@ -439,7 +439,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: df4b42e75c118ee43aa7f5551017b39d, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.235
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -7220,6 +7220,7 @@ GameObject:
   - component: {fileID: 8975781504269218941}
   - component: {fileID: 6230999115221547090}
   - component: {fileID: 5901419383538486834}
+  - component: {fileID: 651983594242769555}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -7325,6 +7326,7 @@ MonoBehaviour:
   <PlayerBody>k__BackingField: {fileID: 7081416051241051723}
   <ModelCamTarget>k__BackingField: {fileID: 3893423418599009062}
   _modelColor: {r: 0, g: 0, b: 0, a: 0}
+  _flashDuration: 0.25
 --- !u!114 &3726133492282219349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7500,6 +7502,20 @@ MonoBehaviour:
   _player: {fileID: 8286632864543236906}
   _maxHealth: 1000
   _currentHealth: 0
+--- !u!114 &651983594242769555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6987246984701191043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46f198e4ca6e4095b0e4025f09d5d1a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 8286632864543236906}
+  _HUD: {fileID: 8344793788179054938}
 --- !u!1 &7001116585677132798
 GameObject:
   m_ObjectHideFlags: 0

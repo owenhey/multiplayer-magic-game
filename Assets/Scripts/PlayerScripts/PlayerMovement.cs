@@ -32,6 +32,8 @@ namespace PlayerScripts {
         private Transform _cam;
         private Transform _ccTrans;
 
+        private Vector3 _knockbackVector;
+
         protected override void Awake() {
             base.Awake();
             _ccTrans = _cc.transform;
@@ -76,6 +78,17 @@ namespace PlayerScripts {
             _cc.transform.DOMove(position, .15f).OnComplete(()=>_cc.enabled = true);
         }
 
+        [Server]
+        public void ServerKnockback(Vector3 knockbackWorldSpace) {
+            ApplyKnockback(knockbackWorldSpace);
+        }
+
+        [ObserversRpc]
+        private void ApplyKnockback(Vector3 knockbackWorldSpace) {
+            _knockbackVector = knockbackWorldSpace;
+            DOTween.To(() => _knockbackVector, x => _knockbackVector = x, Vector3.zero, .35f);
+        }
+
         public void SetColliderEnabled(bool e) {
             _cc.detectCollisions = e;
         }
@@ -118,14 +131,14 @@ namespace PlayerScripts {
         private void Move(Vector3 movementVector){
             if (_cc.enabled == false) return;
             _currentVelocity = movementVector;
-            _cc.Move(movementVector * Time.deltaTime);
+            _cc.Move((movementVector + _knockbackVector) * Time.deltaTime);
         }
 
         private Vector3 GetTargetLookDirection(){
             if(_inputData.wasd == Vector2.zero) return _ccTrans.forward;
             Vector3 camForward = _cam.forward;
             camForward.y = 0;
-
+            
             return camForward;
         }
 
@@ -142,8 +155,10 @@ namespace PlayerScripts {
             if(!_canMove) return;
 
             _isSprinting = false;
+            
+            
             // If we are sprinting
-            if(_inputData.wasd.y == 1 && _inputData.leftShift){
+            if(_inputData.wasd.y >= 1 && _inputData.leftShift){
                 if(_inputData.wasd.y > 0 && _inputData.wasd != Vector2.zero){
                     _inputData.wasd = Vector2.up;
                     Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);

@@ -20,11 +20,21 @@ namespace PlayerScripts {
         [SyncVar(Channel = Channel.Unreliable, OnChange = nameof(ClientHandleColorChange))]
         private Color _modelColor;
 
+        [SerializeField] private float _flashDuration = .15f;
+
         private Material _playerMat;
         private Material _shieldMat;
 
         public System.Action<bool> OnTwirl;
+        
+        private static readonly int _isOverridingColor = Shader.PropertyToID("_IsOverridingColor");
+        private static readonly int _colorPrimary = Shader.PropertyToID("_Color_Primary");
+        private static readonly int _colorMetalDark = Shader.PropertyToID("_Color_Metal_Dark");
+        private static readonly int _twirlCenterWorldSpace = Shader.PropertyToID("_TwirlCenterWorldSpace");
+        private static readonly int _twirlAmount = Shader.PropertyToID("_TwirlAmount");
+        private static readonly int _twirl = Shader.PropertyToID("_Twirl");
 
+        private Tween _flashTween;
 
         protected override void Awake() {
             base.Awake();
@@ -56,8 +66,24 @@ namespace PlayerScripts {
         }
         
         private void ClientHandleColorChange(Color old, Color newColor, bool server) {
-            _playerMat.SetColor("_Color_Primary", newColor);
-            _playerMat.SetColor("_Color_Metal_Dark", newColor);
+            _playerMat.SetColor(_colorPrimary, newColor);
+            _playerMat.SetColor(_colorMetalDark, newColor);
+        }
+
+        [Server]
+        public void ServerFlash() {
+            ClientFlash();
+        }
+
+        [ObserversRpc]
+        private void ClientFlash() {
+            if (_flashTween != null) {
+                _flashTween.Kill();
+            }
+            _playerMat.SetInt(_isOverridingColor, 1);
+            // Use DOTween instead of coroutine, is easier
+            float x = 0;
+            _flashTween = DOTween.To(() => x, y => x = y, 0, 0).SetDelay(_flashDuration).OnComplete(()=>_playerMat.SetInt(_isOverridingColor, 0));
         }
 
         [Client(Logging = LoggingType.Error)]
@@ -83,18 +109,17 @@ namespace PlayerScripts {
         }
 
         private void StartTwirl(bool start) {
-            _playerMat.DOKill();
             if (start) {
-                _playerMat.SetVector("_TwirlCenterWorldSpace", PlayerBody.transform.position);
-                _playerMat.SetInt("_Twirl", 1);
+                _playerMat.SetVector(_twirlCenterWorldSpace, PlayerBody.transform.position);
+                _playerMat.SetInt(_twirl, 1);
                 PlayerBody.DOScale(Vector3.zero, .15f).SetDelay(.15f);
-                _playerMat.DOFloat(20, "_TwirlAmount", .35f);
+                _playerMat.DOFloat(20, _twirlAmount, .35f);
             }
             else {
-                _playerMat.SetVector("_TwirlCenterWorldSpace", PlayerBody.transform.position);
+                _playerMat.SetVector(_twirlCenterWorldSpace, PlayerBody.transform.position);
                 PlayerBody.DOScale(Vector3.one, .2f);
-                _playerMat.DOFloat(0, "_TwirlAmount", .3f).OnComplete(() => {
-                    _playerMat.SetInt("_Twirl", 0);
+                _playerMat.DOFloat(0, _twirlAmount, .3f).OnComplete(() => {
+                    _playerMat.SetInt(_twirl, 0);
                 });
             }
             OnTwirl?.Invoke(start);

@@ -24,3 +24,9 @@ MonoBehaviour:
   SpellAttributes:
   - Key: speed
     Value: 20
+  - Key: damage
+    Value: 35
+  - Key: damage_radius
+    Value: 2
+  - Key: knockback
+    Value: 15
