@@ -38,9 +38,15 @@ namespace Spells {
                 }
             }
             if (c.CompareTag("Shield")) {
-                ServerOnContact(false);
-                c.GetComponentInParent<Player>().PlayerReferences.PlayerModel.ServerDisableShield(true);
-                return;
+                // Make sure it's not my own shield
+                if (c.GetComponentInParent<Player>().OwnerId != _initData.CasterId) {
+                    ServerOnContact(false);
+                    c.GetComponentInParent<Player>().PlayerReferences.PlayerModel.ServerDisableShield(true);
+                    return;
+                }
+                else {
+                    Debug.Log("Ran into my own shield but it's fine");
+                }
             }
             
             // Otherwise, explode
@@ -77,12 +83,12 @@ namespace Spells {
 
         private void Begin() {
             Vector3 hitPosition = _initData.Position;
-            // _spawnSound?.Play();
+            _spawnSound.Play();
             float speed = _initData.SpellDefinition.GetAttributeValue("speed");
             float totalTime =  disToTarget / speed;
 
-            _contentTransform.DOScale(Vector3.one, .3f).From(Vector3.zero);
-            _contentTransform.DOMove(hitPosition, totalTime).SetEase(Ease.Linear).OnComplete(() => {
+            _contentTransform.DOScale(Vector3.one, .1f).From(Vector3.zero);
+            _contentTransform.DOMove(hitPosition, totalTime).SetDelay(.25f).SetEase(Ease.Linear).OnComplete(() => {
                 _fireballEffect.Stop();
             });
 
@@ -116,10 +122,10 @@ namespace Spells {
 
         [ObserversRpc]
         private void ClientExplode(bool explode) {
-            Debug.Log("Explode: " + explode);
             _contentTransform.DOKill();
             _fireballEffect.Stop();
             if (explode) {
+                _explosionSound.Play();
                 _explosionGameObject.SetActive(true);
             }
         }

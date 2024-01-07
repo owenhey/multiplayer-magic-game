@@ -22,4 +22,4 @@ MonoBehaviour:
   SpellPrefab: {fileID: 0}
   SpellAttributes:
   - Key: duration
-    Value: 100
+    Value: 3

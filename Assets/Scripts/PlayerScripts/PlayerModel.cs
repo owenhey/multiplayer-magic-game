@@ -29,7 +29,6 @@ namespace PlayerScripts {
         protected override void Awake() {
             base.Awake();
             InitMaterial();
-            AnimateShieldOff(false);
         }
 
         private void InitMaterial() {

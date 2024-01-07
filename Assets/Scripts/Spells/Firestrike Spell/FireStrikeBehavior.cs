@@ -74,7 +74,7 @@ namespace Spells {
         private void Begin() {
             Vector3 hitPosition = _initData.Position;
             DOTween.To(()=> _decalProjector.fadeFactor, x=> _decalProjector.fadeFactor = x, .7f, .5f).From(0);
-            // _spawnSound?.Play();
+            _spawnSound.Play();
             _contentTransform.DOScale(Vector3.one, .3f).From(Vector3.zero);
             _contentTransform.DOMove(hitPosition, 1.5f).SetEase(Ease.InSine).OnComplete(() => {
                 _fireballEffect.Stop();
@@ -113,6 +113,7 @@ namespace Spells {
             _fireballEffect.Stop();
             _decalProjector.gameObject.SetActive(false);
             if (explode) {
+                _explosionSound.Play();
                 _explosionGameObject.SetActive(true);
             }
         }

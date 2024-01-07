@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace Spells{
     [SpellEffect("Shield")]
-    public class ShieldEffect : PlayerOverrideSpellEffect
-    {
+    public class ShieldEffect : PlayerOverrideSpellEffect {
         protected override void OnSpellStart() {
             
             
