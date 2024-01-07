@@ -29,7 +29,7 @@ namespace PlayerScripts {
         protected override void Awake() {
             base.Awake();
             InitMaterial();
-            AnimateShieldOff();
+            AnimateShieldOff(false);
         }
 
         private void InitMaterial() {
@@ -101,23 +101,22 @@ namespace PlayerScripts {
             OnTwirl?.Invoke(start);
         }
 
-        public void EnableShield(Vector3 worldDirection) {
+        public void ClientEnableShield(Vector3 worldDirection) {
             if(!IsOwner){
                 Debug.Log("Must call this from the owner!");
                 return;
             }
             
-            ServerEnableShield(worldDirection);
-            AnimateShieldOn(worldDirection); // do this locally immediately
+            ServEnableShield(worldDirection);
         }
         
         [ServerRpc]
-        private void ServerEnableShield(Vector3 worldDirection, NetworkConnection sender = null) {
+        private void ServEnableShield(Vector3 worldDirection, NetworkConnection sender = null) {
             NonOwnerTurnShieldOn(worldDirection);
             AnimateShieldOn(worldDirection);
         }
 
-        [ObserversRpc(ExcludeOwner = true)]
+        [ObserversRpc]
         private void NonOwnerTurnShieldOn(Vector3 worldDirection) {
             AnimateShieldOn(worldDirection);
         }
@@ -126,29 +125,32 @@ namespace PlayerScripts {
             _playerShield.TurnOn(direction);
         }
 
-        public void DisableShield() {
+        public void ClientDisableShield(bool hit) {
             if(!IsOwner){
                 Debug.Log("Must call this from the owner!");
                 return;
             }
             
-            ServerDisableShield();
-            AnimateShieldOff();
+            ServDisableShield(hit);
         }
 
+        public void ServerDisableShield(bool hit) {
+            NonOwnerTurnShieldOff(hit);
+            AnimateShieldOff(hit);
+        }
+        
         [ServerRpc]
-        private void ServerDisableShield(NetworkConnection sender = null) {
-            NonOwnerTurnShieldOff();
-            AnimateShieldOff();
+        private void ServDisableShield(bool hit, NetworkConnection sender = null) {
+            ServerDisableShield(hit);
         }
         
-        [ObserversRpc(ExcludeOwner = true)]
-        private void NonOwnerTurnShieldOff() {
-            AnimateShieldOff();
+        [ObserversRpc]
+        private void NonOwnerTurnShieldOff(bool hit) {
+            AnimateShieldOff(hit);
         }
         
-        private void AnimateShieldOff() {
-            _playerShield.TurnOff();
+        private void AnimateShieldOff(bool hit) {
+            _playerShield.TurnOff(hit);
         }
     }
 }

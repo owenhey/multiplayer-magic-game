@@ -416,6 +416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 7185142775271302312}
   _shield: {fileID: 3814963614903075060}
+  _shieldCollider: {fileID: 5750601443661966740}
   _playerShieldMaterialBase: {fileID: 2100000, guid: 5cabe4b86cf5c1d41a8a5c1c3c1c4521,
     type: 2}
   _playerShieldMeshRenderer: {fileID: 6133340370399101305}
@@ -9366,6 +9367,12 @@ PrefabInstance:
 --- !u!4 &3814963614903075060 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3287948175676225887, guid: ce9cfb2fd569b68418a15a6cd47892d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1824057096959015339}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5750601443661966740 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 6241540244220695615, guid: ce9cfb2fd569b68418a15a6cd47892d8,
     type: 3}
   m_PrefabInstance: {fileID: 1824057096959015339}
   m_PrefabAsset: {fileID: 0}

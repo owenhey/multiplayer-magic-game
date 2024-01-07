@@ -9,7 +9,7 @@ namespace Spells{
         protected override void OnSpellStart() {
             
             
-            _targetPlayer.PlayerReferences.PlayerModel.EnableShield(_spellCastData.TargetData.CameraRay.direction);
+            _targetPlayer.PlayerReferences.PlayerModel.ClientEnableShield(_spellCastData.TargetData.CameraRay.direction);
         }
 
         protected override void OnSpellTick(float percent, float remainingDuration) {
@@ -17,7 +17,7 @@ namespace Spells{
         }
 
         protected override void OnSpellEnd() {
-            _targetPlayer.PlayerReferences.PlayerModel.DisableShield();
+            _targetPlayer.PlayerReferences.PlayerModel.ClientDisableShield(false);
         }
     }
 }

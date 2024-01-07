@@ -39,6 +39,7 @@ namespace Spells {
             }
             if (c.CompareTag("Shield")) {
                 ServerOnContact(false);
+                c.GetComponentInParent<Player>().PlayerReferences.PlayerModel.ServerDisableShield(true);
                 return;
             }
             
