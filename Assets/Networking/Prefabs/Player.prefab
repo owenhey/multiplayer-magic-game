@@ -416,10 +416,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 7185142775271302312}
   _shield: {fileID: 3814963614903075060}
+  _model: {fileID: 192306130957749356}
   _shieldCollider: {fileID: 5750601443661966740}
   _playerShieldMaterialBase: {fileID: 2100000, guid: 5cabe4b86cf5c1d41a8a5c1c3c1c4521,
     type: 2}
   _playerShieldMeshRenderer: {fileID: 6133340370399101305}
+  _hoverAmp: 0.08
+  _hoverSpeed: 2
 --- !u!1 &214936784017564499
 GameObject:
   m_ObjectHideFlags: 0
@@ -9364,6 +9367,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce9cfb2fd569b68418a15a6cd47892d8, type: 3}
+--- !u!4 &192306130957749356 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2016327492102026695, guid: ce9cfb2fd569b68418a15a6cd47892d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1824057096959015339}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3814963614903075060 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3287948175676225887, guid: ce9cfb2fd569b68418a15a6cd47892d8,

@@ -6,6 +6,8 @@ using UnityEngine;
 namespace Helpers {
     [RequireComponent(typeof(Rigidbody))]
     public class TriggerListener : MonoBehaviour {
+        [SerializeField] private Collider _collider;
+        
         public Action<Collider> OnEnter;
         public Action<Collider> OnExit;
 
@@ -15,6 +17,10 @@ namespace Helpers {
         
         private void OnTriggerExit(Collider other) {
             OnExit?.Invoke(other);
+        }
+
+        public void SetEnabled(bool e) {
+            _collider.enabled = e;
         }
     }   
 }

@@ -94,12 +94,13 @@ namespace Spells {
             });
         }
 
+        [Server]
         private void ServerOnContact(bool explode) {
             if (explode) {
                 _explosionGameObject.SetActive(true);
             }
             
-            _trigger.gameObject.SetActive(false);
+            _trigger.SetEnabled(false);
             _contentTransform.DOKill();
             _fireballEffect.Stop();
             
@@ -115,6 +116,7 @@ namespace Spells {
 
         [ObserversRpc]
         private void ClientExplode(bool explode) {
+            Debug.Log("Explode: " + explode);
             _contentTransform.DOKill();
             _fireballEffect.Stop();
             if (explode) {

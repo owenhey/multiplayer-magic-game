@@ -96,6 +96,7 @@ namespace Spells {
                 _explosionGameObject.SetActive(true);
             }
 
+            _trigger.SetEnabled(false);
             _contentTransform.DOKill();
             _fireballEffect.Stop();
             ClientExplode(explode);

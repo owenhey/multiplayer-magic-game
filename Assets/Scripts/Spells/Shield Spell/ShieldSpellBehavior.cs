@@ -1,26 +1,42 @@
 using DG.Tweening;
+using FishNet;
 using UnityEngine;
 
 namespace Spells {
     public class ShieldSpellBehavior : MonoBehaviour {
         [SerializeField] private Transform _parent;
         [SerializeField] private Transform _shield;
+        [SerializeField] private Transform _model;
         [SerializeField] private Collider _shieldCollider;
         
         [SerializeField] private Material _playerShieldMaterialBase;
         [SerializeField] private MeshRenderer _playerShieldMeshRenderer;
+
+        [Header("Hover")] 
+        [SerializeField] private float _hoverAmp = .25f;
+        [SerializeField] private float _hoverSpeed = 3;
 
         private Material _shieldMat;
         private float _baseTransparency;
         private static readonly int _transparency = Shader.PropertyToID("_Transparency");
         private static readonly int _centerT = Shader.PropertyToID("_CenterT");
 
+        private Vector3 _modelBaseLocalPosition;
+
         private void Awake() {
             _shieldMat = new Material(_playerShieldMaterialBase);
             _playerShieldMeshRenderer.material = _shieldMat;
             _baseTransparency = _playerShieldMaterialBase.GetFloat(_transparency);
+            _modelBaseLocalPosition = _model.transform.localPosition;
             
             TurnOff(false);
+        }
+
+        private void Update() {
+            if (!InstanceFinder.IsClient) return;
+
+            _model.localPosition =
+                _modelBaseLocalPosition + Vector3.up * (_hoverAmp * Mathf.Sin(Time.time * _hoverSpeed));
         }
 
         public void TurnOn(Vector3 direction) {
