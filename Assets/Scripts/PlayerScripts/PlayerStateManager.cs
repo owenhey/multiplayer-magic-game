@@ -44,7 +44,7 @@ namespace PlayerScripts {
             _movementEnabled = !(_teleporting || _inInventory || _stunned || _dead); 
             PlayerMovement.enabled = _movementEnabled;
 
-            // Movement 
+            // Spells 
             _spellsEnabled = !(_teleporting || _inInventory || _stunned || _castingSpell || _dead); 
             PlayerSpells.enabled = _spellsEnabled;
             
@@ -53,7 +53,7 @@ namespace PlayerScripts {
             PlayerInteract.enabled = _interactionEnabled;
             
             // Indicatosrs
-            _indicatorsEnabled = !(_movingCamera || _teleporting || _inInventory || _stunned || _dead);
+            _indicatorsEnabled = !(_teleporting || _inInventory || _stunned || _dead);
             PlayerIndicators.Hide = !_indicatorsEnabled;
             
             // Animations

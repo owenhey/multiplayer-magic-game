@@ -83,7 +83,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &8089928895858691228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +154,7 @@ MonoBehaviour:
   _trigger: {fileID: 8089928895858691228}
   _initData:
     CasterId: 0
+    SpellId: 0
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &8264046528775499405
@@ -255,6 +256,11 @@ PrefabInstance:
     - target: {fileID: 3421196341928651167, guid: d38d8c460d3cade4ab3d1ddfc6c02ed1,
         type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421196341928651167, guid: d38d8c460d3cade4ab3d1ddfc6c02ed1,
+        type: 3}
+      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

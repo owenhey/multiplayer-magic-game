@@ -37,9 +37,13 @@ namespace Spells {
                     return;
                 }
             }
+            if (c.CompareTag("Shield")) {
+                ServerOnContact(false);
+                return;
+            }
             
             // Otherwise, explode
-            ServerExplode();
+            ServerOnContact(true);
         }
         
         public void SetInitData(SpawnablePrefabInitData data) {
@@ -76,8 +80,8 @@ namespace Spells {
             float speed = _initData.SpellDefinition.GetAttributeValue("speed");
             float totalTime =  disToTarget / speed;
 
-            _contentTransform.DOScale(Vector3.one, .15f);
-            _contentTransform.DOMove(hitPosition, totalTime).SetEase(Ease.InCubic).OnComplete(() => {
+            _contentTransform.DOScale(Vector3.one, .3f).From(Vector3.zero);
+            _contentTransform.DOMove(hitPosition, totalTime).SetEase(Ease.Linear).OnComplete(() => {
                 _fireballEffect.Stop();
             });
 
@@ -89,11 +93,18 @@ namespace Spells {
             });
         }
 
-        private void ServerExplode() {
-            _explosionGameObject.SetActive(true);
+        private void ServerOnContact(bool explode) {
+            if (explode) {
+                _explosionGameObject.SetActive(true);
+            }
+            
+            _trigger.gameObject.SetActive(false);
             _contentTransform.DOKill();
-            ClientExplode();
-            Invoke(nameof(DespawnObject), 2);
+            _fireballEffect.Stop();
+            
+            
+            ClientExplode(explode);
+            Invoke(nameof(DespawnObject), 5);
         }
 
         private void DespawnObject() {
@@ -102,8 +113,12 @@ namespace Spells {
         }
 
         [ObserversRpc]
-        private void ClientExplode() {
-            _explosionGameObject.SetActive(true);
+        private void ClientExplode(bool explode) {
+            _contentTransform.DOKill();
+            _fireballEffect.Stop();
+            if (explode) {
+                _explosionGameObject.SetActive(true);
+            }
         }
     }
 }

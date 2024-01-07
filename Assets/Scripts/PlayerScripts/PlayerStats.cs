@@ -37,6 +37,11 @@ namespace PlayerScripts {
 
         public override void OnSpawnServer(NetworkConnection connection) {
             base.OnSpawnServer(connection);
+            StartCoroutine(ServerSpawnC());
+        }
+        
+        private IEnumerator ServerSpawnC() {
+            yield return new WaitUntil(() => _player.ServerConnected);
             ServerSpawnPlayer();
         }
 
@@ -46,6 +51,8 @@ namespace PlayerScripts {
             ClientSpawnPlayer(Owner);
             OnPlayerSpawn?.Invoke();
         }
+        
+        
 
         [TargetRpc]
         private void ClientSpawnPlayer(NetworkConnection targetPlayer = null) {

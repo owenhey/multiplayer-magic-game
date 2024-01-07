@@ -92,7 +92,7 @@ namespace PlayerScripts {
                 cam.m_XAxis.m_InputAxisValue = 0;
             }
 
-            Cursor.visible = !active;
+            // Cursor.visible = !active;
         }
 
         public Vector3 GetCurrentPosition() {

@@ -6,10 +6,13 @@ using FishNet.Object.Synchronizing;
 using FishNet.Transporting;
 using UnityEngine;
 using DG.Tweening;
+using FishNet.Connection;
+using Spells;
 
 namespace PlayerScripts {
     public class PlayerModel : NetworkedPlayerScript {
         [SerializeField] private Material _playerMaterialBase;
+        [SerializeField] private ShieldSpellBehavior _playerShield;
         
         [field:SerializeField] public Transform PlayerBody {get; private set; }
         [field:SerializeField] public Transform ModelCamTarget {get; private set; }
@@ -18,6 +21,7 @@ namespace PlayerScripts {
         private Color _modelColor;
 
         private Material _playerMat;
+        private Material _shieldMat;
 
         public System.Action<bool> OnTwirl;
 
@@ -25,6 +29,7 @@ namespace PlayerScripts {
         protected override void Awake() {
             base.Awake();
             InitMaterial();
+            AnimateShieldOff();
         }
 
         private void InitMaterial() {
@@ -34,7 +39,7 @@ namespace PlayerScripts {
                 smr.material = _playerMat;
             }
         }
-
+        
         protected override void OnClientStart(bool isOwner) {
             if (!isOwner) return;
             
@@ -94,6 +99,56 @@ namespace PlayerScripts {
                 });
             }
             OnTwirl?.Invoke(start);
+        }
+
+        public void EnableShield(Vector3 worldDirection) {
+            if(!IsOwner){
+                Debug.Log("Must call this from the owner!");
+                return;
+            }
+            
+            ServerEnableShield(worldDirection);
+            AnimateShieldOn(worldDirection); // do this locally immediately
+        }
+        
+        [ServerRpc]
+        private void ServerEnableShield(Vector3 worldDirection, NetworkConnection sender = null) {
+            NonOwnerTurnShieldOn(worldDirection);
+            AnimateShieldOn(worldDirection);
+        }
+
+        [ObserversRpc(ExcludeOwner = true)]
+        private void NonOwnerTurnShieldOn(Vector3 worldDirection) {
+            AnimateShieldOn(worldDirection);
+        }
+        
+        private void AnimateShieldOn(Vector3 direction) {
+            _playerShield.TurnOn(direction);
+        }
+
+        public void DisableShield() {
+            if(!IsOwner){
+                Debug.Log("Must call this from the owner!");
+                return;
+            }
+            
+            ServerDisableShield();
+            AnimateShieldOff();
+        }
+
+        [ServerRpc]
+        private void ServerDisableShield(NetworkConnection sender = null) {
+            NonOwnerTurnShieldOff();
+            AnimateShieldOff();
+        }
+        
+        [ObserversRpc(ExcludeOwner = true)]
+        private void NonOwnerTurnShieldOff() {
+            AnimateShieldOff();
+        }
+        
+        private void AnimateShieldOff() {
+            _playerShield.TurnOff();
         }
     }
 }

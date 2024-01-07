@@ -22,6 +22,9 @@ namespace PlayerScripts {
 
         private static Dictionary<int, Player> _clientIdToPlayer = new();
         private static List<Player> _allPlayers = new();
+
+        public bool ServerConnected;
+        public bool ClientConnected;
         
         public void RegisterOnClientStartListener(Action<bool> method) {
             _onClientStart += method;
@@ -41,28 +44,33 @@ namespace PlayerScripts {
             if (Input.GetKeyUp(KeyCode.Mouse1)) {
                 PlayerReferences.PlayerStateManager.RemoveState(PlayerState.MovingCamera);
             }
-            
-            if (Input.GetKeyUp(KeyCode.H)) {
-                Debug.Log("H pressed: " + h++);
-            }
         }
 
         private void Awake() {
             RegisterOnClientStartListener(InitOwner);
         }
-
+        
         private void InitOwner(bool isLocal) {
             if (!isLocal) return;
 
             LocalPlayer = this;
             SelectRandomName();
+            
+            // Register back to the server that this is ready
+            ClientConnected = true;
+            TellServerReady();
+        }
+
+        [ServerRpc]
+        private void TellServerReady() {
+            ServerConnected = true;
         }
 
         private void SelectRandomName() {
             var randomName = "Player " + UnityEngine.Random.Range(1, 100);
             ServerRpcSetName(randomName);
         }
-
+        
         [ServerRpc]
         private void ServerRpcSetName(string name) {
             PlayerName = name;

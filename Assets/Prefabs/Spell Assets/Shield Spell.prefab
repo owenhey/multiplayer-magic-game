@@ -93,9 +93,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3421382322093571177}
   - component: {fileID: 6241540244220695615}
+  - component: {fileID: 4310450441223571859}
   m_Layer: 0
-  m_Name: Content
-  m_TagString: Untagged
+  m_Name: Shield Collider
+  m_TagString: Shield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135,8 +136,35 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9956173, y: 2.0482156, z: 0.5288834}
-  m_Center: {x: 0.023822129, y: 0.0034097433, z: 0.35582617}
+  m_Size: {x: 1.5376196, y: 1.4673433, z: 0.39526975}
+  m_Center: {x: 0.028361201, y: 0.041935176, z: 0.2890194}
+--- !u!54 &4310450441223571859
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2344521208539986357}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3779637483186871209
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +190,7 @@ Transform:
   m_GameObject: {fileID: 3779637483186871209}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.38, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

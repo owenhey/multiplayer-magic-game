@@ -23,6 +23,7 @@ namespace Spells {
     public class SpellTargetData {
         public bool Cancelled;
         public Vector3 TargetPosition;
+        public Ray CameraRay;
         public int TargetPlayerId;
     }
 }

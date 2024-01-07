@@ -29,6 +29,7 @@ namespace PlayerScripts {
             if (indicator.TargetType == IndicatorTargetType.None) {
                 SpellTargetData targetData = new();
                 targetData.TargetPlayerId = _player.OwnerId;
+                targetData.CameraRay = _player.PlayerReferences.Cam.ScreenPointToRay(Input.mousePosition);
                 spellTargetDataHandler?.Invoke(targetData);
                 return;
             }
@@ -65,6 +66,8 @@ namespace PlayerScripts {
         }
 
         private void AreaIndicatorUpdate() {
+            if (_player.PlayerReferences.Cam == null) return;
+            
             Vector3 mousePosition = Input.mousePosition;
             Ray ray = _player.PlayerReferences.Cam.ScreenPointToRay(mousePosition);
             Vector3 rayTarget = ray.origin + ray.direction * 50;
@@ -89,10 +92,11 @@ namespace PlayerScripts {
             }
             
             // Check for the click
-            if (!Hide && Input.GetKeyDown(KeyCode.Mouse0) && !EventSystem.current.IsPointerOverGameObject()) {
+            if (Input.GetKeyDown(KeyCode.Mouse0) && !EventSystem.current.IsPointerOverGameObject()) {
                 var targetData = new SpellTargetData {
                     Cancelled = false,
                     TargetPosition = rayTarget,
+                    CameraRay = ray,
                     TargetPlayerId = _player.OwnerId
                 };
                 _callback?.Invoke(targetData);
@@ -101,7 +105,7 @@ namespace PlayerScripts {
                 enabled = false;
             }
 
-            if (!Hide && _canCancel && Input.GetKeyDown(KeyCode.Mouse1)) {
+            if (_canCancel && Input.GetKeyDown(KeyCode.Mouse1)) {
                 ForceCancel();
             }
         }
