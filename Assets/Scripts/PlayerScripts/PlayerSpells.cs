@@ -190,6 +190,13 @@ namespace PlayerScripts {
 
         // Casts the chosen spell using the target data
         private void CastSpell() {
+            if (_chosenSpell == null || _results == null || _spellTargetData == null) {
+                Debug.LogWarning($"Something is null. Chosen spell {_chosenSpell}. Results {_results}. Spell Target Data {_spellTargetData}");
+                
+                ResetState();
+                return;
+            }
+            
             // Handle an on cooldown spell
             if (!_chosenSpell.Ready) {
                 OnOnCooldownSpellCast?.Invoke(_chosenSpell);
@@ -206,15 +213,14 @@ namespace PlayerScripts {
                 Effectiveness = _results.Score,
                 TargetData = _spellTargetData,
                 SpellId = _chosenSpell.SpellDefinition.SpellId,
-                Damage = 0,
-                Duration = _chosenSpell.SpellDefinition.GetAttributeValue("duration")
+                Damage = 0
             };
             spellEffect.Init(spellCastData);
             
             // Cast spell effect to type, and handle accordingly
             switch (spellEffect) {
                 case PlayerOverrideSpellEffect playerOverride:
-                    playerOverride.BeginSpell(spellCastData.TargetData.TargetPlayerId, spellCastData.Duration);
+                    playerOverride.BeginSpell(spellCastData.TargetData.TargetPlayerId);
                     break;
                 case SingleCastSpellEffect singleCastSpell:
                     singleCastSpell.BeginSpell();

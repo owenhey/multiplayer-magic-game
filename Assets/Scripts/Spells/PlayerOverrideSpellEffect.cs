@@ -10,17 +10,22 @@ namespace Spells {
     /// </summary>
     public abstract class PlayerOverrideSpellEffect : SpellEffectBase {
         protected Player _targetPlayer;
+        
         protected abstract void OnSpellStart();
 
         protected abstract void OnSpellTick(float percent, float remainingDuration);
 
         protected abstract void OnSpellEnd();
 
-        public void BeginSpell(int targetId, float duration) {
+        protected virtual float GetDuration() {
+            return _spellCastData.SpellDefinition.GetAttributeValue("duration");
+        } 
+
+        public void BeginSpell(int targetId) {
             _targetPlayer = Player.GetPlayerFromClientId(targetId);
             OnSpellStart();
             // Let's assume for now that this is the local player (owner)
-            _targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer(duration, OnSpellEnd, OnSpellTick);
+            _targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer(GetDuration(), OnSpellEnd, OnSpellTick);
         }
     }
 }

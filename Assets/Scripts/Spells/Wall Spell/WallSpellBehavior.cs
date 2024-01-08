@@ -4,8 +4,10 @@ using UnityEngine;
 using DG.Tweening;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using Helpers;
 using Net;
 using PlayerScripts;
+using UnityEngine.ProBuilder;
 
 namespace Spells {
     public class WallSpellBehavior : NetworkBehaviour, INetSpawnable {
@@ -40,9 +42,14 @@ namespace Spells {
         }
 
         private void Begin() {
-            Vector3 startScale = new Vector3(1, 0, 1);
-            _cubeTransform.DOScale(Vector3.one, .25f).From(startScale).SetEase(Ease.OutQuad);
-            _cubeTransform.DOScale(startScale, .15f).SetEase(Ease.InQuad).SetDelay(10.0f).OnComplete(() => {
+            float duration = _initData.SpellDefinition.GetAttributeValue("duration");
+            duration *= Misc.Remap(_initData.SpellEffectiveness, 0, 1, .5f, 1.0f);
+
+            Vector3 size = Vector3.one * Misc.Remap(_initData.SpellEffectiveness, 0, 1, .6f, 1.0f);
+            Vector3 startScale = new Vector3(size.x, 0, size.z);
+            
+            _cubeTransform.DOScale(size, .25f).From(startScale).SetEase(Ease.OutQuad);
+            _cubeTransform.DOScale(startScale, .15f).SetEase(Ease.InQuad).SetDelay(duration).OnComplete(() => {
                 gameObject.SetActive(false);
                 if (IsServer) {
                     Despawn(gameObject, DespawnType.Destroy);

@@ -15,7 +15,6 @@ namespace Spells {
         public int SpellId;
         public SpellDefinition SpellDefinition => SpellIder.Instance.GetSpell(SpellId);
         public float Damage;
-        public float Duration;
     }
     
     /// <summary>

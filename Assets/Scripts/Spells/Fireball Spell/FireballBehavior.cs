@@ -85,6 +85,7 @@ namespace Spells {
             Vector3 hitPosition = _initData.Position;
             _spawnSound.Play();
             float speed = _initData.SpellDefinition.GetAttributeValue("speed");
+            speed *= Misc.Remap(_initData.SpellEffectiveness, 0, 1, .7f, 1.0f);
             float totalTime =  disToTarget / speed;
 
             _contentTransform.DOScale(Vector3.one, .1f).From(Vector3.zero);
@@ -104,6 +105,7 @@ namespace Spells {
         private void DamageInArea() {
             float radius = _initData.SpellDefinition.GetAttributeValue("damage_radius");
             float damage = _initData.SpellDefinition.GetAttributeValue("damage");
+            damage *= Misc.Remap(_initData.SpellEffectiveness, 0, 1, .5f, 1.0f);
             float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
 
             Physics.OverlapSphereNonAlloc(_contentTransform.position, radius, ColliderBuffer.Buffer);

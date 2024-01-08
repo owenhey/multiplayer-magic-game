@@ -21,4 +21,6 @@ MonoBehaviour:
   IndicatorData: {fileID: 11400000, guid: 2e4a35666239e564a908a6ae3c749e24, type: 2}
   SpellPrefab: {fileID: 2376978816892767402, guid: 72601bb66404d47fc85cfaafdd3a73bc,
     type: 3}
-  SpellAttributes: []
+  SpellAttributes:
+  - Key: duration
+    Value: 10
