@@ -60,6 +60,10 @@ namespace PlayerScripts {
             ServerRpcSetColor(randomColor);
         }
 
+        public void SetColorFromClient(Color c) {
+            ServerRpcSetColor(c);
+        }
+
         [ServerRpc]
         private void ServerRpcSetColor(Color c) {
             _modelColor = c;
