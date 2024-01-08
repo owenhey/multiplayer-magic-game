@@ -9,6 +9,7 @@ namespace Spells {
     /// </summary>
     public class SpellCastData {
         public SpellTargetData TargetData;
+        public float Effectiveness; // goes from 0 to 1, based on how well you cast the spell
         public int CastingPlayerId;
         public Player Player => Player.GetPlayerFromClientId(CastingPlayerId);
         public int SpellId;

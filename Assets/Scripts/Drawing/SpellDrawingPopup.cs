@@ -24,15 +24,15 @@ namespace UI {
                 _text.text = "Perfect!";
                 _text.color = _perfectColor;
             }
-            else if (score > .8f) {
+            else if (score > .66f) {
                 _text.text = "Amazing!";
                 _text.color = _colorGradient.Evaluate(score);
             }
-            else if (score > .65f) {
+            else if (score > .33f) {
                 _text.text = "Good";
                 _text.color = _colorGradient.Evaluate(score);
             }
-            else if (score >= .5f) {
+            else if (score > 0) {
                 _text.text = "Poor";
                 _text.color = _colorGradient.Evaluate(score);
             }
@@ -40,6 +40,8 @@ namespace UI {
                 _text.text = "Failed";
                 _text.color = _colorGradient.Evaluate(score);
             }
+
+            _text.text += $" ({results.Score.ToString("#.##")})";
         }
         
         public void Setup(string text) {

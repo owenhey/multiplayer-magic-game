@@ -95,6 +95,7 @@ namespace Spells {
         private void DamageInArea() {
             float radius = _initData.SpellDefinition.GetAttributeValue("damage_radius");
             float damage = _initData.SpellDefinition.GetAttributeValue("damage");
+            damage *= Misc.Remap(_initData.SpellEffectiveness, 0, 1, .65f, 1.0f);
             float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
 
             Physics.OverlapSphereNonAlloc(_contentTransform.position, radius, ColliderBuffer.Buffer);

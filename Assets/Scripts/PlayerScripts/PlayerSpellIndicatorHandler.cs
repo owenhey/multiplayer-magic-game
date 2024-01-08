@@ -71,7 +71,7 @@ namespace PlayerScripts {
             Vector3 mousePosition = Input.mousePosition;
             Ray ray = _player.PlayerReferences.Cam.ScreenPointToRay(mousePosition);
             Vector3 rayTarget = ray.origin + ray.direction * 50;
-            if (Physics.Raycast(ray, out RaycastHit hit, 100, _areaRaycastLayerMask)) {
+            if (Physics.Raycast(ray, out RaycastHit hit, 50, _areaRaycastLayerMask)) {
                 bool showIndicator = !Hide && true;
                 _currentIndicator.SetActive(showIndicator);
 

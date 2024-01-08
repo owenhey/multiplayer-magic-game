@@ -25,6 +25,8 @@ MonoBehaviour:
   - Key: damage
     Value: 55
   - Key: damage_radius
-    Value: 2.5
+    Value: 3
   - Key: knockback
     Value: 15
+  - Key: max_distance
+    Value: 20

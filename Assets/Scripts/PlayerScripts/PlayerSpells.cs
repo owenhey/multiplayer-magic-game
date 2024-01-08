@@ -133,7 +133,7 @@ namespace PlayerScripts {
             Debug.Log("Results: " + results);
             SpellDrawingPopupManager.Instance.ShowPopup(_results);
             // If we cancelled / messed up, just cancel here
-            if (results.Completed == false || results.Score < .5f) {
+            if (results.Completed == false || results.Score <= 0) {
                 enabled = true;
                 _stateManager.RemoveState(PlayerState.CastingSpell);
                 ResetState();
@@ -158,7 +158,7 @@ namespace PlayerScripts {
                 return;
             }
             // Make sure the drawing results are at least somewhat close to reality
-            if (results.Score < .5f) {
+            if (results.Score <= 0) {
                 SpellDrawingPopupManager.Instance.ShowPopup(_results);
                 _stateManager.RemoveState(PlayerState.CastingSpell);
                 ResetState();
@@ -203,6 +203,7 @@ namespace PlayerScripts {
             var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.SpellDefinition.EffectId);
             var spellCastData = new SpellCastData {
                 CastingPlayerId = _player.LocalConnection.ClientId,
+                Effectiveness = _results.Score,
                 TargetData = _spellTargetData,
                 SpellId = _chosenSpell.SpellDefinition.SpellId,
                 Damage = 0,
@@ -253,7 +254,7 @@ namespace PlayerScripts {
                 return;
             }
             // Make sure the drawing results are at least somewhat close to reality
-            if (results.Score < .5f) {
+            if (results.Score <= 0) {
                 SpellDrawingPopupManager.Instance.ShowPopup(_results);
                 _stateManager.RemoveState(PlayerState.CastingSpell);
                 ResetState();
@@ -262,7 +263,7 @@ namespace PlayerScripts {
             }
             
             // Handle targeting and recieve spell cast data
-            _chosenSpell =  _spellInstances.FirstOrDefault(x => x.SpellDefinition.Drawing == results.Drawing);
+            _chosenSpell = _spellInstances.FirstOrDefault(x => x.SpellDefinition.Drawing == results.Drawing);
             CastSpell();
         }
 

@@ -13,6 +13,19 @@ namespace Helpers {
             value = Mathf.Max(baseLow, Mathf.Min(baseHigh, value));
             return endLow + (value - baseLow) * (endHigh - endLow) / (baseHigh - baseLow);
         }
+
+        public static Vector3 GetRandomOffsetFromScore(float effectiveness, float maxRadius, bool includeY) {
+            float randomnessRadius = Remap(effectiveness, 0, 1, maxRadius, 0);
+            if (includeY) {
+                Vector3 offset = Random.insideUnitSphere * randomnessRadius;
+                return offset;
+            }
+            else {
+                Vector2 offset = Random.insideUnitCircle * randomnessRadius;
+                return new Vector3(offset.x, 0, offset.y);
+            }
+            
+        }
         
         /// <summary>
         /// Also searches the input GameObject for this component

@@ -46,7 +46,8 @@ public class DrawingResults{
     }
     
     private float BasicAverageDistance() {
-        return Misc.RemapClamp(AverageDistance, .05f, 0.25f, 1, 0);
+        float f = Misc.Remap(AverageDistance, Drawing.PerfectScoreThreshold, Drawing.FailCastThreshold, 1, 0);
+        return Mathf.Min(1, f);
     }
 
     public override string ToString() {

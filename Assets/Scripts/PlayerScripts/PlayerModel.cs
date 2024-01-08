@@ -113,12 +113,12 @@ namespace PlayerScripts {
                 _playerMat.SetVector(_twirlCenterWorldSpace, PlayerBody.transform.position);
                 _playerMat.SetInt(_twirl, 1);
                 PlayerBody.DOScale(Vector3.zero, .15f).SetDelay(.15f);
-                _playerMat.DOFloat(20, _twirlAmount, .35f);
+                _playerMat.DOFloat(20, _twirlAmount, .25f);
             }
             else {
                 _playerMat.SetVector(_twirlCenterWorldSpace, PlayerBody.transform.position);
-                PlayerBody.DOScale(Vector3.one, .2f);
-                _playerMat.DOFloat(0, _twirlAmount, .3f).OnComplete(() => {
+                PlayerBody.DOScale(Vector3.one, .15f);
+                _playerMat.DOFloat(0, _twirlAmount, .25f).OnComplete(() => {
                     _playerMat.SetInt(_twirl, 0);
                 });
             }

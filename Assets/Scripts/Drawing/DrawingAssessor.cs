@@ -54,7 +54,7 @@ public class DrawingAssessor : ScriptableObject {
         }
         
         // Figure out which was closest
-        float bestScore = 0;
+        float bestScore = Mathf.NegativeInfinity;
         int bestIndex = -1;
         for (int i = 0; i < results.Length; i++) {
             if (results[i].Score >= bestScore) {

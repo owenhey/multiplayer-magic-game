@@ -13,6 +13,7 @@ namespace Net {
     public class SpawnablePrefabInitData {
         public int CasterId;
         public int SpellId;
+        public float SpellEffectiveness;
         public SpellDefinition SpellDefinition => SpellIder.Instance.GetSpell(SpellId);
         public Vector3 Position;
         public Quaternion Rotation;

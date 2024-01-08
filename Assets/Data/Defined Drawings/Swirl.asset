@@ -61,4 +61,6 @@ MonoBehaviour:
   TotalDistance: 1.3931704
   CalculatedDistance: 1.3931704
   TimeTarget: 0
+  PerfectScoreThreshold: 0.05
+  FailCastThreshold: 0.15
   HelperImage: {fileID: 21300000, guid: 1fa9876f2d3d0124b9eeac5aab9d6aee, type: 3}

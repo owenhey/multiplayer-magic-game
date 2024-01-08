@@ -128,6 +128,61 @@ SkinnedMeshRenderer:
     m_Center: {x: -31.044071, y: 1.755291, z: 0.0000038146973}
     m_Extent: {x: 34.989742, y: 25.19738, z: 30.62185}
   m_DirtyAABB: 0
+--- !u!1 &64154677968122558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 830728096494528637}
+  - component: {fileID: 992096100768256207}
+  m_Layer: 9
+  m_Name: Indicator Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &830728096494528637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64154677968122558}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8771216031366389187}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &992096100768256207
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64154677968122558}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.24151802
+  m_Height: 2.000435
+  m_Direction: 1
+  m_Center: {x: 0.004507482, y: 0.9439138, z: -0.06962997}
 --- !u!1 &73486511694080292
 GameObject:
   m_ObjectHideFlags: 0
@@ -6905,6 +6960,7 @@ Transform:
   - {fileID: 7081416051241051723}
   - {fileID: 3893423418599009062}
   - {fileID: 1118673655525569032}
+  - {fileID: 830728096494528637}
   m_Father: {fileID: 5274439918284474655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &573415280932483984
@@ -7130,6 +7186,7 @@ MonoBehaviour:
   _player: {fileID: 8286632864543236906}
   Player: {fileID: 8286632864543236906}
   PlayerReferences: {fileID: 1056872705930149825}
+  _indicatorCollider: {fileID: 64154677968122558}
 --- !u!114 &5886069620591711770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7326,7 +7383,7 @@ MonoBehaviour:
   <PlayerBody>k__BackingField: {fileID: 7081416051241051723}
   <ModelCamTarget>k__BackingField: {fileID: 3893423418599009062}
   _modelColor: {r: 0, g: 0, b: 0, a: 0}
-  _flashDuration: 0.25
+  _flashDuration: 0.4
 --- !u!114 &3726133492282219349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7399,7 +7456,7 @@ MonoBehaviour:
   _player: {fileID: 8286632864543236906}
   _areaRaycastLayerMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 640
   Hide: 0
 --- !u!114 &-5970099899597951696
 MonoBehaviour:
