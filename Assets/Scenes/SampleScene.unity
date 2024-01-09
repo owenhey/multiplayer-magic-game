@@ -5076,10 +5076,10 @@ MonoBehaviour:
   _unreliableMTU: 1023
   _ipv4BindAddress: 
   _ipv6BindAddress: 
-  _port: 8000
+  _port: 7770
   _maximumClients: 8
-  _clientAddress: localhost
-  _timeout: 15
+  _clientAddress: ec2-18-220-60-94.us-east-2.compute.amazonaws.com
+  _timeout: 100
 --- !u!1 &1769068316
 GameObject:
   m_ObjectHideFlags: 0
