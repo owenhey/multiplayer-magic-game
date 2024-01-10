@@ -76,6 +76,12 @@ namespace PlayerScripts {
             PlayerName = name;
         }
 
+        [Server]
+        public void ServerSetName(string name) {
+            if (string.IsNullOrEmpty(name)) return;
+            PlayerName = name;
+        }
+
         private void HandleNameChange(string old, string newName, bool server) {
             NameDisplay.text = newName;
         }
@@ -90,11 +96,14 @@ namespace PlayerScripts {
         }
         
         private void AddToStaticData() {
+            Debug.Log($"<color=green>Adding the player {OwnerId} to the list.</color>");
             _allPlayers.Add(this);
             _clientIdToPlayer.Add(OwnerId, this);
         }
 
-        private void OnDestroy() {
+        public override void OnStopNetwork() {
+            base.OnStopNetwork();
+            Debug.Log($"<color=red>Removing the player {OwnerId} from the list.</color>");
             _allPlayers.Remove(this);
             _clientIdToPlayer.Remove(OwnerId);
         }

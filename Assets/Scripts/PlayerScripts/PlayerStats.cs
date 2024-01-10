@@ -17,18 +17,6 @@ namespace PlayerScripts {
         public System.Action<int> OnHealthChange;
         public System.Action OnPlayerDeath;
         public System.Action OnPlayerSpawn;
-
-        private void Update() {
-            // Only on server
-            if (!IsServer) return;
-
-            if (Input.GetKeyDown(KeyCode.L)) {
-                DamageAndKnockback(Random.Range(5, 10), Vector3.forward * 10);
-            }
-            if (Input.GetKeyDown(KeyCode.K)) {
-                ServerSpawnPlayer();
-            }
-        }
         
         protected override void OnClientStart(bool isOwner) {
             base.OnClientStart(isOwner);

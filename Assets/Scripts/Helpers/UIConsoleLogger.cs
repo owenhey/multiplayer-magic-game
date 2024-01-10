@@ -19,10 +19,10 @@ namespace Helpers {
         private string _currentLog;
 
         private void Awake() {
-            if (Application.isEditor) {
-                Destroy(this.gameObject);
-                return;
-            }
+            // if (Application.isEditor) {
+            //     Destroy(this.gameObject);
+            //     return;
+            // }
 
             _consoleObj.SetActive(false);
             _openButton.SetActive(true);

@@ -42,5 +42,13 @@ namespace Helpers {
 
             return null;
         }
+
+        public static RectTransform RT(this GameObject gameObject) {
+            return gameObject.GetComponent<RectTransform>();
+        }
+
+        public static RectTransform RT(this Transform transform) {
+            return transform.gameObject.RT();
+        }
     }
 }
