@@ -46,8 +46,9 @@ namespace UI {
             Active = active;
             
             _enterToChatText.SetActive(!active);
-            _allContent.gameObject.SetActive(active);
-
+            // _allContent.gameObject.SetActive(active);
+            _allContent.alpha = active ? 1.0f : .15f;
+            
             if (active) {
                 _inputField.Select();
                 _inputField.ActivateInputField();
@@ -63,12 +64,15 @@ namespace UI {
         }
 
         private void HandleMessageSubmit(string message) {
-            _playerChat.SendMessageFromClient(message.Trim());
             _inputField.text = "";
             _inputField.caretPosition = 0;
-            
             _inputField.Select();
             _inputField.ActivateInputField();
+            
+            message = message.Trim();
+            if (string.IsNullOrEmpty(message)) return;
+            
+            _playerChat.SendMessageFromClient(message.Trim());
         }
 
         private void Awake() {

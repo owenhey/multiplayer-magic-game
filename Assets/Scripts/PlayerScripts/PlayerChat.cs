@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
+using Net;
 using PlayerScripts;
 using UnityEngine;
 
@@ -27,7 +28,7 @@ namespace PlayerScripts{
 
         [Server]
         private void ServerSendMessageToClients(ChatMessage message) {
-            ReceiveMessageFromServer(message);
+            ServerChat.Instance.SendMessageToClients(message);
         }
             
         [Server]
@@ -36,8 +37,8 @@ namespace PlayerScripts{
             ServerSendMessageToClients(serverMessage);
         }
 
-        [ObserversRpc(ExcludeOwner = false)]
-        private void ReceiveMessageFromServer(ChatMessage message) {
+        [Client]
+        public void ReceiveMessageFromServer(ChatMessage message) {
             OnClientMessageReceived?.Invoke(message);
         }
 

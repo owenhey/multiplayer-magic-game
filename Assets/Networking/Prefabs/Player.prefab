@@ -8474,6 +8474,7 @@ MonoBehaviour:
   <NetworkObj>k__BackingField: {fileID: 3726133492282219349}
   <PlayerModel>k__BackingField: {fileID: 9214829115622678224}
   <PlayerSpells>k__BackingField: {fileID: -5970099899597951696}
+  <PlayerChat>k__BackingField: {fileID: 309360326368588270}
   <PlayerAnimations>k__BackingField: {fileID: 459770775653816622}
   <PlayerStateManager>k__BackingField: {fileID: 8975781504269218941}
   <PlayerTimers>k__BackingField: {fileID: 2092327897885649139}

@@ -11,6 +11,7 @@ namespace PlayerScripts {
         [field:SerializeField] public NetworkObject NetworkObj { get; private set; }
         [field:SerializeField] public PlayerModel PlayerModel { get; private set; }
         [field:SerializeField] public PlayerSpells PlayerSpells { get; private set; }
+        [field:SerializeField] public PlayerChat PlayerChat { get; private set; }
         [field:SerializeField] public PlayerAnimations PlayerAnimations { get; private set; }
         [field:SerializeField] public PlayerStateManager PlayerStateManager { get; private set; }
         [field:SerializeField] public PlayerTimers PlayerTimers { get; private set; }
