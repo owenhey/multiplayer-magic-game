@@ -15,7 +15,7 @@ MonoBehaviour:
   EffectId: Shield
   SpellId: 4
   SpellName: Shield
-  SpellCooldown: 10
+  SpellCooldown: 5
   SpellIcon: {fileID: 21300000, guid: b0e3851cadd1c0847bdf97afd3ab6be7, type: 3}
   Drawing: {fileID: 11400000, guid: 2f3f5cd04f9c39145a841edddcc0ff07, type: 2}
   IndicatorData: {fileID: 11400000, guid: 2e4a35666239e564a908a6ae3c749e24, type: 2}

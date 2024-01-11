@@ -228,7 +228,7 @@ namespace PlayerScripts {
             }
             
             // Put the spell on cooldown
-            // _chosenSpell.SetOnCooldown();
+            _chosenSpell.SetOnCooldown();
             
             _stateManager.RemoveState(PlayerState.CastingSpell);
             ResetState();
@@ -253,12 +253,13 @@ namespace PlayerScripts {
             // Reset the instant draw
             _indicatorHandler.Setup(_instantDrawIndicatorData, HandleTargetInstantDraw, false);
             
-            Debug.Log("Results: " + results);
+            
             if (results.Completed == false) {
                 _stateManager.RemoveState(PlayerState.CastingSpell);
                 ResetState();
                 return;
             }
+            Debug.Log("Results: " + results);
             // Make sure the drawing results are at least somewhat close to reality
             if (results.Score <= 0) {
                 SpellDrawingPopupManager.Instance.ShowPopup(_results);

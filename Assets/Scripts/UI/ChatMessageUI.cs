@@ -23,5 +23,9 @@ namespace UI {
         public void FadeAndDestroy() {
             _textField.DOFade(0, 1.0f).OnComplete(()=>Destroy(gameObject));
         }
+
+        public void SetDark(bool dark) {
+            _textField.color = dark ? Color.black : Color.white;
+        }
     }
 }

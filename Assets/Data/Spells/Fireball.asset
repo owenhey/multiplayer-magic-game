@@ -15,7 +15,7 @@ MonoBehaviour:
   EffectId: Fireball
   SpellId: 3
   SpellName: Fireball
-  SpellCooldown: 8
+  SpellCooldown: 2
   SpellIcon: {fileID: 21300000, guid: b0e3851cadd1c0847bdf97afd3ab6be7, type: 3}
   Drawing: {fileID: 11400000, guid: 5ea90ffb513ac42f7b36cb1b003b16aa, type: 2}
   IndicatorData: {fileID: 11400000, guid: 2e4a35666239e564a908a6ae3c749e24, type: 2}
@@ -23,7 +23,7 @@ MonoBehaviour:
     type: 3}
   SpellAttributes:
   - Key: speed
-    Value: 20
+    Value: 30
   - Key: damage
     Value: 35
   - Key: damage_radius

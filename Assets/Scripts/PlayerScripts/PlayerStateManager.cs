@@ -27,7 +27,8 @@ namespace PlayerScripts {
         private bool _movementEnabled;
         private bool _spellsEnabled;
         private bool _interactionEnabled;
-        private bool _indicatorsEnabled;
+        private bool _indicatorsShowing;
+        private bool _indicatorsActive;
         private bool _animatorActive;
         private bool _collidersActive;
         private bool _chatActive;
@@ -57,8 +58,11 @@ namespace PlayerScripts {
             PlayerInteract.enabled = _interactionEnabled;
             
             // Indicators
-            _indicatorsEnabled = !(_teleporting || _inInventory || _stunned || _dead || _chatting);
-            PlayerIndicators.Hide = !_indicatorsEnabled;
+            _indicatorsShowing = !(_teleporting || _inInventory || _stunned || _dead || _chatting);
+            PlayerIndicators.Hide = !_indicatorsShowing;
+            
+            _indicatorsActive = !(_teleporting || _inInventory || _stunned || _dead || _chatting);
+            PlayerIndicators.CanRegisterClick = _indicatorsActive;
             
             // Animations
             _animatorActive = !(_dead);

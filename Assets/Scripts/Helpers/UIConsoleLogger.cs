@@ -36,6 +36,8 @@ namespace Helpers {
             
             _closeButton.SetActive(open);
             _openButton.SetActive(!open);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_consoleLineParent);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_consoleLineParent.parent.RT());
         }
 
         private void Log(string logString, string stackTrace, LogType type) {

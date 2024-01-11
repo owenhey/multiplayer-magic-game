@@ -16,6 +16,7 @@ namespace PlayerScripts {
         private Action _updateLoop;
         private bool _canCancel;
         public bool Hide;
+        public bool CanRegisterClick;
         
         protected override void Awake() {
             base.Awake();
@@ -72,7 +73,7 @@ namespace PlayerScripts {
             Ray ray = _player.PlayerReferences.Cam.ScreenPointToRay(mousePosition);
             Vector3 rayTarget = ray.origin + ray.direction * 50;
             if (Physics.Raycast(ray, out RaycastHit hit, 50, _areaRaycastLayerMask)) {
-                bool showIndicator = !Hide && true;
+                bool showIndicator = !Hide;
                 _currentIndicator.SetActive(showIndicator);
 
                 Vector3 playerPos = _playerReferences.GetPlayerPosition();
@@ -92,7 +93,12 @@ namespace PlayerScripts {
             }
             
             // Check for the click
-            if (Input.GetKeyDown(KeyCode.Mouse0) && !EventSystem.current.IsPointerOverGameObject()) {
+            bool mouseDown = Input.GetKeyDown(KeyCode.Mouse0);
+            bool canClick = CanRegisterClick;
+            bool notClickingUI = !EventSystem.current.IsPointerOverGameObject();
+
+            bool validLeftClick = mouseDown && canClick && notClickingUI;
+            if (validLeftClick) {
                 var targetData = new SpellTargetData {
                     Cancelled = false,
                     TargetPosition = rayTarget,
@@ -105,7 +111,9 @@ namespace PlayerScripts {
                 enabled = false;
             }
 
-            if (_canCancel && Input.GetKeyDown(KeyCode.Mouse1)) {
+            bool rightMouseDown = Input.GetKeyDown(KeyCode.Mouse1);
+            bool validRightClick = _canCancel && rightMouseDown && canClick;
+            if (validRightClick) {
                 ForceCancel();
             }
         }

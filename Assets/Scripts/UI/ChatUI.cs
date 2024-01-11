@@ -16,6 +16,7 @@ namespace UI {
         [SerializeField] private ChatMessageUI _chatMessagePrefab;
 
         [SerializeField] private RectTransform _chatMessageParent;
+        [SerializeField] private GameObject _background;
         [SerializeField] private CanvasGroup _allContent;
         [SerializeField] private TMP_InputField _inputField;
 
@@ -35,6 +36,7 @@ namespace UI {
             var chatMessageUI = Instantiate(_chatMessagePrefab, _chatMessageParent);
             
             chatMessageUI.Init(chatMessage);
+            chatMessageUI.SetDark(!Active);
             _shownChats.AddLast(chatMessageUI);
             if (_shownChats.Count > _maxDisplayed) {
                 _shownChats.First.Value.FadeAndDestroy();
@@ -46,8 +48,12 @@ namespace UI {
             Active = active;
             
             _enterToChatText.SetActive(!active);
-            // _allContent.gameObject.SetActive(active);
-            _allContent.alpha = active ? 1.0f : .15f;
+            _background.SetActive(active);
+            _allContent.alpha = active ? 1.0f : .35f;
+            
+            foreach (var chatMessageUI in _shownChats) {
+                chatMessageUI.SetDark(!active);
+            }
             
             if (active) {
                 _inputField.Select();

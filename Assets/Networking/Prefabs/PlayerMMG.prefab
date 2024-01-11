@@ -4286,6 +4286,7 @@ MonoBehaviour:
   _chatMessagePrefab: {fileID: 794195652028859682, guid: 8a8ca30676a24ea4789d9a95d803f9ed,
     type: 3}
   _chatMessageParent: {fileID: 4381868559730292464}
+  _background: {fileID: 6569402697902619580}
   _allContent: {fileID: 6050227320373683264}
   _inputField: {fileID: 5747729274774714398}
   _enterToChatText: {fileID: 9191018773438394338}
@@ -8400,7 +8401,7 @@ GameObject:
   - component: {fileID: 651983594242769555}
   - component: {fileID: 309360326368588270}
   m_Layer: 6
-  m_Name: Player
+  m_Name: PlayerMMG
   m_TagString: Untagged
   m_Icon: {fileID: 2800000, guid: 02800fb9cff14da47a04572790384d8b, type: 3}
   m_NavMeshLayer: 0
@@ -8602,6 +8603,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 640
   Hide: 0
+  CanRegisterClick: 0
 --- !u!114 &-5970099899597951696
 MonoBehaviour:
   m_ObjectHideFlags: 0
