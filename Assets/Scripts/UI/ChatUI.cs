@@ -50,6 +50,7 @@ namespace UI {
             _enterToChatText.SetActive(!active);
             _background.SetActive(active);
             _allContent.alpha = active ? 1.0f : .35f;
+            _allContent.interactable = _allContent.blocksRaycasts = active;
             
             foreach (var chatMessageUI in _shownChats) {
                 chatMessageUI.SetDark(!active);

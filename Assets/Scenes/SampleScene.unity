@@ -195,7 +195,7 @@ PrefabInstance:
     - target: {fileID: 7443408887813606051, guid: 0b650fca685f2eb41a86538aa883e4c1,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7443408887813606060, guid: 0b650fca685f2eb41a86538aa883e4c1,
         type: 3}
@@ -2038,7 +2038,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 391.25, y: 236.75}
-  m_SizeDelta: {x: 300, y: 300}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &409355511
 MonoBehaviour:
@@ -3733,7 +3733,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 391.25, y: 236.75}
-  m_SizeDelta: {x: 300, y: 300}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &689800149
 GameObject:
@@ -4669,7 +4669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993fd72ab7f22654f9ad1894c08116d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 300
+  size: 500
   _drawingMechanic: {fileID: 409355513}
   _targetDrawing: {fileID: 0}
   _content: {fileID: 1788322472}
@@ -5965,7 +5965,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 391.25, y: 236.75}
-  m_SizeDelta: {x: 300, y: 300}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1563426206
 GameObject:
@@ -6897,7 +6897,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 391.25, y: 236.75}
-  m_SizeDelta: {x: 300, y: 300}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1683995547
 MonoBehaviour:
@@ -6970,7 +6970,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 391.25, y: 236.75}
-  m_SizeDelta: {x: 300, y: 300}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1689544137
 GameObject:
@@ -7165,8 +7165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95203da08be12be4db362cafe4108b07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resolution: 512
-  blurStepSize: 1
+  resolution: 1024
+  blurStepSize: 2
   blurStepCount: 2
   clearColor: {r: 0.6509434, g: 0.35924706, b: 0.35924706, a: 0}
   blurResistance: 1
@@ -7177,7 +7177,7 @@ MonoBehaviour:
   myImage: {fileID: 409355511}
   drawer: {fileID: 409355513}
   color: {r: 1, g: 0.44753826, b: 0.08018869, a: 1}
-  size: 5
+  size: 10
   clearOnStartDrawing: 1
 --- !u!114 &1788322475
 MonoBehaviour:
@@ -7840,7 +7840,7 @@ PrefabInstance:
     - target: {fileID: 7443408887813606051, guid: 0b650fca685f2eb41a86538aa883e4c1,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7443408887813606060, guid: 0b650fca685f2eb41a86538aa883e4c1,
         type: 3}

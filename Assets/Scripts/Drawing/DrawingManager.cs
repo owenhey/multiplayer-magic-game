@@ -75,7 +75,7 @@ namespace Drawing {
 
             else {
                 _targetDrawing = null;
-                SetSize(500);
+                SetSize(1000);
                 PositionDrawing((Vector2)Input.mousePosition);
                 // PLACEHOLDER FOR THE INSTANT CAST METHOD
                 _guideImage.enabled = false;
