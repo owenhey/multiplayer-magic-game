@@ -55,14 +55,19 @@ namespace PlayerScripts {
             _updateLoop?.Invoke();
         }
 
-        public void ForceCancel() {
+        public void ForceCancel(bool fireCallback) {
             var targetData = new SpellTargetData {
                 Cancelled = true,
                 TargetPosition = default,
                 TargetPlayerId = -1
             };
-            _callback?.Invoke(targetData);
-            _currentIndicator.SetActive(false);
+            if (fireCallback) {
+                _callback?.Invoke(targetData);
+            }
+
+            if (_currentIndicator != null) {
+                _currentIndicator.SetActive(false);
+            }
             enabled = false;
         }
 
@@ -114,7 +119,7 @@ namespace PlayerScripts {
             bool rightMouseDown = Input.GetKeyDown(KeyCode.Mouse1);
             bool validRightClick = _canCancel && rightMouseDown && canClick;
             if (validRightClick) {
-                ForceCancel();
+                ForceCancel(true);
             }
         }
 

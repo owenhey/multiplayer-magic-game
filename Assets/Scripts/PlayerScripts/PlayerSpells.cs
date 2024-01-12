@@ -9,50 +9,34 @@ using Helpers;
 using UnityEngine;
 using Spells;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
+using UnityEngine.EventSystems;
 using Visuals;
 
 namespace PlayerScripts {
-    // Handles the casting / cooldown of a spell
-    public class SpellInstance {
-        public SpellDefinition SpellDefinition { get; }
-        public float RemainingCooldown { get; private set;}
-        public bool Ready => RemainingCooldown <= 0;
-
-        private PlayerTimers _timers;
-
-        public Action OnChange;
-
-        public SpellInstance(SpellDefinition d, PlayerTimers timers) {
-            SpellDefinition = d;
-            _timers = timers;
-            
-            RemainingCooldown = -1;
-        }
-
-        public void SetOnCooldown() {
-            _timers.RegisterTimer(SpellDefinition.SpellCooldown, FinishCooldown, OnCooldownTick);
-            OnChange?.Invoke();
-        }
-
-        private void OnCooldownTick(float percentThrough, float remainingSeconds) {
-            RemainingCooldown = remainingSeconds;
-            OnChange?.Invoke();
-        }
-
-        private void FinishCooldown() {
-            RemainingCooldown = -1;
-            OnChange?.Invoke();
-        }
+    public enum SpellCastingType {
+        Quickcast,
+        QuickcastWithIndicator,
+        Area
     }
-    
     public class PlayerSpells : LocalPlayerScript {
         [SerializeField] private PlayerSpellIndicatorHandler _indicatorHandler;
-        [SerializeField] private bool _instantDrawEnabled = false;
         [SerializeField] private List<SpellDefinition> _spells;
         [SerializeField] private SpellIndicatorData _instantDrawIndicatorData;
 
         private List<SpellInstance> _spellInstances;
         private PlayerStateManager _stateManager;
+        
+        // Type
+        [SerializeField] private SpellCastingType _castingType;
+        public SpellCastingType CastingType {
+            get {
+                return _castingType;
+            }
+            set {
+                _castingType = value;
+                SetCastingType(_castingType);
+            }
+        }
         
         // Mid-cast data
         private SpellInstance _chosenSpell = null;
@@ -66,27 +50,6 @@ namespace PlayerScripts {
             base.Awake();
             _stateManager = _player.PlayerReferences.PlayerStateManager;
         }
-        
-        // To be removed, eventually
-        private void Update() {
-            if (Input.GetKeyDown(KeyCode.Alpha1)) {
-                AttemptCast(_spellInstances[0]);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2)) {
-                AttemptCast(_spellInstances[1]);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha3)) {
-                AttemptCast(_spellInstances[2]);
-            }
-            if (Input.GetKeyDown(KeyCode.Space)) {
-                AttemptGenericCast();
-            }
-
-            // Testing
-            if (Input.GetKeyDown(KeyCode.I)) {
-                SetInstantDraw(!_instantDrawEnabled);
-            }
-        }
 
         /// Only called on the owner
         private void Init() {
@@ -95,104 +58,44 @@ namespace PlayerScripts {
             for (int i = 0; i < _spells.Count; i++) {
                 _spellInstances.Add(new SpellInstance(_spells[i], _player.PlayerReferences.PlayerTimers));
             }
-            
-            // Let's just start with instant draw
-            SetInstantDraw(true);
-        }
-        
-        private void AttemptCast(SpellInstance spellChosen) {
-            if (!spellChosen.Ready) {
-                OnOnCooldownSpellCast?.Invoke(spellChosen);
-                ResetState();
-                return;
-            }
-            // Disable appropriate components so nothing else can happen
-            _stateManager.AddState(PlayerState.CastingSpell);
-            
-            // Handle targeting and recieve spell cast data
-            _chosenSpell = spellChosen;
-            _indicatorHandler.Setup(spellChosen.SpellDefinition.IndicatorData, HandleTargetSpellData, true);
+
+            CastingType = SpellCastingType.QuickcastWithIndicator;
         }
 
-        private void HandleTargetSpellData(SpellTargetData spellTargetData) {
-            // Handle if the player cancelled it 
-            if (spellTargetData.Cancelled == true) {
-                enabled = true;
-                _stateManager.RemoveState(PlayerState.CastingSpell);
-                ResetState();
-                return;
-            }
-            _spellTargetData = spellTargetData;
+        private void SetCastingType(SpellCastingType type) {
+            // Reset indicator (if it's there)
+            ResetState();
+            _indicatorHandler.ForceCancel(false);
             
-            // Now, go to the drawing assessor and see how we did
-            DrawingManager.Instance.StartDrawing(_chosenSpell.SpellDefinition.Drawing, HandleDrawing);
+            switch (type) {
+                case SpellCastingType.Quickcast:
+                    _indicatorHandler.Setup(_instantDrawIndicatorData, HandleQuickcastTarget, false);
+                    break;
+                case SpellCastingType.QuickcastWithIndicator:
+                    // Update method handles this
+                    break;
+                case SpellCastingType.Area:
+                    break;
+            }
         }
 
-        private void HandleDrawing(DrawingResults results) {
-            _results = results;
-            Debug.Log("Results: " + results);
-            SpellDrawingPopupManager.Instance.ShowPopup(_results);
-            // If we cancelled / messed up, just cancel here
-            if (results.Completed == false || results.Score <= 0) {
-                enabled = true;
-                _stateManager.RemoveState(PlayerState.CastingSpell);
-                ResetState();
-                OnSpellMessUp?.Invoke();
-                return;
+        private void Update() {
+            if (_castingType == SpellCastingType.QuickcastWithIndicator && 
+                Input.GetKeyDown(KeyCode.Mouse0) && 
+                !EventSystem.current.IsPointerOverGameObject()) {
+                _stateManager.AddState(PlayerState.CastingSpell);
+                DrawingManager.Instance.StartDrawing(null, HandleIndicatorDraw, true);
             }
-            CastSpell();
-        }
-        
-        // Space way
-        private void AttemptGenericCast() {
-            _stateManager.AddState(PlayerState.CastingSpell);
-            DrawingManager.Instance.StartDrawing(null, HandleGenericDrawing);
         }
 
-        private void HandleGenericDrawing(DrawingResults results) {
-            _results = results;
-            Debug.Log("Results: " + results);
-            if (results.Completed == false) {
-                _stateManager.RemoveState(PlayerState.CastingSpell);
-                ResetState();
-                return;
-            }
-            // Make sure the drawing results are at least somewhat close to reality
-            if (results.Score <= 0) {
-                SpellDrawingPopupManager.Instance.ShowPopup(_results);
-                _stateManager.RemoveState(PlayerState.CastingSpell);
-                ResetState();
-                OnSpellMessUp?.Invoke();
-                return;
-            }
-            
-            // Handle targeting and recieve spell cast data
-            _chosenSpell = _spellInstances.FirstOrDefault(x=>x.SpellDefinition.Drawing == results.Drawing);
-            if (!_chosenSpell.Ready) {
-                OnOnCooldownSpellCast?.Invoke(_chosenSpell);
-                ResetState();
-                return;
-            }
-            
-            _indicatorHandler.Setup(_chosenSpell.SpellDefinition.IndicatorData, HandleGenericIndicator, true);
-        }
-
-        private void HandleGenericIndicator(SpellTargetData targetData) {
-            if (targetData.Cancelled) {
-                _stateManager.RemoveState(PlayerState.CastingSpell);
-                ResetState();
-                return;
-            }
-            _spellTargetData = targetData;
-            // Here, just cast the spell. Player has already drawn
-            CastSpell();
-        }
-
-        // Casts the chosen spell using the target data
+        /// <summary>
+        /// Actually casts the spell, on the client side. MAke sure that the spell is chosen, the results have been
+        /// calculated, and the target data has been set. This should be the LAST thing to be called.
+        /// </summary>
         private void CastSpell() {
+            // If something went wrong
             if (_chosenSpell == null || _results == null || _spellTargetData == null) {
                 Debug.LogWarning($"Something is null. Chosen spell {_chosenSpell}. Results {_results}. Spell Target Data {_spellTargetData}");
-                
                 ResetState();
                 return;
             }
@@ -205,8 +108,8 @@ namespace PlayerScripts {
                 return;
             }
 
+            // Show drawing results if we actually drew something
             SpellDrawingPopupManager.Instance.ShowPopup(_results);
-            Debug.Log($"Casting spell: {_chosenSpell.SpellDefinition.name}");
             var spellEffect = SpellEffectFactory.CreateSpellEffect(_chosenSpell.SpellDefinition.EffectId);
             var spellCastData = new SpellCastData {
                 CastingPlayerId = _player.LocalConnection.ClientId,
@@ -228,34 +131,25 @@ namespace PlayerScripts {
             }
             
             // Put the spell on cooldown
-            _chosenSpell.SetOnCooldown();
+            // _chosenSpell.SetOnCooldown();
             
-            _stateManager.RemoveState(PlayerState.CastingSpell);
             ResetState();
         }
 
-        private void SetInstantDraw(bool instantDraw) {
-            _instantDrawEnabled = instantDraw;
-            _indicatorHandler.Setup(_instantDrawIndicatorData, HandleTargetInstantDraw, false);
+        #region Quickcast
 
-            if (!instantDraw) {
-                _indicatorHandler.ForceCancel();
-            }
-        }
-
-        private void HandleTargetInstantDraw(SpellTargetData targetData) {
+        private void HandleQuickcastTarget(SpellTargetData targetData) {
             _spellTargetData = targetData;
-            DrawingManager.Instance.StartDrawing(null, HandleDrawInstantDraw, true);
+            DrawingManager.Instance.StartDrawing(null, HandleQuickcastDraw, true);
         }
 
-        private void HandleDrawInstantDraw(DrawingResults results) {
+        private void HandleQuickcastDraw(DrawingResults results) {
             _results = results;
             // Reset the instant draw
-            _indicatorHandler.Setup(_instantDrawIndicatorData, HandleTargetInstantDraw, false);
+            _indicatorHandler.Setup(_instantDrawIndicatorData, HandleQuickcastTarget, false);
             
             
             if (results.Completed == false) {
-                _stateManager.RemoveState(PlayerState.CastingSpell);
                 ResetState();
                 return;
             }
@@ -263,7 +157,6 @@ namespace PlayerScripts {
             // Make sure the drawing results are at least somewhat close to reality
             if (results.Score <= 0) {
                 SpellDrawingPopupManager.Instance.ShowPopup(_results);
-                _stateManager.RemoveState(PlayerState.CastingSpell);
                 ResetState();
                 OnSpellMessUp?.Invoke();
                 return;
@@ -274,15 +167,51 @@ namespace PlayerScripts {
             CastSpell();
         }
 
-        private void HandleOnCooldownSpellCast() {
-            _stateManager.RemoveState(PlayerState.CastingSpell);
-            ResetState();
+        #endregion
+
+        #region Indicator
+
+        private void HandleIndicatorDraw(DrawingResults results) {
+            Debug.Log("Handeled Draw");
+            _results = results;
+            
+            if (_results.Completed == false) {
+                ResetState();
+                return;
+            }
+            
+            Debug.Log("Results: " + _results);
+            // Make sure the drawing results are at least somewhat close to reality
+            if (_results.Score <= 0) {
+                SpellDrawingPopupManager.Instance.ShowPopup(_results);
+                ResetState();
+                OnSpellMessUp?.Invoke();
+                return;
+            }
+            _chosenSpell = _spellInstances.FirstOrDefault(x => x.SpellDefinition.Drawing == _results.Drawing);
+
+            _indicatorHandler.Setup(_chosenSpell.SpellDefinition.IndicatorData, HandleIndicatorTarget, true);
         }
+
+        private void HandleIndicatorTarget(SpellTargetData targetData) {
+            _spellTargetData = targetData;
+
+            if (targetData.Cancelled) {
+                ResetState();
+                return;
+            }
+            
+            // Handle targeting and recieve spell cast data
+            CastSpell();
+        }
+
+        #endregion
 
         private void ResetState() {
             _chosenSpell = null;
             _spellTargetData = null;
             _results = null;
+            _stateManager.RemoveState(PlayerState.CastingSpell);
         }
 
         protected override void OnClientStart(bool isOwner) {
@@ -298,3 +227,4 @@ namespace PlayerScripts {
         public List<SpellInstance> SpellInstances => _spellInstances;
     }
 }
+

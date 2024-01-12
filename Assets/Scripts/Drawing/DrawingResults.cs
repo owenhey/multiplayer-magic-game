@@ -51,6 +51,6 @@ public class DrawingResults{
     }
 
     public override string ToString() {
-        return $"Completed all points: Score: {Score}, {CompletedAllPoints}, Total Time: {TotalTime}, Average Distance: {AverageDistance}, Percent Distance Error: {PercentDistanceError:P0}";
+        return $"Completed all points: {CompletedAllPoints}. Score: {Score}, {CompletedAllPoints}, Total Time: {TotalTime}, Average Distance: {AverageDistance}, Percent Distance Error: {PercentDistanceError:P0}";
     }
 }

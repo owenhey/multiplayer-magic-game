@@ -71,15 +71,15 @@ namespace UI {
         }
         
         private void OnQuickcastClick() {
-            
+            _playerSpells.CastingType = SpellCastingType.Quickcast;
         }
 
         private void OnIndicatorClick() {
-            
+            _playerSpells.CastingType = SpellCastingType.QuickcastWithIndicator;
         }
 
         private void OnAreaClick() {
-            
+            _playerSpells.CastingType = SpellCastingType.Area;
         }
 
         private void OnCloseGameClick() {

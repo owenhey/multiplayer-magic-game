@@ -9839,6 +9839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
+  WaitTilNextFrame: 0
   PlayerMovement: {fileID: 6707716053342808154}
   PlayerSpells: {fileID: -5970099899597951696}
   PlayerModel: {fileID: 9214829115622678224}
@@ -9905,7 +9906,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 10
+  <PrefabId>k__BackingField: 0
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
@@ -9961,7 +9962,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
   _indicatorHandler: {fileID: -8941229978140903528}
-  _instantDrawEnabled: 0
   _spells:
   - {fileID: 11400000, guid: 6be7092796acb4f5a815edea6773ffb2, type: 2}
   - {fileID: 11400000, guid: 061618cc6aa12df41824b159e1093763, type: 2}
@@ -9970,6 +9970,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ac41e57798fe63846875d7780cef0caf, type: 2}
   _instantDrawIndicatorData: {fileID: 11400000, guid: 8c42f81f1648a4467b5d3e8ea5a3d97d,
     type: 2}
+  _castingType: 0
 --- !u!114 &2092327897885649139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10072,7 +10073,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
-  Active: 1
 --- !u!1 &7001116585677132798
 GameObject:
   m_ObjectHideFlags: 0

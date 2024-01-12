@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using Drawing;
 
 public class DrawingMechanic : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class DrawingMechanic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!DrawingManager.Instance.Open) return;
+        
         var pointOnCanvas = GetMouseValidity(Input.mousePosition);
         if(pointOnCanvas != null){
             if(Input.GetKeyDown(KeyCode.Mouse0)){

@@ -57,14 +57,6 @@ namespace UI{
             }
         }
         
-        private void OnEnable() {
-            
-        }
-
-        private void OnDisable() {
-            
-        }
-
         public void Open() {
             _openButton.gameObject.SetActive(false);
             _closeButton.gameObject.SetActive(true);

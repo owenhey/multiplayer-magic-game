@@ -78,7 +78,7 @@ namespace Drawing{
             }
             average /= _targetDrawing.Points.Count;
             
-            Debug.Log($"({_targetDrawing.name}) Target points count: " + _targetDrawing.Points.Count + ", Closest points count: " + closestPoints.Count +  $". {average}");
+            // Debug.Log($"({_targetDrawing.name}) Target points count: " + _targetDrawing.Points.Count + ", Closest points count: " + closestPoints.Count +  $". {average}");
 
             return new DrawingResults(true, _targetDrawing, 0, average, 0, 0, true);
         }

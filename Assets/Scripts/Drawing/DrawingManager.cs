@@ -38,8 +38,8 @@ namespace Drawing {
         private DrawShapeCallback _callback;
 
         private bool _open;
+        public bool Open => _open;
         private bool _offsetShapes;
-        private bool _enabled;
 
         private void Start() {
             Hide();
@@ -152,7 +152,8 @@ namespace Drawing {
         // Can be called either from Cancel or OnEndDraw
         private void Finish(DrawingResults results) {
             _cg.interactable = false;
-            _cg.DOFade(0, .5f).SetDelay(.25f).OnComplete(() => _content.SetActive(false));
+            _open = false;
+            _cg.DOFade(0, .5f).SetDelay(.25f).OnComplete(Hide);
             _callback?.Invoke(results);
         }
 
@@ -184,7 +185,6 @@ namespace Drawing {
         }
 
         public void SetSize(float sizeT) {
-            Debug.Log("Size t: " + sizeT);
             foreach (var item in _rts) {
                 item.sizeDelta = new Vector2(sizeT, sizeT);
             }

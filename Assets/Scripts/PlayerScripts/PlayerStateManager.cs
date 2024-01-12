@@ -6,6 +6,8 @@ namespace PlayerScripts {
     public enum PlayerState { MovingCamera, Teleporting, CastingSpell, InInventory, Stunned, Dead, Chatting, InSettings }
 
     public class PlayerStateManager : LocalPlayerScript {
+        public bool WaitTilNextFrame;
+        [Space(30)]
         [SerializeField] private PlayerMovement PlayerMovement;
         [SerializeField] private PlayerSpells PlayerSpells;
         [SerializeField] private PlayerModel PlayerModel;
@@ -35,6 +37,27 @@ namespace PlayerScripts {
         private bool _collidersActive;
         private bool _chatActive;
         private bool _settingsEnabled;
+
+        private bool _waitDirty;
+
+        private void CheckForUpdateState() {
+            if (WaitTilNextFrame) {
+                _waitDirty = true;
+            }
+            else {
+                UpdateState();
+            }
+        }
+
+        private void Update() {
+            if (!WaitTilNextFrame) return;
+            
+            // If it's 1, don't do anything. If 0 update state
+            if (_waitDirty) {
+                UpdateState();
+                _waitDirty = false;
+            }
+        }
 
         // Main method that handles what is enabled / disabled at any given time
         private void UpdateState() {
@@ -92,7 +115,7 @@ namespace PlayerScripts {
         public void AddState(PlayerState state) {
             StateCounts.TryAdd(state, 0);
             StateCounts[state]++;
-            UpdateState();
+            CheckForUpdateState();
         }
 
         public void RemoveState(PlayerState state) {
@@ -102,7 +125,7 @@ namespace PlayerScripts {
                     StateCounts.Remove(state);
                 }
             }
-            UpdateState();
+            CheckForUpdateState();
         }
         
         protected override void OnClientStart(bool isOwner) {
@@ -111,7 +134,7 @@ namespace PlayerScripts {
                 return;
             }
             
-            UpdateState();
+            CheckForUpdateState();
         }
     }
 }
