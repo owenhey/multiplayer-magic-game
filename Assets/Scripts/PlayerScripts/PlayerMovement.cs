@@ -106,6 +106,7 @@ namespace PlayerScripts {
             }
 
             // Cursor.visible = !active;
+            _refs.AdjustZoom(Time.deltaTime * -_inputData.scrollAmount);
         }
 
         public Vector3 GetCurrentPosition() {
@@ -199,11 +200,15 @@ namespace PlayerScripts {
                 Input.GetAxisRaw("Vertical")
             ), 1);
             _inputData.rightClick = Input.GetKey(KeyCode.Mouse1);
+            _inputData.scrollAmount = Input.mouseScrollDelta.y;
         }
 
         public class InputData{
             // WASD
             public Vector2 wasd;
+            
+            // Scrolling
+            public float scrollAmount;
 
             // Activators
             public bool leftShift;
