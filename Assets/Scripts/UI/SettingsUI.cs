@@ -1,6 +1,8 @@
 using System;
+using Helpers;
 using PlayerScripts;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI {
@@ -16,6 +18,7 @@ namespace UI {
         [SerializeField] private Button _quickcastButton;
         [SerializeField] private Button _indicatorButton;
         [SerializeField] private Button _areaButton;
+        [FormerlySerializedAs("_slider")] [SerializeField] private Slider _spellSizeSlider;
         [SerializeField] private Button _closeButton;
 
         public bool Active { get; private set; }
@@ -28,6 +31,7 @@ namespace UI {
             _quickcastButton.onClick.AddListener(OnQuickcastClick);
             _indicatorButton.onClick.AddListener(OnIndicatorClick);
             _areaButton.onClick.AddListener(OnAreaClick);
+            _spellSizeSlider.onValueChanged.AddListener(HandleSliderSet);
             _closeButton.onClick.AddListener(OnCloseGameClick);
         }
 
@@ -66,10 +70,18 @@ namespace UI {
             _playerStateManager.RemoveState(PlayerState.InSettings);
         }
 
+        private void HandleSliderSet(float delta) {
+            float textSize = Misc.Remap(delta, 0, 1, 45, 90);
+            float canvasSize = Misc.Remap(delta, 0, 1, 500, 1000);
+
+            PlayerSettings.TextSize = textSize;
+            PlayerSettings.CanvasSettingSize = (int)canvasSize;
+        }
+
         private void OnResumeClick() {
             Close();
         }
-        
+
         private void OnQuickcastClick() {
             _playerSpells.CastingType = SpellCastingType.Quickcast;
         }

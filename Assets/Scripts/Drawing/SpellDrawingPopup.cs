@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using PlayerScripts;
 
 namespace UI {
     public class SpellDrawingPopup : MonoBehaviour {
@@ -18,7 +19,7 @@ namespace UI {
         
         public void Setup(DrawingResults results) {
             BasicFade();
-
+            _text.fontSize = PlayerSettings.TextSize;
             float score = results.Score;
             if (score >= 1f) {
                 _text.text = "Perfect!";
@@ -41,7 +42,7 @@ namespace UI {
                 _text.color = _colorGradient.Evaluate(score);
             }
 
-            _text.text += $" ({results.Score.ToString("#.##")})";
+            _text.text += $" ({results.Score:0.00})";
         }
         
         public void Setup(string text) {

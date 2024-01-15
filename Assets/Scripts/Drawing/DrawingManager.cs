@@ -66,7 +66,7 @@ namespace Drawing {
             }
             else if (drawing == null && !offsetShapes) {
                 _targetDrawing = null;
-                SetSize(100);
+                // SetSize(100);
                 // In this case, just position it in the center of the circle. Maybe show the indicator here?
                 _guideImage.enabled = false;
                 PositionDrawing((Vector2)Input.mousePosition);
@@ -75,7 +75,8 @@ namespace Drawing {
 
             else {
                 _targetDrawing = null;
-                SetSize(1000);
+                // SetSize(1000);
+                SetSize(PlayerSettings.CanvasSettingSize);
                 PositionDrawing((Vector2)Input.mousePosition);
                 // PLACEHOLDER FOR THE INSTANT CAST METHOD
                 _guideImage.enabled = false;
