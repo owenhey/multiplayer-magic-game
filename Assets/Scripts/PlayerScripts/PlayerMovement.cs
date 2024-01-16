@@ -27,6 +27,8 @@ namespace PlayerScripts {
             [SerializeField] private CharacterController _cc;
             [SerializeField] private PlayerReferences _refs;
 
+        public bool RequireRightClickToMoveMouse = true;
+            
         private Vector3 _currentVelocity;
         private InputData _inputData = new();
         private Transform _cam;
@@ -97,15 +99,13 @@ namespace PlayerScripts {
             var cam = _refs.PlayerCameraControls.CMCam;
             if (!cam) return;
             
-            bool active = _inputData.rightClick;
+            bool active = _inputData.rightClick || !RequireRightClickToMoveMouse;
             cam.m_YAxis.m_InputAxisName = active ? "Mouse Y" : "";
             cam.m_XAxis.m_InputAxisName = active ? "Mouse X" : "";
             if (!active) {
                 cam.m_YAxis.m_InputAxisValue = 0;
                 cam.m_XAxis.m_InputAxisValue = 0;
             }
-
-            // Cursor.visible = !active;
         }
 
         public Vector3 GetCurrentPosition() {

@@ -84,7 +84,9 @@ namespace PlayerScripts {
                 Input.GetKeyDown(KeyCode.Mouse0) && 
                 !EventSystem.current.IsPointerOverGameObject()) {
                 _stateManager.AddState(PlayerState.CastingSpell);
-                DrawingManager.Instance.StartDrawing(null, HandleIndicatorDraw, true);
+                bool useFakeMouse = _player.PlayerReferences.PlayerCameraControls.CameraType ==
+                                    CameraMovementType.ThirdPersonShooter;
+                DrawingManager.Instance.StartDrawing(HandleIndicatorDraw, !useFakeMouse, useFakeMouse);
             }
         }
 
@@ -140,7 +142,9 @@ namespace PlayerScripts {
 
         private void HandleQuickcastTarget(SpellTargetData targetData) {
             _spellTargetData = targetData;
-            DrawingManager.Instance.StartDrawing(null, HandleQuickcastDraw, true);
+            bool useFakeMouse = _player.PlayerReferences.PlayerCameraControls.CameraType ==
+                                CameraMovementType.ThirdPersonShooter;
+            DrawingManager.Instance.StartDrawing(HandleQuickcastDraw, !useFakeMouse, useFakeMouse);
         }
 
         private void HandleQuickcastDraw(DrawingResults results) {
@@ -172,7 +176,6 @@ namespace PlayerScripts {
         #region Indicator
 
         private void HandleIndicatorDraw(DrawingResults results) {
-            Debug.Log("Handeled Draw");
             _results = results;
             
             if (_results.Completed == false) {

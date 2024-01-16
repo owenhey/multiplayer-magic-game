@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,18 +26,25 @@ public class DrawingMechanic : MonoBehaviour
     private float startTime;
 
     private bool drawingOnCanvas = false;
+    private bool _usingFakeMouse = false;
+    private Vector2 _fakeMousePosition;
 
-
-    private void Start(){
-        Application.targetFrameRate = 256;
-    }
 
     // Update is called once per frame
     void Update()
     {
         if(!DrawingManager.Instance.Open) return;
+
+        Vector2? pointOnCanvas;
+        if (_usingFakeMouse) {
+            Debug.Log($"Fake mous pos: " + _fakeMousePosition);
+            _fakeMousePosition += new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            pointOnCanvas = GetMouseValidity(_fakeMousePosition);
+        }
+        else {
+            pointOnCanvas = GetMouseValidity(Input.mousePosition);
+        }
         
-        var pointOnCanvas = GetMouseValidity(Input.mousePosition);
         if(pointOnCanvas != null){
             if(Input.GetKeyDown(KeyCode.Mouse0)){
                 OnStartDraw?.Invoke();
@@ -53,6 +61,10 @@ public class DrawingMechanic : MonoBehaviour
             SendPoints();
             drawingOnCanvas = false;
         }
+    }
+
+    public void OnEnable() {
+        _fakeMousePosition = new Vector2(Screen.width, Screen.height) * .5f;
     }
 
     public void ForceStartDraw() {
@@ -117,5 +129,9 @@ public class DrawingMechanic : MonoBehaviour
         if(value < startLow) value = startLow;
         if(value > startHigh) value = startHigh;
         return endLow + ((endHigh - endLow) / (startHigh - startLow)) * (value - startLow);
+    }
+
+    public void UseFakeMouse(bool useFakeMouse) {
+        _usingFakeMouse = useFakeMouse;
     }
 }

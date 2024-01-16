@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -6,6 +7,7 @@ using UnityEngine;
 
 namespace PlayerScripts {
     public class PlayerCameraControls : LocalPlayerScript {
+        [SerializeField] private PlayerHUD _hud;
         [SerializeField] private PlayerMovement _playerMovement;
         [SerializeField] private PlayerModel _model;
         [SerializeField] private Transform _camTarget;
@@ -21,10 +23,45 @@ namespace PlayerScripts {
         private Vector3 _camRadii;
         private float _camZoom = 1;
         private Vector3 _helperForward;
+        
+        [SerializeField] private CameraMovementType _cameraType;
+        public CameraMovementType CameraType {
+            get {
+                return _cameraType;
+            }
+            set {
+                _cameraType = value;
+            }
+        }
+
+        private void SetCameraType(CameraMovementType t) {
+            switch (t) {
+                case CameraMovementType.Standard:
+                    _hud.SetCrosshairActive(false);
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.Confined;
+                    _playerMovement.RequireRightClickToMoveMouse = true;
+                    break;
+                case CameraMovementType.ThirdPersonShooter:
+                    _hud.SetCrosshairActive(true);
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                    _playerMovement.RequireRightClickToMoveMouse = false;
+                    break;
+                case CameraMovementType.MMO:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(t), t, null);
+            }
+        }
+
+        private void OnEnable() {
+            SetCameraType(_cameraType);
+        }
 
         private void Update() {
             if (!_isOwner) return;
-
+            
             HandleZoom();
             SetCamHorizontal();
             AdjustTargetPoint();
@@ -48,8 +85,8 @@ namespace PlayerScripts {
                 offsetX *= camDirectionFactor;
             }
 
-            float zoomFactor = Misc.RemapClamp(_camZoom, 1, 2.0f, 1, 0);
-            offsetX *= zoomFactor;
+            // float zoomFactor = Misc.RemapClamp(_camZoom, 1, 2.0f, 1, .5f);
+            // offsetX *= zoomFactor;
             _camTarget.localPosition = new Vector3(offsetX, _baseCamOffset.y, 0);
         }
 
@@ -75,6 +112,9 @@ namespace PlayerScripts {
                 CMCam.m_Orbits[1].m_Radius,
                 CMCam.m_Orbits[2].m_Radius
             );
+
+            _cameraType = CameraMovementType.Standard;
+            SetCameraType(CameraMovementType.Standard);
         }
         
         public void AdjustZoom(float delta) {
@@ -83,5 +123,11 @@ namespace PlayerScripts {
             CMCam.m_Orbits[1].m_Radius = _camRadii.y * _camZoom;
             CMCam.m_Orbits[2].m_Radius = _camRadii.z * _camZoom;
         }
+    }
+
+    public enum CameraMovementType {
+        Standard,
+        ThirdPersonShooter,
+        MMO
     }
 }

@@ -46,50 +46,28 @@ namespace Drawing {
             Instance = this;
         }
 
-        public void StartDrawing(DefinedDrawing drawing = null, DrawShapeCallback callback = null,
-            bool offsetShapes = false) {
+        public void StartDrawing(DrawShapeCallback callback = null, bool offsetShapes = false, bool useFakeMouse = false) {
             _cg.DOKill();
             _cg.alpha = 1;
             _cg.interactable = true;
             
-            if (drawing != null) {
-                SetSize(100);
-                _targetDrawing = drawing;
-                // Set the drawing on the mouse
-                _guideImage.enabled = true;
-                _guideImage.sprite = drawing.HelperImage;
-                Vector2 firstPointOffset =
-                    _targetDrawing.GetStartingPointOffsetInPixels(_calculatedDrawingRT.sizeDelta.x);
-                PositionDrawing((Vector2)Input.mousePosition - firstPointOffset);
-                // PositionDrawing((Vector2)Input.mousePosition);
-                _circleImage.enabled = false;
+            _targetDrawing = null;
+            SetSize(PlayerSettings.CanvasSettingSize);
+            if (useFakeMouse) {
+                PositionDrawing(new Vector2(Screen.width, Screen.height) * .5f);
             }
-            else if (drawing == null && !offsetShapes) {
-                _targetDrawing = null;
-                // SetSize(100);
-                // In this case, just position it in the center of the circle. Maybe show the indicator here?
-                _guideImage.enabled = false;
-                PositionDrawing((Vector2)Input.mousePosition);
-                _circleImage.enabled = true;
-            }
-
             else {
-                _targetDrawing = null;
-                // SetSize(1000);
-                SetSize(PlayerSettings.CanvasSettingSize);
                 PositionDrawing((Vector2)Input.mousePosition);
-                // PLACEHOLDER FOR THE INSTANT CAST METHOD
-                _guideImage.enabled = false;
-                _circleImage.enabled = false;
-                _drawingMechanic.ForceStartDraw();
             }
-
+            _guideImage.enabled = false;
+            _circleImage.enabled = false;
+            _drawingMechanic.ForceStartDraw();
             _offsetShapes = offsetShapes;
             _content.SetActive(true);
-            _cg.DOFade(1.0f, .15f).From(0);
             _drawingMechanic.Clear();
             _callback = callback;
             _open = true;
+            _drawingMechanic.UseFakeMouse(useFakeMouse);
 
             ClearDebug();
         }
