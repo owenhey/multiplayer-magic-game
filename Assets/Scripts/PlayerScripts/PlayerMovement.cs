@@ -75,7 +75,7 @@ namespace PlayerScripts {
 
         public void Warp(Vector3 position) {
             _cc.enabled = false;
-            _cc.transform.DOMove(position, .15f).OnComplete(()=>_cc.enabled = true);
+            _cc.transform.DOMove(position, .25f).OnComplete(()=>_cc.enabled = true);
         }
 
         [Server]
@@ -94,7 +94,7 @@ namespace PlayerScripts {
         }
 
         private void HandleCamera() {
-            var cam = _refs.CMCam;
+            var cam = _refs.PlayerCameraControls.CMCam;
             if (!cam) return;
             
             bool active = _inputData.rightClick;
@@ -106,7 +106,6 @@ namespace PlayerScripts {
             }
 
             // Cursor.visible = !active;
-            _refs.AdjustZoom(Time.deltaTime * -_inputData.scrollAmount);
         }
 
         public Vector3 GetCurrentPosition() {
@@ -115,6 +114,10 @@ namespace PlayerScripts {
         
         public Vector3 GetCurrentVel(){
             return _currentVelocity;
+        }
+
+        public Vector3 GetModelForwardDirection() {
+            return _ccTrans.forward;
         }
 
         public Vector3 GetCurrentVelLocal(){
@@ -137,10 +140,8 @@ namespace PlayerScripts {
 
         private Vector3 GetTargetLookDirection(){
             if(_inputData.wasd == Vector2.zero) return _ccTrans.forward;
-            Vector3 camForward = _cam.forward;
-            camForward.y = 0;
-            
-            return camForward;
+
+            return _refs.PlayerCameraControls.CamHorizontal;
         }
 
         private void LookAt(Vector3 targetLookDirection){
@@ -200,16 +201,12 @@ namespace PlayerScripts {
                 Input.GetAxisRaw("Vertical")
             ), 1);
             _inputData.rightClick = Input.GetKey(KeyCode.Mouse1);
-            _inputData.scrollAmount = Input.mouseScrollDelta.y;
         }
 
         public class InputData{
             // WASD
             public Vector2 wasd;
             
-            // Scrolling
-            public float scrollAmount;
-
             // Activators
             public bool leftShift;
 

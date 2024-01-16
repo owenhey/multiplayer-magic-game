@@ -20,7 +20,7 @@ namespace PlayerScripts {
         private Camera _cam {
             get {
                 if (__cam == null) {
-                    __cam = _playerReferences.Cam; // This will try to get the cam every time it's called
+                    __cam = _playerReferences.PlayerCameraControls.Cam; // This will try to get the cam every time it's called
                 }
                 return __cam;
             }

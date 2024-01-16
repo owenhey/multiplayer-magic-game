@@ -15,7 +15,6 @@ namespace PlayerScripts {
         [SerializeField] private ShieldSpellBehavior _playerShield;
         
         [field:SerializeField] public Transform PlayerBody {get; private set; }
-        [field:SerializeField] public Transform ModelCamTarget {get; private set; }
         
         [SyncVar(Channel = Channel.Unreliable, OnChange = nameof(ClientHandleColorChange))]
         private Color _modelColor;

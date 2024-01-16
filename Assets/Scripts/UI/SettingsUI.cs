@@ -18,7 +18,7 @@ namespace UI {
         [SerializeField] private Button _quickcastButton;
         [SerializeField] private Button _indicatorButton;
         [SerializeField] private Button _areaButton;
-        [FormerlySerializedAs("_slider")] [SerializeField] private Slider _spellSizeSlider;
+        [SerializeField] private Slider _spellSizeSlider;
         [SerializeField] private Button _closeButton;
 
         public bool Active { get; private set; }
@@ -71,7 +71,7 @@ namespace UI {
         }
 
         private void HandleSliderSet(float delta) {
-            float textSize = Misc.Remap(delta, 0, 1, 45, 90);
+            float textSize = Misc.Remap(delta, 0, 1, 35, 90);
             float canvasSize = Misc.Remap(delta, 0, 1, 500, 1000);
 
             PlayerSettings.TextSize = textSize;

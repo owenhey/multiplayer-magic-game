@@ -30,7 +30,7 @@ namespace PlayerScripts {
             if (indicator.TargetType == IndicatorTargetType.None) {
                 SpellTargetData targetData = new();
                 targetData.TargetPlayerId = _player.OwnerId;
-                targetData.CameraRay = _player.PlayerReferences.Cam.ScreenPointToRay(Input.mousePosition);
+                targetData.CameraRay = _player.PlayerReferences.PlayerCameraControls.Cam.ScreenPointToRay(Input.mousePosition);
                 spellTargetDataHandler?.Invoke(targetData);
                 return;
             }
@@ -72,10 +72,10 @@ namespace PlayerScripts {
         }
 
         private void AreaIndicatorUpdate() {
-            if (_player.PlayerReferences.Cam == null) return;
+            if (_player.PlayerReferences.PlayerCameraControls.Cam == null) return;
             
             Vector3 mousePosition = Input.mousePosition;
-            Ray ray = _player.PlayerReferences.Cam.ScreenPointToRay(mousePosition);
+            Ray ray = _player.PlayerReferences.PlayerCameraControls.Cam.ScreenPointToRay(mousePosition);
             Vector3 rayTarget = ray.origin + ray.direction * 50;
             if (Physics.Raycast(ray, out RaycastHit hit, 50, _areaRaycastLayerMask)) {
                 bool showIndicator = !Hide;

@@ -14,8 +14,9 @@ namespace PlayerScripts {
         [SerializeField] private PlayerChat PlayerChat;
         [SerializeField] private PlayerInteract PlayerInteract;
         [SerializeField] private PlayerAnimations PlayerAnimator;
-        [SerializeField] private PlayerSettings playerSettings;
+        [SerializeField] private PlayerSettings PlayerSettings;
         [SerializeField] private PlayerSpellIndicatorHandler PlayerIndicators;
+        [SerializeField] private PlayerCameraControls CameraControls;
         public Dictionary<PlayerState, int> StateCounts { get; private set; }= new Dictionary<PlayerState, int>();
         [HideInInspector] public bool ShowStateCounts;
         
@@ -37,6 +38,7 @@ namespace PlayerScripts {
         private bool _collidersActive;
         private bool _chatActive;
         private bool _settingsEnabled;
+        private bool _cameraControlsEnabled;
 
         private bool _waitDirty;
 
@@ -100,12 +102,16 @@ namespace PlayerScripts {
             PlayerMovement.SetColliderEnabled(_collidersActive);
             
             // Player Chat
-            _chatActive = !(_chatting || _inSettings);
+            _chatActive = !(_chatting || _inSettings || _inInventory);
             PlayerChat.Active = _chatActive;
             
             // Player settings
-            _settingsEnabled = !(_chatting || _inSettings);
-            playerSettings.Active = _settingsEnabled;
+            _settingsEnabled = !(_chatting || _inSettings || _inInventory);
+            PlayerSettings.Active = _settingsEnabled;
+            
+            // Camera Controls
+            _cameraControlsEnabled = !(_chatting || _inSettings || _inInventory);
+            CameraControls.enabled = _cameraControlsEnabled;
         }
 
         private bool Active(PlayerState state) {
