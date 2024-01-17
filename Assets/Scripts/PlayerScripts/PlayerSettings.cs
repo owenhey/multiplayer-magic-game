@@ -49,7 +49,7 @@ namespace PlayerScripts {
         }
 
         private void CursorSettings() {
-            Cursor.lockState = CursorLockMode.Confined;
+            // Cursor.lockState = CursorLockMode.Confined;
         }
     }
 }

@@ -2,10 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using UnityEngine;
 using DG.Tweening;
+using Helpers;
 using PlayerScripts;
 using UnityEngine.UI;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Drawing {
     public delegate void DebugPointDelegate(in Vector2 v, int index);
@@ -13,63 +17,67 @@ namespace Drawing {
     public delegate void DrawShapeCallback(DrawingResults r);
 
     public class DrawingManager : MonoBehaviour {
-        public float size;
 
         [SerializeField] private DrawingMechanic _drawingMechanic;
-        [SerializeField] [ReadOnly] private DefinedDrawing _targetDrawing;
         [SerializeField] private GameObject _content;
 
-        [Header("Display")] [SerializeField] private RectTransform _calculatedDrawingRT;
-        [SerializeField] private RectTransform _displayParent;
-        [SerializeField] private Image _guideImage;
-        [SerializeField] private Image _circleImage;
+        [Header("Display")] 
+        [SerializeField] private RectTransform _calculatedDrawingRT;
         [SerializeField] private CanvasGroup _cg;
         [SerializeField] private RectTransform[] _rts;
-
-        [Header("Debugging")] [SerializeField] public bool _debug = false;
-        [SerializeField] private RectTransform _debugParent;
-        [SerializeField] private RectTransform _showDrawingPointsParent;
-        [SerializeField] private GameObject _debugDot;
+        [SerializeField] private RectTransform _displayRT;
 
         private RectTransform _debugSlider;
-        private Vector3 _fakeMousePos;
 
         public static DrawingManager Instance;
         private DrawShapeCallback _callback;
 
         private bool _open;
         public bool Open => _open;
-        private bool _offsetShapes;
+        private float size;
+        
+        public static System.Action<Vector2> OnTranslatedDraw;
+        public static System.Action OnTranslatedStartDraw;
+        public static System.Action<Vector2[], float> OnTranslatedEndDraw;
+
+        public static readonly Vector2 HALF = new Vector2(.5f, .5f);
+
+        private CameraMovementType _camType;
+        
 
         private void Start() {
             Hide();
             Instance = this;
+            _drawingMechanic.Init();
         }
 
-        public void StartDrawing(DrawShapeCallback callback = null, bool offsetShapes = false, bool useFakeMouse = false) {
-            _cg.DOKill();
-            _cg.alpha = 1;
-            _cg.interactable = true;
-            
-            _targetDrawing = null;
+        public void StartDrawing(CameraMovementType camMoveType, DrawShapeCallback callback) {
+            _camType = camMoveType;
+            switch (camMoveType) {
+                case CameraMovementType.Standard:
+                    _drawingMechanic.SetUseVirtualMouse(false);
+                    PositionDrawing((Vector2)Input.mousePosition);
+                    break;
+                case CameraMovementType.ThirdPersonShooter:
+                    Vector2 centerOfScreen = HALF * new Vector2(Screen.width, Screen.height);
+                    _drawingMechanic.SetUseVirtualMouse(true, centerOfScreen);
+                    PositionDrawing(centerOfScreen);
+                    PlayerCameraControls.MouseSensativity = .05f;
+                    break;
+                case CameraMovementType.MMO:
+                    PositionDrawing((Vector2)Input.mousePosition);
+                    break;
+            }
+            ResetDrawingCanvas(callback);
+        }
+
+        private void ResetDrawingCanvas(DrawShapeCallback callback) {
             SetSize(PlayerSettings.CanvasSettingSize);
-            if (useFakeMouse) {
-                PositionDrawing(new Vector2(Screen.width, Screen.height) * .5f);
-            }
-            else {
-                PositionDrawing((Vector2)Input.mousePosition);
-            }
-            _guideImage.enabled = false;
-            _circleImage.enabled = false;
-            _drawingMechanic.ForceStartDraw();
-            _offsetShapes = offsetShapes;
             _content.SetActive(true);
             _drawingMechanic.Clear();
             _callback = callback;
             _open = true;
-            _drawingMechanic.UseFakeMouse(useFakeMouse);
-
-            ClearDebug();
+            _drawingMechanic.ForceStartDraw();
         }
 
         public void Hide() {
@@ -95,75 +103,50 @@ namespace Drawing {
         }
 
         private void OnStartDraw() {
-            ClearDebug();
-
-            if (_targetDrawing != null) {
-                DrawingAssessor.Instance.HandleStartDraw(new[] { _targetDrawing });
-            }
-            else {
-                // Grab all spells
-                var spells = Player.LocalPlayer.PlayerReferences.PlayerSpells.GetAllEquippedSpells();
-                DrawingAssessor.Instance.HandleStartDraw(spells.Select(x => x.Drawing).ToArray());
-            }
-
-            if (_debug) {
-                _debugSlider = Instantiate(_debugDot, _debugParent).GetComponent<RectTransform>();
-                DrawingAssessor.Instance.SetDebug(FrameDebug, IndexDebug);
-            }
+            // Grab all spells
+            var spells = Player.LocalPlayer.PlayerReferences.PlayerSpells.GetAllEquippedSpells();
+            DrawingAssessor.Instance.HandleStartDraw(spells.Select(x => x.Drawing).ToArray());
+            
+            OnTranslatedStartDraw?.Invoke();
         }
 
         private void OnDraw(Vector2 point) {
-            if (_offsetShapes) {
-                DrawingAssessor.Instance.HandleDrawTranslated(in point, _calculatedDrawingRT.sizeDelta.x);
+            DrawingAssessor.Instance.HandleDrawTranslated(in point, _calculatedDrawingRT.sizeDelta.x);
+            if (_camType == CameraMovementType.ThirdPersonShooter) {
+                OnTranslatedDraw?.Invoke(point);
+                Vector2 screen = new Vector2(Screen.width, Screen.height);
+                Vector2 halfScreen = screen * .5f;
+                // translate point to pixel coordinates
+                Vector2 pixelLoc = (HALF - point) * size;
+                Vector2 centerOfScreenInPixels = HALF * screen;
+                
+
+
+                _displayRT.anchoredPosition = halfScreen + pixelLoc;
             }
             else {
-                DrawingAssessor.Instance.HandleDraw(in point);
+                // NORMAL
+                OnTranslatedDraw?.Invoke(point);
             }
-
         }
 
         private void OnEndDraw(Vector2[] points, float time) {
             var results = DrawingAssessor.Instance.HandleEndDraw();
-        
             Finish(results);
+            
+            PlayerCameraControls.MouseSensativity = 1.0f;
+            
+            OnTranslatedEndDraw?.Invoke(points, time);
         }
 
         // Can be called either from Cancel or OnEndDraw
         private void Finish(DrawingResults results) {
-            _cg.interactable = false;
-            _open = false;
-            _cg.DOFade(0, .5f).SetDelay(.25f).OnComplete(Hide);
+            Hide();
             _callback?.Invoke(results);
         }
 
-        private void FrameDebug(in Vector2 vec, int index) {
-            if (!_debugSlider) {
-                _debugSlider = Instantiate(_debugDot, _debugParent).GetComponent<RectTransform>();
-            }
-
-            _debugSlider.anchoredPosition = _calculatedDrawingRT.sizeDelta * (vec - Vector2.one * .5f);
-        }
-
-        private void IndexDebug(in Vector2 vec, int index) {
-            var obj = Instantiate(_debugDot, _debugParent);
-            var rt = obj.GetComponent<RectTransform>();
-            rt.anchoredPosition = _calculatedDrawingRT.sizeDelta * (vec - Vector2.one * .5f);
-            obj.GetComponent<UnityEngine.UI.Image>().color = new Color(1, .6f, .45f, 1);
-            obj.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = (index + 1).ToString();
-
-            rt.DOScale(Vector3.one * 1.5f, .2f * .5f).From(Vector3.zero).OnComplete(() => {
-                rt.transform.DOScale(Vector3.one, .2f * .5f);
-            });
-        }
-
-        private void ClearDebug() {
-            int childCount = _debugParent.childCount;
-            for (int i = childCount - 1; i >= 0; i--) {
-                Destroy(_debugParent.GetChild(i).gameObject);
-            }
-        }
-
         public void SetSize(float sizeT) {
+            size = sizeT;
             foreach (var item in _rts) {
                 item.sizeDelta = new Vector2(sizeT, sizeT);
             }

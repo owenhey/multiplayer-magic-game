@@ -29,7 +29,7 @@ namespace Helpers{
             }
         }
 
-        private void OnDrawGizmos() {
+        private void OnDrawGizmosSelected() {
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(_gizmo, .5f);
         }

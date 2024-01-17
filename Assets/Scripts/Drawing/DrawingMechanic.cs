@@ -11,12 +11,10 @@ public class DrawingMechanic : MonoBehaviour
     public RectTransform canvasBounds;
     public RectTransform canvas;
 
-    public ComputeShaderTest shader;
+    public DrawingComputeShader shader;
     [ReadOnly] public Vector2 bottomLeftCanvasSpace;
     [ReadOnly] public Vector2 topRightCanvasSpace;
     [ReadOnly] public Vector2 totalCanvasSize;
-
-    public RectTransform overrideMouse;
 
     public System.Action<Vector2> OnDraw;
     public System.Action OnStartDraw;
@@ -26,9 +24,11 @@ public class DrawingMechanic : MonoBehaviour
     private float startTime;
 
     private bool drawingOnCanvas = false;
-    private bool _usingFakeMouse = false;
-    private Vector2 _fakeMousePosition;
 
+    // Virtual mouse
+    [SerializeField] private Vector2 _virtualMouseMultiplier;
+    private bool _usingVirtualMouse;
+    private Vector2 _virtualMousePosition;
 
     // Update is called once per frame
     void Update()
@@ -36,10 +36,9 @@ public class DrawingMechanic : MonoBehaviour
         if(!DrawingManager.Instance.Open) return;
 
         Vector2? pointOnCanvas;
-        if (_usingFakeMouse) {
-            Debug.Log($"Fake mous pos: " + _fakeMousePosition);
-            _fakeMousePosition += new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            pointOnCanvas = GetMouseValidity(_fakeMousePosition);
+        if (_usingVirtualMouse) {
+            CalculateVirtualMouseMovement();
+            pointOnCanvas = GetMouseValidity(_virtualMousePosition);
         }
         else {
             pointOnCanvas = GetMouseValidity(Input.mousePosition);
@@ -63,15 +62,26 @@ public class DrawingMechanic : MonoBehaviour
         }
     }
 
-    public void OnEnable() {
-        _fakeMousePosition = new Vector2(Screen.width, Screen.height) * .5f;
+    private void CalculateVirtualMouseMovement() {
+        _virtualMousePosition += new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * _virtualMouseMultiplier;
+    }
+
+    public void SetUseVirtualMouse(bool use, Vector2 startPosition = default) {
+        _usingVirtualMouse = use;
+        if (use) {
+            _virtualMousePosition = startPosition;
+        }
+    }
+
+    public void Init() {
+        shader.Init();
     }
 
     public void ForceStartDraw() {
-        OnStartDraw?.Invoke();
         drawnPoints.Clear();
         startTime = Time.time;
         drawingOnCanvas = true;
+        OnStartDraw?.Invoke();
     }
 
     private void SendPoints(){
@@ -95,19 +105,11 @@ public class DrawingMechanic : MonoBehaviour
     private Vector2? GetMouseValidity(Vector2 mousePos) {
         RecalculateBounds();
 
-        Vector3 mousePosition;
-        if (overrideMouse != null) {
-            mousePosition = overrideMouse.anchoredPosition;
-        }
-        else {
-            mousePosition = Input.mousePosition;
-        }
+        mousePos = new Vector3(mousePos.x / Screen.width, mousePos.y / Screen.height);
+        mousePos = new Vector3(mousePos.x * totalCanvasSize.x, mousePos.y * totalCanvasSize.y, 0);
 
-        mousePosition = new Vector3(mousePosition.x / Screen.width, mousePosition.y / Screen.height);
-        mousePosition = new Vector3(mousePosition.x * totalCanvasSize.x, mousePosition.y * totalCanvasSize.y, 0);
-
-        float x = Remap(mousePosition.x, bottomLeftCanvasSpace.x, topRightCanvasSpace.x, 0, 1);
-        float y = Remap(mousePosition.y, bottomLeftCanvasSpace.y, topRightCanvasSpace.y, 0, 1);
+        float x = Remap(mousePos.x, bottomLeftCanvasSpace.x, topRightCanvasSpace.x, 0, 1);
+        float y = Remap(mousePos.y, bottomLeftCanvasSpace.y, topRightCanvasSpace.y, 0, 1);
 
         Vector2 drawnPoint = drawnPoint = new Vector2(x, y);
 
@@ -129,9 +131,5 @@ public class DrawingMechanic : MonoBehaviour
         if(value < startLow) value = startLow;
         if(value > startHigh) value = startHigh;
         return endLow + ((endHigh - endLow) / (startHigh - startLow)) * (value - startLow);
-    }
-
-    public void UseFakeMouse(bool useFakeMouse) {
-        _usingFakeMouse = useFakeMouse;
     }
 }

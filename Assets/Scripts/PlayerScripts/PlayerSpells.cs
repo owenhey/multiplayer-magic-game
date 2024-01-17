@@ -59,7 +59,7 @@ namespace PlayerScripts {
                 _spellInstances.Add(new SpellInstance(_spells[i], _player.PlayerReferences.PlayerTimers));
             }
 
-            CastingType = SpellCastingType.QuickcastWithIndicator;
+            CastingType = SpellCastingType.Quickcast;
         }
 
         private void SetCastingType(SpellCastingType type) {
@@ -84,9 +84,8 @@ namespace PlayerScripts {
                 Input.GetKeyDown(KeyCode.Mouse0) && 
                 !EventSystem.current.IsPointerOverGameObject()) {
                 _stateManager.AddState(PlayerState.CastingSpell);
-                bool useFakeMouse = _player.PlayerReferences.PlayerCameraControls.CameraType ==
-                                    CameraMovementType.ThirdPersonShooter;
-                DrawingManager.Instance.StartDrawing(HandleIndicatorDraw, !useFakeMouse, useFakeMouse);
+                CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
+                DrawingManager.Instance.StartDrawing(camType, HandleIndicatorDraw);
             }
         }
 
@@ -142,9 +141,8 @@ namespace PlayerScripts {
 
         private void HandleQuickcastTarget(SpellTargetData targetData) {
             _spellTargetData = targetData;
-            bool useFakeMouse = _player.PlayerReferences.PlayerCameraControls.CameraType ==
-                                CameraMovementType.ThirdPersonShooter;
-            DrawingManager.Instance.StartDrawing(HandleQuickcastDraw, !useFakeMouse, useFakeMouse);
+            CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
+            DrawingManager.Instance.StartDrawing(camType, HandleQuickcastDraw);
         }
 
         private void HandleQuickcastDraw(DrawingResults results) {

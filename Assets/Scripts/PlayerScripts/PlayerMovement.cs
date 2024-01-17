@@ -100,11 +100,18 @@ namespace PlayerScripts {
             if (!cam) return;
             
             bool active = _inputData.rightClick || !RequireRightClickToMoveMouse;
-            cam.m_YAxis.m_InputAxisName = active ? "Mouse Y" : "";
-            cam.m_XAxis.m_InputAxisName = active ? "Mouse X" : "";
+            // cam.m_YAxis.m_InputAxisName = active ? "Mouse Y" : "";
+            // cam.m_XAxis.m_InputAxisName = active ? "Mouse X" : "";
+            
+            cam.m_YAxis.m_InputAxisName = "";
+            cam.m_XAxis.m_InputAxisName = "";
             if (!active) {
                 cam.m_YAxis.m_InputAxisValue = 0;
                 cam.m_XAxis.m_InputAxisValue = 0;
+            }
+            else {
+                cam.m_YAxis.m_InputAxisValue = Input.GetAxisRaw("Mouse Y") * PlayerCameraControls.MouseSensativity;
+                cam.m_XAxis.m_InputAxisValue = Input.GetAxisRaw("Mouse X") * PlayerCameraControls.MouseSensativity;
             }
         }
 

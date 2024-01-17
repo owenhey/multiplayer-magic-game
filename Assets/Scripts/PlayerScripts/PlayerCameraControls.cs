@@ -24,6 +24,8 @@ namespace PlayerScripts {
         private float _camZoom = 1;
         private Vector3 _helperForward;
         
+        public static float MouseSensativity = 1;
+        
         [SerializeField] private CameraMovementType _cameraType;
         public CameraMovementType CameraType {
             get {
@@ -114,7 +116,7 @@ namespace PlayerScripts {
             );
 
             _cameraType = CameraMovementType.Standard;
-            SetCameraType(CameraMovementType.Standard);
+            SetCameraType(_cameraType);
         }
         
         public void AdjustZoom(float delta) {
