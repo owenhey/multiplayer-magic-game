@@ -27,11 +27,13 @@ namespace Drawing {
         [SerializeField] private RectTransform[] _rts;
         [SerializeField] private RectTransform _displayRT;
 
+        public float ShooterMouseSensativity = .1f;
+
         private RectTransform _debugSlider;
 
         public static DrawingManager Instance;
-        private DrawShapeCallback _callback;
 
+        private DrawShapeCallback _callback;
         private bool _open;
         public bool Open => _open;
         private float size;
@@ -62,7 +64,7 @@ namespace Drawing {
                     Vector2 centerOfScreen = HALF * new Vector2(Screen.width, Screen.height);
                     _drawingMechanic.SetUseVirtualMouse(true, centerOfScreen);
                     PositionDrawing(centerOfScreen);
-                    PlayerCameraControls.MouseSensativity = .05f;
+                    PlayerCameraControls.MouseSensativity = ShooterMouseSensativity;
                     break;
                 case CameraMovementType.MMO:
                     PositionDrawing((Vector2)Input.mousePosition);

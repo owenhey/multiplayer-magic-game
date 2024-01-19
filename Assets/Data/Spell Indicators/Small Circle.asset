@@ -16,4 +16,5 @@ MonoBehaviour:
   PossibleTargets: 0
   Indicator: 0
   MinimumRange: 0
-  MaximumRange: 10
+  MaximumRange: 25
+  Size: 1

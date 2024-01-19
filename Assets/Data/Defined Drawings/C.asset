@@ -10,24 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f37f03dec991b624687a900c30947a94, type: 3}
-  m_Name: Hourglass
+  m_Name: C
   m_EditorClassIdentifier: 
   Points:
-  - X: 0
+  - X: 1
+    Y: 0.745
+    time: 0
+  - X: 0.5
     Y: 1
     time: 0
-  - X: 1
-    Y: 0
-    time: 0.6666
   - X: 0
+    Y: 0.745
+    time: 0
+  - X: 0
+    Y: 0.255
+    time: 0
+  - X: 0.5
     Y: 0
-    time: 0.3333
+    time: 0
   - X: 1
-    Y: 1
-    time: 0.928
-  TotalDistance: 4
-  CalculatedDistance: 3.8284273
-  TimeTarget: 1
-  PerfectScoreThreshold: 0.1
-  FailCastThreshold: 0.2
-  HelperImage: {fileID: 21300000, guid: 6027d9c411b560c4695d87a18707045d, type: 3}
+    Y: 0.255
+    time: 0
+  TotalDistance: 1.4183073
+  CalculatedDistance: 2.7350836
+  TimeTarget: 0
+  PerfectScoreThreshold: 0.06
+  FailCastThreshold: 0.15
+  HelperImage: {fileID: 21300000, guid: 19ec2df1e65747543988db368a124c65, type: 3}

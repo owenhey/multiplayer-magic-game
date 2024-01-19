@@ -15,8 +15,9 @@ using Visuals;
 namespace PlayerScripts {
     public enum SpellCastingType {
         Quickcast,
-        QuickcastWithIndicator,
-        Area
+        Indicator,
+        DelayedIndicator,
+        Area,
     }
     public class PlayerSpells : LocalPlayerScript {
         [SerializeField] private PlayerSpellIndicatorHandler _indicatorHandler;
@@ -71,16 +72,18 @@ namespace PlayerScripts {
                 case SpellCastingType.Quickcast:
                     _indicatorHandler.Setup(_instantDrawIndicatorData, HandleQuickcastTarget, false);
                     break;
-                case SpellCastingType.QuickcastWithIndicator:
+                case SpellCastingType.Indicator:
                     // Update method handles this
                     break;
                 case SpellCastingType.Area:
+                    break;
+                case SpellCastingType.DelayedIndicator:
                     break;
             }
         }
 
         private void Update() {
-            if (_castingType == SpellCastingType.QuickcastWithIndicator && 
+            if (_castingType == SpellCastingType.Indicator && 
                 Input.GetKeyDown(KeyCode.Mouse0) && 
                 !EventSystem.current.IsPointerOverGameObject()) {
                 _stateManager.AddState(PlayerState.CastingSpell);
