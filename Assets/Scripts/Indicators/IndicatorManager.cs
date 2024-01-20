@@ -4,12 +4,15 @@ using UnityEngine;
 
 namespace Visuals {
     public enum IndicatorTypes {
-        Sphere
+        Sphere,
+        TargetPlayer
     }
     public class IndicatorManager : MonoBehaviour {
         [SerializeField] private GameObject _spherePrefab;
+        [SerializeField] private GameObject _targetPrefab;
 
         private IIndicator _sphere;
+        private IIndicator _targetPlayer;
 
         public static IndicatorManager Instance;
 
@@ -24,6 +27,14 @@ namespace Visuals {
                     _sphere.Init();
                 }
                 return _sphere;
+            }
+
+            if (type == IndicatorTypes.TargetPlayer) {
+                if (_targetPlayer == null) {
+                    _targetPlayer = Instantiate(_targetPrefab, transform).GetComponent<IIndicator>();
+                    _targetPlayer.Init();
+                }
+                return _targetPlayer;
             }
             
             return null;

@@ -6,6 +6,7 @@ using Spells;
 public class SpellIndicatorDataEditor : Editor {
     SerializedProperty targetTypeProp;
     SerializedProperty possibleTargetsProp;
+    SerializedProperty defaultTargetProp;
     SerializedProperty indicatorProp;
     SerializedProperty minRangeProp;
     SerializedProperty maxRangeProp;
@@ -19,6 +20,7 @@ public class SpellIndicatorDataEditor : Editor {
         minRangeProp = serializedObject.FindProperty("MinimumRange");
         maxRangeProp = serializedObject.FindProperty("MaximumRange");
         sizeProp = serializedObject.FindProperty("Size");
+        defaultTargetProp = serializedObject.FindProperty("TargetDefault");
     }
 
     public override void OnInspectorGUI() {
@@ -35,6 +37,7 @@ public class SpellIndicatorDataEditor : Editor {
             case IndicatorTargetType.Target:
                 // Show fields for Target
                 EditorGUILayout.PropertyField(possibleTargetsProp);
+                EditorGUILayout.PropertyField(defaultTargetProp);
                 EditorGUILayout.PropertyField(minRangeProp);
                 EditorGUILayout.PropertyField(maxRangeProp);
                 EditorGUILayout.PropertyField(sizeProp);

@@ -53,6 +53,9 @@ namespace PlayerScripts {
                 case IndicatorTypes.Sphere:
                     _updateLoop = AreaIndicatorUpdate;
                     break;
+                case IndicatorTypes.TargetPlayer:
+                    _updateLoop = TargetIndicatorUpdate;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -130,6 +133,10 @@ namespace PlayerScripts {
             if (validRightClick) {
                 ForceCancel(true);
             }
+        }
+        
+        private void TargetIndicatorUpdate() {
+            throw new NotImplementedException();
         }
 
         private (bool, Ray, RaycastHit) GetRaycastData(Vector3? mousePos = null) {

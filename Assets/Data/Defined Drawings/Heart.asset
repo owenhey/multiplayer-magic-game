@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37f03dec991b624687a900c30947a94, type: 3}
+  m_Name: Heart
+  m_EditorClassIdentifier: 
+  Points:
+  - X: 0.5
+    Y: 0.75
+    time: 0.3333
+  - X: 0.25
+    Y: 1
+    time: 0.6666
+  - X: 0
+    Y: 0.6
+    time: 0.6666
+  - X: 0.5
+    Y: 0
+    time: 0.6666
+  - X: 1
+    Y: 0.6
+    time: 0.6666
+  - X: 0.75
+    Y: 1
+    time: 0.6666
+  - X: 0.5
+    Y: 0.75
+    time: 0.6666
+  TotalDistance: 4
+  CalculatedDistance: 3.2125547
+  TimeTarget: 1
+  PerfectScoreThreshold: 0.1
+  FailCastThreshold: 0.2
+  HelperImage: {fileID: 21300000, guid: 6027d9c411b560c4695d87a18707045d, type: 3}
