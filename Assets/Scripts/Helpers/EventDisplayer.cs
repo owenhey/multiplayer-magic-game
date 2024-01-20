@@ -36,6 +36,12 @@ namespace Helpers{
 
         private LinkedList<EventDisplayerArea> activeEventAreas = new LinkedList<EventDisplayerArea>();
 
+        public static EventDisplayer Instance;
+
+        private void Awake() {
+            Instance = this;
+        }
+        
         private void Start() {
             // DisplayEvent(
             //     "Hello",
@@ -54,7 +60,7 @@ namespace Helpers{
             // );
         }
 
-        public void DisplayEvent(string eventTitle, string eventDescription, EventDisplayTypes eventType){
+        public void DisplayEvent(string eventTitle, string eventDescription = "", EventDisplayTypes eventType = EventDisplayTypes.Information){
             Color titleColor = Color.white;
             Color descriptionColor = Color.white;
 

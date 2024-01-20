@@ -25,7 +25,7 @@ namespace Spells {
             _targetPlayer = Player.GetPlayerFromClientId(targetId);
             OnSpellStart();
             // Let's assume for now that this is the local player (owner)
-            _targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer(GetDuration(), OnSpellEnd, OnSpellTick);
+            _targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer($"spell_effect_{_spellCastData.SpellDefinition.SpellName}", false, GetDuration(), OnSpellEnd, OnSpellTick);
         }
     }
 }

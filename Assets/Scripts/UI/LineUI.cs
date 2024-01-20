@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI {
     public class LineUI : MonoBehaviour {
@@ -15,6 +16,10 @@ namespace UI {
             _rt.localRotation = Quaternion.Euler(0, 0, angle);
 
             _rt.DOSizeDelta(new Vector2(width, (end-start).magnitude), .3f).SetEase(Ease.OutQuad);
+        }
+
+        public void SetColor(Color c) {
+            GetComponent<Image>().color = c;
         }
     }
 }

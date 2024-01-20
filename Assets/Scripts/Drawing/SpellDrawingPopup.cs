@@ -21,7 +21,7 @@ namespace UI {
             BasicFade();
             _text.fontSize = PlayerSettings.TextSize;
             float score = results.Score;
-            if (score >= 1f) {
+            if (score >= .995f) {
                 _text.text = "Perfect!";
                 _text.color = _perfectColor;
             }

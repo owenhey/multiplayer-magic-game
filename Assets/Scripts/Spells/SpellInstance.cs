@@ -21,7 +21,7 @@ namespace Spells {
         }
 
         public void SetOnCooldown() {
-            _timers.RegisterTimer(SpellDefinition.SpellCooldown, FinishCooldown, OnCooldownTick);
+            _timers.RegisterTimer($"spell_cooldown_{SpellDefinition.SpellName}", false, SpellDefinition.SpellCooldown, FinishCooldown, OnCooldownTick);
             OnChange?.Invoke();
         }
 

@@ -36,6 +36,7 @@ namespace UI {
                 
                 var line = Instantiate(_linePrefab, _lineParent);
                 line.Setup(start, end, 10);
+                if(i == 0) line.SetColor(Color.green);
             }
         }
 

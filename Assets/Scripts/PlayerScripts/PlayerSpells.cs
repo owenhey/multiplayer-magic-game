@@ -26,7 +26,7 @@ namespace PlayerScripts {
 
         private List<SpellInstance> _spellInstances;
         private PlayerStateManager _stateManager;
-        
+
         // Type
         [SerializeField] private SpellCastingType _castingType;
         public SpellCastingType CastingType {
@@ -76,8 +76,10 @@ namespace PlayerScripts {
                     // Update method handles this
                     break;
                 case SpellCastingType.Area:
+                    // Update method handles this
                     break;
                 case SpellCastingType.DelayedIndicator:
+                    // Update method handles this
                     break;
             }
         }
@@ -86,9 +88,26 @@ namespace PlayerScripts {
             if (_castingType == SpellCastingType.Indicator && 
                 Input.GetKeyDown(KeyCode.Mouse0) && 
                 !EventSystem.current.IsPointerOverGameObject()) {
+                
                 _stateManager.AddState(PlayerState.CastingSpell);
                 CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
                 DrawingManager.Instance.StartDrawing(camType, HandleIndicatorDraw);
+            }
+            if (_castingType == SpellCastingType.DelayedIndicator && 
+                Input.GetKeyDown(KeyCode.Mouse0) && 
+                !EventSystem.current.IsPointerOverGameObject()) {
+                
+                _stateManager.AddState(PlayerState.CastingSpell);
+                CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
+                DrawingManager.Instance.StartDrawing(camType, HandleDelayedDraw);
+            }
+            if (_castingType == SpellCastingType.Area && 
+                Input.GetKeyDown(KeyCode.Mouse0) && 
+                !EventSystem.current.IsPointerOverGameObject()) {
+                
+                _stateManager.AddState(PlayerState.CastingSpell);
+                CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
+                DrawingManager.Instance.StartDrawing(camType, HandleAreaDraw);
             }
         }
 
@@ -211,6 +230,84 @@ namespace PlayerScripts {
 
         #endregion
 
+        #region DelayedIndicator
+
+        private void HandleDelayedDraw(DrawingResults results) {
+            _results = results;
+            
+            if (_results.Completed == false) {
+                ResetState();
+                return;
+            }
+            
+            Debug.Log("Results: " + _results);
+            // Make sure the drawing results are at least somewhat close to reality
+            if (_results.Score <= 0) {
+                SpellDrawingPopupManager.Instance.ShowPopup(_results);
+                ResetState();
+                OnSpellMessUp?.Invoke();
+                return;
+            }
+            _chosenSpell = _spellInstances.FirstOrDefault(x => x.SpellDefinition.Drawing == _results.Drawing);
+            
+            // Make sure it's not on cooldown
+            if (_chosenSpell.RemainingCooldown > PlayerSpellIndicatorHandler.AUTOCAST_TIME) {
+                OnOnCooldownSpellCast?.Invoke(_chosenSpell);
+                SpellDrawingPopupManager.Instance.ShowPopup($"On cooldown! ({_chosenSpell.RemainingCooldown.ToString("0.0")})");
+                ResetState();
+                return;
+            }
+            
+            
+            _indicatorHandler.Setup(_chosenSpell.SpellDefinition.IndicatorData, HandleDelayedTarget, true);
+            _indicatorHandler.SetAutocast();
+        }
+        
+        private void HandleDelayedTarget(SpellTargetData targetData) {
+            _spellTargetData = targetData;
+
+            if (targetData.Cancelled) {
+                ResetState();
+                return;
+            }
+            
+            // Handle targeting and recieve spell cast data
+            CastSpell();
+        }
+
+        #endregion
+
+        #region Area
+
+        private void HandleAreaDraw(DrawingResults results) {
+            _results = results;
+            
+            if (_results.Completed == false) {
+                ResetState();
+                return;
+            }
+            
+            Debug.Log("Results: " + _results);
+            // Make sure the drawing results are at least somewhat close to reality
+            if (_results.Score <= 0) {
+                SpellDrawingPopupManager.Instance.ShowPopup(_results);
+                ResetState();
+                OnSpellMessUp?.Invoke();
+                return;
+            }
+            _chosenSpell = _spellInstances.FirstOrDefault(x => x.SpellDefinition.Drawing == _results.Drawing);
+            
+            // top left and bottom right are in the results
+            // choose the midpoint
+            Vector2 midpoint = (results.BottomLeftScreenSpace + results.TopRightScreenSpace) * .5f;
+
+            _spellTargetData = _indicatorHandler.GetCurrentTargetData(new Vector3(midpoint.x, midpoint.y, 0));
+            
+            CastSpell();
+        }
+
+        #endregion
+        
         private void ResetState() {
             _chosenSpell = null;
             _spellTargetData = null;

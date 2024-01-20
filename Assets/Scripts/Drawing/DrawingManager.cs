@@ -37,6 +37,7 @@ namespace Drawing {
         private bool _open;
         public bool Open => _open;
         private float size;
+        private Vector2 position;
         
         public static System.Action<Vector2> OnTranslatedDraw;
         public static System.Action OnTranslatedStartDraw;
@@ -99,6 +100,7 @@ namespace Drawing {
         }
 
         private void PositionDrawing(Vector2 position) {
+            this.position = position;
             foreach (var rectTransform in _rts) {
                 rectTransform.anchoredPosition = position;
             }
@@ -113,17 +115,14 @@ namespace Drawing {
         }
 
         private void OnDraw(Vector2 point) {
-            DrawingAssessor.Instance.HandleDrawTranslated(in point, _calculatedDrawingRT.sizeDelta.x);
+            DrawingAssessor.Instance.HandleDraw(in point);
             if (_camType == CameraMovementType.ThirdPersonShooter) {
                 OnTranslatedDraw?.Invoke(point);
                 Vector2 screen = new Vector2(Screen.width, Screen.height);
                 Vector2 halfScreen = screen * .5f;
                 // translate point to pixel coordinates
                 Vector2 pixelLoc = (HALF - point) * size;
-                Vector2 centerOfScreenInPixels = HALF * screen;
                 
-
-
                 _displayRT.anchoredPosition = halfScreen + pixelLoc;
             }
             else {
@@ -134,11 +133,28 @@ namespace Drawing {
 
         private void OnEndDraw(Vector2[] points, float time) {
             var results = DrawingAssessor.Instance.HandleEndDraw();
+            // Calculate the pixel coordinates of the shape
+            var screenSpaceCoords = CalculateScreenSpaceCoordinatesOfShape(results.BottomLeftShapeSpace, results.TopRightShapeSpace);
+            results.BottomLeftScreenSpace = screenSpaceCoords.Item1;
+            results.TopRightScreenSpace = screenSpaceCoords.Item2;
             Finish(results);
             
             PlayerCameraControls.MouseSensativity = 1.0f;
             
             OnTranslatedEndDraw?.Invoke(points, time);
+        }
+
+        private (Vector2, Vector2) CalculateScreenSpaceCoordinatesOfShape(Vector2 BLShapeSpace, Vector2 TRShapeSpace) {
+            Vector2 BLScreenSpace = new(
+                Misc.Remap(BLShapeSpace.x, 0, 1, -1, 1) * size * .5f + _displayRT.anchoredPosition.x,
+                Misc.Remap(BLShapeSpace.y, 0, 1, -1, 1) * size * .5f + _displayRT.anchoredPosition.y
+            );
+            Vector2 TRScreenSpace = new(
+                Misc.Remap(TRShapeSpace.x, 0, 1, -1, 1) * size * .5f + _displayRT.anchoredPosition.x,
+                Misc.Remap(TRShapeSpace.y, 0, 1, -1, 1) * size * .5f + _displayRT.anchoredPosition.y
+            );
+
+            return (BLScreenSpace, TRScreenSpace);
         }
 
         // Can be called either from Cancel or OnEndDraw

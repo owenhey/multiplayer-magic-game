@@ -19,8 +19,8 @@ namespace Drawing{
         public ScalableDrawingAssessor(DefinedDrawing target) {
             _targetDrawing = target;
             _points = new(256);
-            _minBounds = new Vector2(Mathf.Infinity, Mathf.Infinity);
-            _maxBounds = new Vector2(Mathf.NegativeInfinity, Mathf.NegativeInfinity);
+            _minBounds = new Vector2(.5f, .5f);
+            _maxBounds = new Vector2(.5f, .5f);
         }
         
         public void RegisterPoint(in Vector2 point) {
@@ -68,19 +68,24 @@ namespace Drawing{
             closestPoints.Add(currentMinPoint);
             
             // Now, figure out average distance between points
+            bool hitAllPoints = true;
             float average = 0;
             for (int i = 0; i < _targetDrawing.Points.Count; i++) {
                 if(i < closestPoints.Count)
                     average += _targetDrawing.Points[i].Distance(closestPoints[i]);
                 else {
                     average += 1f;
+                    hitAllPoints = false;
                 }
             }
             average /= _targetDrawing.Points.Count;
             
             // Debug.Log($"({_targetDrawing.name}) Target points count: " + _targetDrawing.Points.Count + ", Closest points count: " + closestPoints.Count +  $". {average}");
-
-            return new DrawingResults(true, _targetDrawing, 0, average, 0, 0, true);
+            DrawingResults r = new DrawingResults(true, _targetDrawing, 0, average, 0, 0, hitAllPoints){
+                BottomLeftShapeSpace = _minBounds,
+                TopRightShapeSpace = _maxBounds
+            };
+            return r;
         }
 
         private Vector2 TranslatePoint(in Vector2 point) {

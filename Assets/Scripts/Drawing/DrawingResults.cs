@@ -17,8 +17,6 @@ public class DrawingResults{
         NewPercentDistanceError = newPercentDistanceError;
     }
 
-    #region Variables
-
     public readonly bool Completed;
     public readonly DefinedDrawing Drawing;
     public readonly float TotalTime;
@@ -27,8 +25,10 @@ public class DrawingResults{
     public readonly float NewPercentDistanceError;
     public readonly bool CompletedAllPoints;
     public float Score;
-
-    #endregion
+    public Vector2 BottomLeftShapeSpace;
+    public Vector2 BottomLeftScreenSpace; // Set by the drawing manager
+    public Vector2 TopRightShapeSpace;
+    public Vector2 TopRightScreenSpace; // Set by the drawing manager
 
     public void AssessResults(DrawingResultsAssessorTypes type) {
         switch (type) {

@@ -195,7 +195,7 @@ PrefabInstance:
     - target: {fileID: 7443408887813606051, guid: 0b650fca685f2eb41a86538aa883e4c1,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7443408887813606060, guid: 0b650fca685f2eb41a86538aa883e4c1,
         type: 3}
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: -1.75, z: -2}
+  m_FollowOffset: {x: 0, y: 0.8189808, z: -4.0408573}
   m_XDamping: 0
   m_YDamping: 0.25
   m_ZDamping: 0.25
@@ -354,7 +354,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: -25
+    Value: -30
     m_SpeedMode: 0
     m_MaxSpeed: 300
     m_AccelTime: 0.1
@@ -845,7 +845,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: -1.75, z: -2}
+  m_FollowOffset: {x: 0, y: 0.8189808, z: -4.0408573}
   m_XDamping: 0
   m_YDamping: 0.25
   m_ZDamping: 0.25
@@ -865,7 +865,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: -25
+    Value: -30
     m_SpeedMode: 0
     m_MaxSpeed: 300
     m_AccelTime: 0.1
@@ -1614,8 +1614,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.23139612, y: 0.2886526, z: -0.07211132, w: -0.9262481}
-  m_LocalPosition: {x: 13.502951, y: 9.262512, z: -12.387707}
+  m_LocalRotation: {x: -0.25204405, y: 0.27183038, z: -0.07403763, w: -0.9257972}
+  m_LocalPosition: {x: 13.564484, y: 11.250828, z: -17.779121}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1623,7 +1623,7 @@ Transform:
   - {fileID: 1868379209}
   - {fileID: 1689544139}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 18.64, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 28.779, y: -23.959, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1708,7 +1708,7 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_YAxis:
-    Value: 0
+    Value: 0.32
     m_SpeedMode: 1
     m_MaxSpeed: 0.03
     m_AccelTime: 0.05
@@ -1732,7 +1732,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: -25
+    Value: -30
     m_SpeedMode: 1
     m_MaxSpeed: 1.75
     m_AccelTime: 0.05
@@ -1792,8 +1792,8 @@ MonoBehaviour:
   m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
-    m_Style: 1
-    m_Time: 2
+    m_Style: 0
+    m_Time: 0.5
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -4223,7 +4223,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: MMGv 0.16
+  m_text: MMGv 0.23
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7525,7 +7525,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: -1.75, z: -2}
+  m_FollowOffset: {x: 0, y: 0.8189808, z: -4.0408573}
   m_XDamping: 0
   m_YDamping: 0.25
   m_ZDamping: 0.25
@@ -7545,7 +7545,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: -25
+    Value: -30
     m_SpeedMode: 0
     m_MaxSpeed: 300
     m_AccelTime: 0.1
@@ -7650,7 +7650,7 @@ PrefabInstance:
     - target: {fileID: 7443408887813606051, guid: 0b650fca685f2eb41a86538aa883e4c1,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7443408887813606060, guid: 0b650fca685f2eb41a86538aa883e4c1,
         type: 3}

@@ -38,13 +38,6 @@ public class DrawingAssessor : ScriptableObject {
         }
     }
 
-    public void HandleDrawTranslated(in Vector2 point, float canvasSize) {
-        // Have to translate points to the assessor's starting point
-        foreach (var assessor in _assessors) {
-            assessor.RegisterPoint(point - assessor.Target.GetStartingPointOffset());
-        }
-    }
-
     public DrawingResults HandleEndDraw() {
         // Get all the results
         DrawingResults[] results = new DrawingResults[_assessors.Length];

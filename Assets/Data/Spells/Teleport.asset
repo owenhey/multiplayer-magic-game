@@ -24,4 +24,4 @@ MonoBehaviour:
   - Key: duration
     Value: 0.75
   - Key: max_distance
-    Value: 12
+    Value: 20

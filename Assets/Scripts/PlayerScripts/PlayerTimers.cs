@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace PlayerScripts {
@@ -10,8 +11,12 @@ namespace PlayerScripts {
             public Action OnCompleteAction;
             private Action<float, float> _onTickAction;
             private float _totalDuration;
+            public bool AllowDuplicates { get; private set; }
+            [field:SerializeField] public string Key { get; private set; }
 
-            public PlayerTimer(float duration, Action onComplete, Action<float, float> onTickAction) {
+            public PlayerTimer(string key, bool allowDuplicates, float duration, Action onComplete, Action<float, float> onTickAction) {
+                Key = key;
+                AllowDuplicates = allowDuplicates;
                 _remainingDuration = duration;
                 _totalDuration = duration;
                 OnCompleteAction = onComplete;
@@ -45,13 +50,31 @@ namespace PlayerScripts {
         /// <summary>
         /// Adds a new timer to the player
         /// </summary>
+        /// <param name="key"> identifier of this timer</param>
+        /// <param name="allowDuplicates"> whether or not another time of the same key getting registered stops the previous one</param>
         /// <param name="duration">Total duration</param>
         /// <param name="onComplete"> Called at the end</param>
         /// <param name="onTick"> Called every frame this timer is ticked, with the percentage
         /// of the way through the timer (like .65f == 65%), and how many seconds are left</param>
-        public void RegisterTimer(float duration, Action onComplete, Action<float, float> onTick) {
-            var newTimer = new PlayerTimer(duration, onComplete, onTick);
+        public void RegisterTimer(string key, bool allowDuplicates, float duration, Action onComplete, Action<float, float> onTick) {
+            var newTimer = new PlayerTimer(key, allowDuplicates, duration, onComplete, onTick);
+            for (int i = 0; i < _activeTimers.Count; i++) {
+                if (_activeTimers[i].AllowDuplicates == false) {
+                    if (_activeTimers[i].Key == key) {
+                        _activeTimers.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
             _activeTimers.Add(newTimer);
+        }
+
+        /// <summary>
+        /// Removes all timers under a certain key
+        /// </summary>
+        /// <param name="key"></param>
+        public void RemoveTimers(string key) {
+            _activeTimers.RemoveAll(x => x.Key == key);
         }
     }
 }
