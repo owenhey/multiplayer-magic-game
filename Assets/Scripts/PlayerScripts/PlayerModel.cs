@@ -7,6 +7,7 @@ using FishNet.Transporting;
 using UnityEngine;
 using DG.Tweening;
 using FishNet.Connection;
+using GameKit.Utilities;
 using Spells;
 
 namespace PlayerScripts {
@@ -27,6 +28,7 @@ namespace PlayerScripts {
         public System.Action<bool> OnTwirl;
         
         private static readonly int _isOverridingColor = Shader.PropertyToID("_IsOverridingColor");
+        private static readonly int _OverrideColor = Shader.PropertyToID("_OverrideColor");
         private static readonly int _colorPrimary = Shader.PropertyToID("_Color_Primary");
         private static readonly int _colorMetalDark = Shader.PropertyToID("_Color_Metal_Dark");
         private static readonly int _twirlCenterWorldSpace = Shader.PropertyToID("_TwirlCenterWorldSpace");
@@ -34,6 +36,24 @@ namespace PlayerScripts {
         private static readonly int _twirl = Shader.PropertyToID("_Twirl");
 
         private Tween _flashTween;
+
+        private Color? _forceTint;
+        public Color? ForceTint {
+            private get {
+                return _forceTint;
+            }
+            set {
+                _forceTint = value;
+                if (value == null) {
+                    _playerMat.SetInt(_isOverridingColor, 0);
+                    _playerMat.SetColor(_OverrideColor, Color.white);
+                }
+                else {
+                    _playerMat.SetInt(_isOverridingColor, 1);
+                    _playerMat.SetColor(_OverrideColor, value.Value);
+                }
+            }
+        }
 
         protected override void Awake() {
             base.Awake();

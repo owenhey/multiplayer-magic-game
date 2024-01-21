@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using PlayerScripts;
 using UnityEngine;
 
 namespace Visuals{
@@ -14,6 +15,8 @@ namespace Visuals{
             _copiedMaterial = new Material(meshRend.sharedMaterial);
             meshRend.material = _copiedMaterial;
         }
+
+        public void SetPlayer(Player player) { }
 
         public Transform GetTransform() {
             return transform;

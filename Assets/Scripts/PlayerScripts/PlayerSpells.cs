@@ -24,6 +24,8 @@ namespace PlayerScripts {
         [SerializeField] private List<SpellDefinition> _spells;
         [SerializeField] private SpellIndicatorData _instantDrawIndicatorData;
 
+        [SerializeField] private LayerMask _quickcastLayermask;
+        
         private List<SpellInstance> _spellInstances;
         private PlayerStateManager _stateManager;
 
@@ -67,47 +69,37 @@ namespace PlayerScripts {
             // Reset indicator (if it's there)
             ResetState();
             _indicatorHandler.ForceCancel(false);
-            
-            switch (type) {
-                case SpellCastingType.Quickcast:
-                    _indicatorHandler.Setup(_instantDrawIndicatorData, HandleQuickcastTarget, false);
-                    break;
-                case SpellCastingType.Indicator:
-                    // Update method handles this
-                    break;
-                case SpellCastingType.Area:
-                    // Update method handles this
-                    break;
-                case SpellCastingType.DelayedIndicator:
-                    // Update method handles this
-                    break;
-            }
         }
 
         private void Update() {
-            if (_castingType == SpellCastingType.Indicator && 
-                Input.GetKeyDown(KeyCode.Mouse0) && 
-                !EventSystem.current.IsPointerOverGameObject()) {
-                
-                _stateManager.AddState(PlayerState.CastingSpell);
-                CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
-                DrawingManager.Instance.StartDrawing(camType, HandleIndicatorDraw);
-            }
-            if (_castingType == SpellCastingType.DelayedIndicator && 
-                Input.GetKeyDown(KeyCode.Mouse0) && 
-                !EventSystem.current.IsPointerOverGameObject()) {
-                
-                _stateManager.AddState(PlayerState.CastingSpell);
-                CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
-                DrawingManager.Instance.StartDrawing(camType, HandleDelayedDraw);
-            }
-            if (_castingType == SpellCastingType.Area && 
-                Input.GetKeyDown(KeyCode.Mouse0) && 
-                !EventSystem.current.IsPointerOverGameObject()) {
-                
-                _stateManager.AddState(PlayerState.CastingSpell);
-                CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
-                DrawingManager.Instance.StartDrawing(camType, HandleAreaDraw);
+            if (_player.PlayerReferences.PlayerCameraControls.Cam == null) return;
+            
+            bool triedToClick = Input.GetKeyDown(KeyCode.Mouse0) && !EventSystem.current.IsPointerOverGameObject();
+            switch (_castingType) {
+                case SpellCastingType.Indicator when triedToClick: {
+                    _stateManager.AddState(PlayerState.CastingSpell);
+                    CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
+                    DrawingManager.Instance.StartDrawing(camType, HandleIndicatorDraw);
+                    break;
+                }
+                case SpellCastingType.DelayedIndicator when triedToClick: {
+                    _stateManager.AddState(PlayerState.CastingSpell);
+                    CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
+                    DrawingManager.Instance.StartDrawing(camType, HandleDelayedDraw);
+                    break;
+                }
+                case SpellCastingType.Area when triedToClick: {
+                    _stateManager.AddState(PlayerState.CastingSpell);
+                    CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
+                    DrawingManager.Instance.StartDrawing(camType, HandleAreaDraw);
+                    break;
+                }
+                case SpellCastingType.Quickcast: {
+                    _stateManager.AddState(PlayerState.CastingSpell);
+                    var targetData = _indicatorHandler.GetCurrentTargetData(_quickcastLayermask);
+                    HandleQuickcastTarget(targetData);
+                    break;
+                }
             }
         }
 
@@ -146,7 +138,7 @@ namespace PlayerScripts {
             // Cast spell effect to type, and handle accordingly
             switch (spellEffect) {
                 case PlayerOverrideSpellEffect playerOverride:
-                    playerOverride.BeginSpell(spellCastData.TargetData.TargetPlayerId);
+                    playerOverride.BeginSpell();
                     break;
                 case SingleCastSpellEffect singleCastSpell:
                     singleCastSpell.BeginSpell();
@@ -301,7 +293,7 @@ namespace PlayerScripts {
             // choose the midpoint
             Vector2 midpoint = (results.BottomLeftScreenSpace + results.TopRightScreenSpace) * .5f;
 
-            _spellTargetData = _indicatorHandler.GetCurrentTargetData(new Vector3(midpoint.x, midpoint.y, 0));
+            _spellTargetData = _indicatorHandler.GetCurrentTargetData(_chosenSpell.SpellDefinition.IndicatorData.LayerMask, new Vector3(midpoint.x, midpoint.y, 0));
             
             CastSpell();
         }

@@ -48,7 +48,7 @@ namespace Spells {
             Vector3 size = Vector3.one * Misc.Remap(_initData.SpellEffectiveness, 0, 1, .6f, 1.0f);
             Vector3 startScale = new Vector3(size.x, 0, size.z);
             
-            _cubeTransform.DOScale(size, .25f).From(startScale).SetEase(Ease.OutQuad);
+            _cubeTransform.DOScale(size, .35f).From(startScale).SetEase(Ease.OutQuad);
             _cubeTransform.DOScale(startScale, .15f).SetEase(Ease.InQuad).SetDelay(duration).OnComplete(() => {
                 gameObject.SetActive(false);
                 if (IsServer) {

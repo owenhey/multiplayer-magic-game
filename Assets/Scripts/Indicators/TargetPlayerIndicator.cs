@@ -1,27 +1,42 @@
+using PlayerScripts;
 using UnityEngine;
 
 namespace Visuals {
     public class TargetPlayerIndicator : MonoBehaviour, IIndicator {
         private Transform _trans;
-        private MeshRenderer _meshR;
-        
+
+        private Player __player;
+        private Player _player {
+            get {
+                return __player;
+            }
+            set {
+                if (__player != null) {
+                    __player.PlayerReferences.PlayerModel.ForceTint = null;
+                }
+                __player = value;
+                if (value != null) {
+                    __player.PlayerReferences.PlayerModel.ForceTint = Color.red;
+                }
+            }
+        }
+
         public void Init() {
             _trans = transform;
-            _meshR = GetComponent<MeshRenderer>();
         }
 
         public Transform GetTransform() => _trans;
+        
+        public void SetPlayer(Player p) => _player = p;
 
         public void SetPosition(Vector3 position) {
             _trans.position = position;
         }
 
         public void SetSize(float size) {
-            _trans.localScale = Vector3.one * size;
         }
 
         public void SetValid(bool valid) {
-            _meshR.enabled = valid;
         }
 
         public void SetActive(bool active) {

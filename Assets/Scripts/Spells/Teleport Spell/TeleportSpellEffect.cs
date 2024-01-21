@@ -11,6 +11,8 @@ namespace Spells {
         private bool _unTwirled = false;
         private PlayerStateManager _stateManager;
         
+        protected override bool CastOnSelf() => true;
+        
         protected override void OnSpellStart() {
             float maxDistanceAllowed = _spellCastData.SpellDefinition.GetAttributeValue("max_distance");
             maxDistanceAllowed *= (_spellCastData.Effectiveness * .5f) + .5f; // Can only go so far if you fuck up (remapped to 50%-100%)

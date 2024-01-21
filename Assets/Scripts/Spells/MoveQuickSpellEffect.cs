@@ -6,6 +6,7 @@ using UnityEngine;
 [SpellEffect("SpeedUp")]
 public class MoveQuickSpellEffect : PlayerOverrideSpellEffect
 {
+    protected override bool CastOnSelf() => true;
     protected override void OnSpellStart() {
         _targetPlayer.PlayerReferences.PlayerMovement.SpeedMultiplier = 1.5f;
         _targetPlayer.PlayerReferences.PlayerAnimations.SetAnimationSpeed(1.5f);

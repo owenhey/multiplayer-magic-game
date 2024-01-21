@@ -15,7 +15,10 @@ MonoBehaviour:
   TargetType: 1
   PossibleTargets: -1
   TargetDefault: 0
-  Indicator: 0
+  Indicator: 1
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 8
   MinimumRange: 0
   MaximumRange: 10
   Size: 1

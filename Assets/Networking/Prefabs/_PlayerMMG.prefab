@@ -12789,8 +12789,6 @@ MonoBehaviour:
   _raycastLayerMask:
     serializedVersion: 2
     m_Bits: 128
-  _raycastTickRate: 30
-  _raycastTickDelay: 0.033333335
 --- !u!114 &-8941229978140903528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12804,9 +12802,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
-  _areaRaycastLayerMask:
-    serializedVersion: 2
-    m_Bits: 640
   Hide: 0
   CanRegisterClick: 0
 --- !u!114 &-5970099899597951696
@@ -12829,8 +12824,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ac41e57798fe63846875d7780cef0caf, type: 2}
   - {fileID: 11400000, guid: 061618cc6aa12df41824b159e1093763, type: 2}
   - {fileID: 11400000, guid: b5269cd9971f5470e8196e681df7c7e2, type: 2}
+  - {fileID: 11400000, guid: f63ca8a7391f807479afa09aafba6a16, type: 2}
   _instantDrawIndicatorData: {fileID: 11400000, guid: 8c42f81f1648a4467b5d3e8ea5a3d97d,
     type: 2}
+  _quickcastLayermask:
+    serializedVersion: 2
+    m_Bits: 136
   _castingType: 0
 --- !u!114 &2092327897885649139
 MonoBehaviour:

@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetType: 2
   PossibleTargets: 0
+  TargetDefault: 0
   Indicator: 0
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 648
   MinimumRange: 0
   MaximumRange: 25
   Size: 1

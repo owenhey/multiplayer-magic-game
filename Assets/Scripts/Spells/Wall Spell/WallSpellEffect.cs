@@ -10,6 +10,11 @@ namespace Spells{
             // Generate a rotation that represents the direction the player is facing
             Player player = _spellCastData.Player;
 
+            Ray ray = new Ray(_spellCastData.TargetData.TargetPosition + Vector3.up, Vector3.down);
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Environment"))) {
+                _spellCastData.TargetData.TargetPosition = hit.point;
+            }
+            
             Vector3 directionOfSpell =
                 _spellCastData.TargetData.TargetPosition - player.PlayerReferences.GetPlayerPosition();
             directionOfSpell.y = 0; 

@@ -9,13 +9,10 @@ namespace PlayerScripts {
         [SerializeField] private PlayerReferences _playerReferences;
         [Header("Settings")] 
         [SerializeField] private LayerMask _raycastLayerMask;
-        [SerializeField] [Tooltip("How often(ish) to raycast. 0 for every frame")] private float _raycastTickRate = 30;
-        [SerializeField] [ReadOnly] private float _raycastTickDelay;
 
         public Action OnInteractableChange;
         public IInteractable CurrentInteractable { get; private set; }
 
-        private float _lastRaycastTime = -1;
         private Camera __cam;
         private Camera _cam {
             get {
@@ -32,10 +29,7 @@ namespace PlayerScripts {
         }
 
         private void Update() {
-            if (Time.time > _lastRaycastTime + _raycastTickDelay) {
-                _lastRaycastTime = Time.time;
-                RaycastForInteractables();
-            }
+            RaycastForInteractables();
             
             // See if the player is pressing something
             if (CurrentInteractable != null && Input.GetKeyDown(KeyCode.Mouse0)) {
@@ -85,16 +79,5 @@ namespace PlayerScripts {
         protected override void OnClientStart(bool isOwner) {
             if (!isOwner) enabled = false;
         }
-
-#if UNITY_EDITOR
-        protected override void OnValidate() {
-            base.OnValidate();
-            float newVal = 1 / (_raycastTickRate);
-            if (Math.Abs(newVal - _raycastTickDelay) > .0001f) {
-                _raycastTickDelay = newVal;
-                UnityEditor.EditorUtility.SetDirty(this);
-            }
-        }
-        #endif
     }
 }

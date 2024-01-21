@@ -6,6 +6,8 @@ using UnityEngine;
 namespace Spells{
     [SpellEffect("Shield")]
     public class ShieldEffect : PlayerOverrideSpellEffect {
+        protected override bool CastOnSelf() => true;
+
         protected override void OnSpellStart() {
             _targetPlayer.PlayerReferences.PlayerModel.ClientEnableShield(_spellCastData.TargetData.CameraRay.direction);
         }

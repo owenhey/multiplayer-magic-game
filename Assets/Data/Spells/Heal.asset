@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Heal
   m_EditorClassIdentifier: 
   EffectId: Heal
-  SpellId: 0
+  SpellId: 5
   SpellName: Heal
   SpellCooldown: 1
   SpellIcon: {fileID: 21300000, guid: b0e3851cadd1c0847bdf97afd3ab6be7, type: 3}
-  Drawing: {fileID: 11400000, guid: 2ca47d5e0468146bc923c925b19e3fc3, type: 2}
-  IndicatorData: {fileID: 0}
+  Drawing: {fileID: 11400000, guid: 1f5e8d5f052c1f34bb642a9c4a606778, type: 2}
+  IndicatorData: {fileID: 11400000, guid: f10ff40ebda3a944898f1f0ba4beaa82, type: 2}
   SpellPrefab: {fileID: 0}
   SpellAttributes: []

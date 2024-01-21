@@ -19,12 +19,14 @@ namespace Spells {
 
         protected virtual float GetDuration() {
             return _spellCastData.SpellDefinition.GetAttributeValue("duration");
-        } 
+        }
 
-        public void BeginSpell(int targetId) {
-            _targetPlayer = Player.GetPlayerFromClientId(targetId);
+        protected abstract bool CastOnSelf();
+
+        public void BeginSpell() {
+            _targetPlayer = Player.GetPlayerFromClientId(CastOnSelf() ? _spellCastData.CastingPlayerId : _spellCastData.TargetData.TargetPlayerId);
             OnSpellStart();
-            // Let's assume for now that this is the local player (owner)
+            // TODO: FIX this so it can be used over the network
             _targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer($"spell_effect_{_spellCastData.SpellDefinition.SpellName}", false, GetDuration(), OnSpellEnd, OnSpellTick);
         }
     }

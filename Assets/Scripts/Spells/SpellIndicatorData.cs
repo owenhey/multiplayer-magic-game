@@ -33,11 +33,12 @@ namespace Spells {
         public SpellTargets PossibleTargets;
         public IndicatorTargetDefaultType TargetDefault;
         
-        // Area needs this one
+        // Area need these
         [Space(20)]  
-        public IndicatorTypes Indicator;
         
         // Both target and area need these
+        public IndicatorTypes Indicator;
+        public LayerMask LayerMask;
         public float MinimumRange = 0;
         public float MaximumRange = 10.0f;
         [Range(0, 5)] public float Size = 1.0f;

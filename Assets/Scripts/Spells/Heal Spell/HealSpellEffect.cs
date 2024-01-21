@@ -7,7 +7,7 @@ namespace Spells{
     public class HealSpellEffect : SingleCastSpellEffect
     {
         public override void BeginSpell() {
-            Debug.Log($"{_spellCastData.TargetData.TargetPlayerId}");
+            Debug.Log($"Casting heal on player {_spellCastData.TargetData.TargetPlayerId}");
             
             
         }
