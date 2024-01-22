@@ -10,10 +10,15 @@ namespace Visuals{
         
         private Material _copiedMaterial;
 
+        
         public void Init() {
             var meshRend = GetComponentInChildren<MeshRenderer>();
             _copiedMaterial = new Material(meshRend.sharedMaterial);
             meshRend.material = _copiedMaterial;
+        }
+
+        public void ResetIndicator() {
+            // nothing to do here
         }
 
         public void SetPlayer(Player player) { }

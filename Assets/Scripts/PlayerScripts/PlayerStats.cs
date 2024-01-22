@@ -14,7 +14,7 @@ namespace PlayerScripts {
         [ReadOnly] private int _currentHealth;
         public int CurrentHealth => _currentHealth;
 
-        public System.Action<int> OnHealthChange;
+        public System.Action<int, int> OnHealthChange;
         public System.Action OnPlayerDeath;
         public System.Action OnPlayerSpawn;
         
@@ -63,6 +63,16 @@ namespace PlayerScripts {
             OnPlayerSpawn?.Invoke();
         }
 
+        [Client]
+        public void ClientAffectHealth(int delta) {
+            ServerAffectHealthFromClient(delta);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void ServerAffectHealthFromClient(int delta) {
+            AffectHealth(delta);
+        }
+        
         [Server]
         public void AffectHealth(int delta) {
             _currentHealth = Mathf.Clamp(_currentHealth + delta, 0, _maxHealth);
@@ -91,7 +101,7 @@ namespace PlayerScripts {
         }
         
         private void OnHealthChangeHandler(int oldHealth, int newHealth, bool asServer) {
-            OnHealthChange?.Invoke(newHealth);
+            OnHealthChange?.Invoke(newHealth, newHealth - oldHealth);
         }
     }
 }

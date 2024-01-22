@@ -9,7 +9,6 @@ namespace Visuals {
     }
     public class IndicatorManager : MonoBehaviour {
         [SerializeField] private GameObject _spherePrefab;
-        [SerializeField] private GameObject _targetPrefab;
 
         private IIndicator _sphere;
         private IIndicator _targetPlayer;
@@ -31,7 +30,7 @@ namespace Visuals {
 
             if (type == IndicatorTypes.TargetPlayer) {
                 if (_targetPlayer == null) {
-                    _targetPlayer = Instantiate(_targetPrefab, transform).GetComponent<IIndicator>();
+                    _targetPlayer = new TargetPlayerIndicator();
                     _targetPlayer.Init();
                 }
                 return _targetPlayer;

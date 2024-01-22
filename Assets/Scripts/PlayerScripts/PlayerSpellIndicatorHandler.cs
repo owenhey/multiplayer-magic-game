@@ -1,6 +1,7 @@
 using Spells;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using Visuals;
 
@@ -12,7 +13,8 @@ namespace PlayerScripts {
         private Action<SpellTargetData> _callback;
 
         private Action _updateLoop;
-        private bool _canCancel;
+        private bool _forceCast = false;
+        
         public bool Hide;
         public bool CanRegisterClick;
 
@@ -24,30 +26,31 @@ namespace PlayerScripts {
         public Action<float> OnAutocastTick;
         public Action<bool> OnAutocastSet;    
         
+        private delegate SpellTargetData BuildSpellTargetDataDelegate();
+        
         protected override void Awake() {
             base.Awake();
             enabled = false;
             _playerReferences = _player.PlayerReferences;
         }
         
-        public void Setup(SpellIndicatorData indicator, Action<SpellTargetData> spellTargetDataHandler, bool canCancel) {
-            _canCancel = canCancel;
-            // Handle no indicator
-            if (indicator.TargetType == IndicatorTargetType.None) {
-                SpellTargetData targetData = new();
-                targetData.TargetPlayerId = _player.OwnerId;
-                targetData.CameraRay = _player.PlayerReferences.PlayerCameraControls.Cam.ScreenPointToRay(Input.mousePosition);
-                spellTargetDataHandler?.Invoke(targetData);
-                _currentIndicator = null;
-                return;
-            }
-            
+        public void Setup(SpellIndicatorData indicator, Action<SpellTargetData> spellTargetDataHandler) {
+            // Store appropriate variables
+            _callback = spellTargetDataHandler;
             enabled = true;
             _currentIndicatorData = indicator;
             _currentIndicator = IndicatorManager.Instance.GetIndicator(indicator.Indicator);
-            _callback = spellTargetDataHandler;
             _currentIndicator.SetSize(indicator.Size);
+            
+            // Handle no indicator
+            if (indicator.TargetType == IndicatorTargetType.None) {
+                HandleNoneIndicator();
+                ResetState();
+                return;
+            }
 
+            _currentIndicator.ResetIndicator();
+            // Set update loop
             switch (indicator.Indicator) {
                 case IndicatorTypes.Sphere:
                     _updateLoop = AreaIndicatorUpdate;
@@ -61,90 +64,58 @@ namespace PlayerScripts {
             _updateLoop?.Invoke();
         }
 
+        private void HandleNoneIndicator() {
+            SpellTargetData targetData = new() {
+                TargetPlayerId = _player.OwnerId,
+                CameraRay = _player.PlayerReferences.PlayerCameraControls.Cam.ScreenPointToRay(Input.mousePosition)
+            };
+            _callback?.Invoke(targetData);
+            _currentIndicator = null;
+        }
+
         private void Update() {
+            if (_player.PlayerReferences.PlayerCameraControls.Cam == null) return;
             _updateLoop?.Invoke();
         }
 
-        public void ForceCancel(bool fireCallback) {
-            CancelAutocast();
-            var targetData = new SpellTargetData {
-                Cancelled = true,
-                TargetPosition = default,
-                TargetPlayerId = -1
-            };
-            if (fireCallback) {
-                _callback?.Invoke(targetData);
-            }
-
-            if (_currentIndicator != null) {
-                _currentIndicator.SetActive(false);
-            }
-            enabled = false;
-        }
-
         private void AreaIndicatorUpdate() {
-            if (_player.PlayerReferences.PlayerCameraControls.Cam == null) return;
-
             var (didHit, ray, hitData) = GetRaycastData(_currentIndicatorData.LayerMask);
+            // Default ray in case you don't hit anything
             Vector3 rayTarget = ray.origin + ray.direction * DEFAULT_MAX_INDICATOR_DISTANCE;
+            
+            // Default to true (or false if Hide is on)
+            bool showIndicator = !Hide;
             if (didHit) {
+                showIndicator = true;
                 rayTarget = hitData.point;
-                bool showIndicator = !Hide;
-                _currentIndicator?.SetActive(showIndicator);
 
-                Vector3 playerPos = _playerReferences.GetPlayerPosition();
-                float distanceFromPlayer = (playerPos - hitData.point).magnitude;
-
-                Vector3 point = hitData.point;
-                if (distanceFromPlayer > _currentIndicatorData.MaximumRange) {
-                    // Clamp the position vector
-                    Vector3 fromPlayer = point - playerPos;
-                    point = playerPos + Vector3.ClampMagnitude(fromPlayer, _currentIndicatorData.MaximumRange);
-                }
-                _currentIndicator?.SetPosition(point);
+                // Calculate the maxmium distance
+                Vector3 clampedPosition = ClampPositionOfRayTarget(hitData.point, _currentIndicatorData);
+                _currentIndicator?.SetPosition(clampedPosition);
             }
-            else {
-                _currentIndicator?.SetActive(false);
-            }
+            _currentIndicator.SetActive(showIndicator);
+            
+            // Builder for targeting
+            BuildSpellTargetDataDelegate builder = () => AreaSpellTargetBuilder(rayTarget, ray);
 
             // Check for the click
-            bool mouseDown = Input.GetKeyDown(KeyCode.Mouse0);
-            bool canClick = CanRegisterClick;
-            bool notClickingUI = !EventSystem.current.IsPointerOverGameObject();
+            CheckForClick(builder);
+        }
 
-            bool validLeftClick = mouseDown && canClick && notClickingUI;
-            if (validLeftClick) {
-                Player targetPlayer = null;
-                if (didHit) {
-                    if(hitData.collider.TryGetComponent(out PlayerCollider c)) {
-                        targetPlayer = c.Player;
-                    }
-                }
-                var targetData = new SpellTargetData {
-                    Cancelled = false,
-                    TargetPosition = rayTarget,
-                    CameraRay = ray,
-                    TargetPlayerId = targetPlayer != null ? targetPlayer.OwnerId : -1
-                };
-                _callback?.Invoke(targetData);
-                _currentIndicator.SetActive(false);
-                _currentIndicator = null;
-                enabled = false;
-                CancelAutocast();
-            }
-
-            bool rightMouseDown = Input.GetKeyDown(KeyCode.Mouse1);
-            bool validRightClick = _canCancel && rightMouseDown && canClick;
-            if (validRightClick) {
-                ForceCancel(true);
-            }
+        private SpellTargetData AreaSpellTargetBuilder(Vector3 rayTarget, Ray ray) {
+            return new SpellTargetData {
+                Cancelled = false,
+                TargetPosition = rayTarget,
+                CameraRay = ray,
+                TargetPlayerId = -1
+            };
         }
         
         private void TargetIndicatorUpdate() {
-            if (_player.PlayerReferences.PlayerCameraControls.Cam == null) return;
-
             var (didHit, ray, hitData) = GetSpherecastData(_currentIndicatorData.LayerMask);
             Vector3 rayTarget = ray.origin + ray.direction * DEFAULT_MAX_INDICATOR_DISTANCE;
+            
+            bool showIndicator = !Hide;
             Player playerTarget = null;
             if (didHit) {
                 // Try to get the player collider
@@ -155,51 +126,49 @@ namespace PlayerScripts {
                     if (canTargetSelf || !targetingSelf) {
                         // This means we are good!
                         playerTarget = c.Player;
-                        _currentIndicator.SetPosition(playerTarget.PlayerReferences.GetPlayerPosition() + Vector3.up * 2.5f);
-                        bool showIndicator = !Hide;
-                        _currentIndicator?.SetPlayer(showIndicator ? playerTarget : null);
-                        _currentIndicator?.SetActive(showIndicator);
                     }
-                    else if (_currentIndicatorData.TargetDefault == IndicatorTargetDefaultType.Self) {
-                        playerTarget = _player;
-                        bool showIndicator = !Hide;
-                        _currentIndicator?.SetPlayer(showIndicator ? playerTarget : null);
-                        _currentIndicator?.SetActive(showIndicator);
-                    }
-                    else {
-                        _currentIndicator?.SetPlayer(null);
-                        _currentIndicator?.SetActive(false);
-                    }
+                    // This means the player is just null. Which might be fine!
                 }
             }
-            else {
-                _currentIndicator?.SetPlayer(null);
-                _currentIndicator?.SetActive(false);
+            // Potentially set the player to self if not hitting anything
+            else if (_currentIndicatorData.TargetDefault == IndicatorTargetDefaultType.Self) {
+                playerTarget = _player;
             }
+            
+            _currentIndicator.SetActive(showIndicator);
+            _currentIndicator.SetPlayer(playerTarget);
 
-            // Check for the click
+            // Spell creator for targeting
+            BuildSpellTargetDataDelegate builder = () => TargetSpellTargetBuilder(rayTarget, ray, playerTarget);
+
+            // Check for click
+            CheckForClick(builder);
+        }
+
+        private SpellTargetData TargetSpellTargetBuilder(Vector3 rayTarget, Ray ray, Player player) {
+            return new SpellTargetData {
+                Cancelled = player == null,
+                TargetPosition = rayTarget,
+                CameraRay = ray,
+                TargetPlayerId = player != null ? player.OwnerId : -1
+            };
+        }
+        
+        private void CheckForClick(BuildSpellTargetDataDelegate targetDataBuilder) {
             bool mouseDown = Input.GetKeyDown(KeyCode.Mouse0);
             bool canClick = CanRegisterClick;
             bool notClickingUI = !EventSystem.current.IsPointerOverGameObject();
 
+            // Check for valid input
             bool validLeftClick = mouseDown && canClick && notClickingUI;
-            if (validLeftClick) {
-                var targetData = new SpellTargetData {
-                    Cancelled = false,
-                    TargetPosition = rayTarget,
-                    CameraRay = ray,
-                    TargetPlayerId = playerTarget != null ? playerTarget.OwnerId : -1
-                };
-                
-                _callback?.Invoke(targetData);
-                _currentIndicator.SetActive(false);
-                _currentIndicator = null;
-                enabled = false;
-                CancelAutocast();
+            if (_forceCast || validLeftClick) {
+                var targetData = targetDataBuilder();
+                FireCallback(targetData);
+                ResetState();
             }
 
             bool rightMouseDown = Input.GetKeyDown(KeyCode.Mouse1);
-            bool validRightClick = _canCancel && rightMouseDown && canClick;
+            bool validRightClick = rightMouseDown && canClick;
             if (validRightClick) {
                 ForceCancel(true);
             }
@@ -218,22 +187,104 @@ namespace PlayerScripts {
         }
 
         /// <summary>
-        /// Gets the current target data, where ever the mouse may be
+        /// Gets the current target data if you don't know the spell
         /// </summary>
-        public SpellTargetData GetCurrentTargetData(LayerMask mask, Vector3? mousePos = null) {
-            var (didHit, ray, hitData) = GetRaycastData(mask);
-            Vector3 rayTarget = ray.origin + ray.direction * DEFAULT_MAX_INDICATOR_DISTANCE;
-            if (didHit) {
-                rayTarget = hitData.point;
+        public Dictionary<SpellIndicatorData, SpellTargetData> GetCurrentTargetData(SpellIndicatorData[] indicators, Vector3? mousePos = null) {
+            Dictionary<SpellIndicatorData, SpellTargetData> retValue = new();
+
+            foreach (var indicator in indicators) {
+                if(retValue.ContainsKey(indicator)) continue;
+
+                retValue.Add(indicator, GetCurrentTargetData(indicator, mousePos));
             }
             
-            var targetData = new SpellTargetData {
-                Cancelled = false,
-                TargetPosition = rayTarget,
-                CameraRay = ray,
-                TargetPlayerId = _player.OwnerId
-            };
-            return targetData;
+            return retValue;
+        }
+
+        public SpellTargetData GetCurrentTargetData(SpellIndicatorData indicator, Vector3? mousePos = null) {
+            if (mousePos == null) mousePos = Input.mousePosition;
+            
+            if (indicator.TargetType == IndicatorTargetType.Area) {
+                var (didHit, ray, hitData) = GetRaycastData(indicator.LayerMask, mousePos);
+                
+                // Clamp the magnitude of the positioning
+                Vector3 targetPos = GetDefaultPositionOfIndicator(ray);
+                if (didHit) targetPos = hitData.point;
+                Vector3 clampedPoint = ClampPositionOfRayTarget(targetPos, indicator);
+
+                var targetData = new SpellTargetData {
+                    Cancelled = false,
+                    TargetPosition = clampedPoint,
+                    CameraRay = ray,
+                    TargetPlayerId = 0
+                };
+
+                return targetData;
+            }
+            else if (indicator.TargetType == IndicatorTargetType.Target) {
+                var (didHit, ray, hitData) = GetSpherecastData(indicator.LayerMask, mousePos);
+                Vector3 rayTarget = ray.origin + ray.direction * DEFAULT_MAX_INDICATOR_DISTANCE;
+                Player playerTarget = null;
+                if (didHit) {
+                    // Try to get the player collider
+                    if (hitData.collider.TryGetComponent(out PlayerCollider c)) {
+                        bool canTargetSelf = indicator.PossibleTargets.HasFlag(SpellTargets.Self);
+                        bool targetingSelf = c.Player.IsOwner;
+                        if (canTargetSelf || !targetingSelf) {
+                            playerTarget = c.Player;
+                        }
+                    }
+                }
+                else if (indicator.TargetDefault == IndicatorTargetDefaultType.Self) {
+                    playerTarget = _player;
+                }
+
+                var targetData = TargetSpellTargetBuilder(rayTarget, ray, playerTarget);
+                return targetData;
+            }
+
+            return null;
+        }
+        
+        public void ForceCancel(bool fireCallback) {
+            if (fireCallback) {
+                SpellTargetData cancelledData = new() {
+                    Cancelled = true
+                };
+                FireCallback(cancelledData);
+            }
+            ResetState();
+        }
+
+        private void FireCallback(SpellTargetData data) => _callback?.Invoke(data);
+
+        private void ResetState() {
+            enabled = false;
+            
+            _callback = null;
+            _forceCast = false;
+            
+            _currentIndicator?.SetActive(false);
+            _currentIndicator = null;
+            
+            CancelAutocast();
+        }
+
+        private Vector3 ClampPositionOfRayTarget(Vector3 currentTarget, SpellIndicatorData indicator) {
+            Vector3 playerPos = _playerReferences.GetPlayerPosition();
+            float distanceFromPlayer = (playerPos - currentTarget).magnitude;
+            Vector3 point = currentTarget;
+            if (distanceFromPlayer > indicator.MaximumRange) {
+                // Clamp the position vector
+                Vector3 fromPlayer = point - playerPos;
+                point = playerPos + Vector3.ClampMagnitude(fromPlayer, indicator.MaximumRange);
+            }
+
+            return point;
+        }
+
+        private Vector3 GetDefaultPositionOfIndicator(Ray ray) {
+            return ray.origin + ray.direction * DEFAULT_MAX_INDICATOR_DISTANCE;
         }
 
         protected override void OnClientStart(bool isOwner) {
@@ -250,12 +301,7 @@ namespace PlayerScripts {
         }
 
         private void Autocast() {
-            var targetData = GetCurrentTargetData(_currentIndicatorData.LayerMask);
-            _callback?.Invoke(targetData);
-            _currentIndicator.SetActive(false);
-            _currentIndicator = null;
-            enabled = false;
-            OnAutocastSet?.Invoke(false);
+            _forceCast = true;
         }
 
         private void CancelAutocast() {

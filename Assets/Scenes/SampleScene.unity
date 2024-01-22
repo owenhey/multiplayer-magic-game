@@ -4217,7 +4217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -7251,8 +7251,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spherePrefab: {fileID: 5208804480250378763, guid: d3e86a4f6a8bf8540b1f6a6c41cf3e53,
     type: 3}
-  _targetPrefab: {fileID: 2543480782709849852, guid: a71da962e6a8b9e4fb9ba2aa9693a298,
-    type: 3}
 --- !u!1 &1868379207
 GameObject:
   m_ObjectHideFlags: 3
@@ -7760,7 +7758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

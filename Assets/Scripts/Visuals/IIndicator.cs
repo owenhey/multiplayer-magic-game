@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Visuals {
     public interface IIndicator {
+        void ResetIndicator();
         void Init();
         Transform GetTransform();
-        
         void SetPlayer(Player player);
         void SetPosition(Vector3 position);
         void SetSize(float size);

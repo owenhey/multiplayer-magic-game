@@ -25,6 +25,7 @@ namespace PlayerScripts {
         private Material _playerMat;
         private Material _shieldMat;
 
+        public System.Action OnHealSpell;
         public System.Action<bool> OnTwirl;
         
         private static readonly int _isOverridingColor = Shader.PropertyToID("_IsOverridingColor");
@@ -91,6 +92,22 @@ namespace PlayerScripts {
         private void ClientHandleColorChange(Color old, Color newColor, bool server) {
             _playerMat.SetColor(_colorPrimary, newColor);
             _playerMat.SetColor(_colorMetalDark, newColor);
+        }
+
+        [Client]
+        public void ClientHealSpell() {
+            ServerHealSpell();
+        }
+
+        
+        [ServerRpc(RequireOwnership = false)]
+        private void ServerHealSpell() {
+            ObserversHealSpell();
+        }
+
+        [ObserversRpc]
+        private void ObserversHealSpell() {
+            OnHealSpell?.Invoke();
         }
 
         [Server]

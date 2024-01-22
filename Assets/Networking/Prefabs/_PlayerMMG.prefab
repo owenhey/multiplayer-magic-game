@@ -9670,6 +9670,54 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!1 &4984952014918620927
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6336008043593946860}
+  - component: {fileID: 2387904286654878615}
+  m_Layer: 3
+  m_Name: SpellEffects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6336008043593946860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4984952014918620927}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 663973250537962934}
+  m_Father: {fileID: 8771216031366389187}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2387904286654878615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4984952014918620927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f153fe00fc910cf4ba95378058ad93a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: {fileID: 3430161197533812790}
+  Offset: {x: 0, y: 1.25, z: 0}
+  IsLocal: 0
 --- !u!1 &5031305548184273124
 GameObject:
   m_ObjectHideFlags: 0
@@ -12271,6 +12319,7 @@ GameObject:
   - component: {fileID: 6749459404671944547}
   - component: {fileID: 3976832369467006623}
   - component: {fileID: 5886069620591711770}
+  - component: {fileID: 7770192929556453981}
   m_Layer: 3
   m_Name: Player Body
   m_TagString: Untagged
@@ -12295,6 +12344,7 @@ Transform:
   - {fileID: 3893423418599009062}
   - {fileID: 1118673655525569032}
   - {fileID: 830728096494528637}
+  - {fileID: 6336008043593946860}
   m_Father: {fileID: 5274439918284474655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &573415280932483984
@@ -12559,6 +12609,20 @@ MonoBehaviour:
   - {fileID: 8857650236885227732}
   - {fileID: 5204808401472938194}
   - {fileID: 4421928464756027738}
+--- !u!114 &7770192929556453981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6947449413219042651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9311ec51fd884d20b206b67ece815ec2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 8286632864543236906}
+  _healEffect: {fileID: 6163223820011513681}
 --- !u!1 &6960753304027691506
 GameObject:
   m_ObjectHideFlags: 0
@@ -12825,11 +12889,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 061618cc6aa12df41824b159e1093763, type: 2}
   - {fileID: 11400000, guid: b5269cd9971f5470e8196e681df7c7e2, type: 2}
   - {fileID: 11400000, guid: f63ca8a7391f807479afa09aafba6a16, type: 2}
-  _instantDrawIndicatorData: {fileID: 11400000, guid: 8c42f81f1648a4467b5d3e8ea5a3d97d,
-    type: 2}
-  _quickcastLayermask:
-    serializedVersion: 2
-    m_Bits: 136
   _castingType: 0
 --- !u!114 &2092327897885649139
 MonoBehaviour:
@@ -18055,6 +18114,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 824e802d498a8b54aa8bd4fb61c0fc4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &5021625007274231937
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6336008043593946860}
+    m_Modifications:
+    - target: {fileID: 5514250314181621047, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514250314181621047, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514250314181621047, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514250314181621047, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514250314181621047, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514250314181621047, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514250314181621047, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7044557947437630131, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+        type: 3}
+      propertyPath: m_Name
+      value: HealVFX
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 513cebbed744e5d489bb5e23d7c9a1d4, type: 3}
+--- !u!4 &663973250537962934 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5514250314181621047, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+    type: 3}
+  m_PrefabInstance: {fileID: 5021625007274231937}
+  m_PrefabAsset: {fileID: 0}
+--- !u!2083052967 &6163223820011513681 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 1168770133088251856, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+    type: 3}
+  m_PrefabInstance: {fileID: 5021625007274231937}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5242711918818141021
 PrefabInstance:
   m_ObjectHideFlags: 0

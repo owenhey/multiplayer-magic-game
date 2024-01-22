@@ -10,12 +10,12 @@ namespace UI{
         [SerializeField] private TextMeshProUGUI _text;
         [SerializeField] private PlayerStats _playerStats;
 
-        private void UpdateHealth(int health) {
+        private void UpdateHealth(int health, int delta) {
             _text.text = $"{health} / {_playerStats.MaxHealth}";
         }
 
         private void UpdateHealth() {
-            UpdateHealth(_playerStats.CurrentHealth);
+            UpdateHealth(_playerStats.CurrentHealth, 0);
         }
 
         private void OnEnable() {

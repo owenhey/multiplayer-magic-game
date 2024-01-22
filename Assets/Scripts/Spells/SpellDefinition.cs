@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Helpers;
@@ -28,7 +29,7 @@ namespace Spells {
         
         public float GetAttributeValue(string key) {
             var attribute = SpellAttributes.FirstOrDefault(a => a.Key == key);
-            return attribute != null ? attribute.Value : 0; // Return a default value if not found
+            return attribute != null ? attribute.Value : throw new ArgumentException("NO ATTRIBUTE WITH THAT NAME"); // Return a default value if not found
         }
 
         public void AddToAllSpells() {

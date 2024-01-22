@@ -22,9 +22,6 @@ namespace PlayerScripts {
     public class PlayerSpells : LocalPlayerScript {
         [SerializeField] private PlayerSpellIndicatorHandler _indicatorHandler;
         [SerializeField] private List<SpellDefinition> _spells;
-        [SerializeField] private SpellIndicatorData _instantDrawIndicatorData;
-
-        [SerializeField] private LayerMask _quickcastLayermask;
         
         private List<SpellInstance> _spellInstances;
         private PlayerStateManager _stateManager;
@@ -45,6 +42,8 @@ namespace PlayerScripts {
         private SpellInstance _chosenSpell = null;
         private SpellTargetData _spellTargetData = null;
         private DrawingResults _results = null;
+        // Only used for quickcast
+        private Dictionary<SpellIndicatorData, SpellTargetData> _quickcastDrawIndicatorData;
 
         public Action OnSpellMessUp;
         public Action<SpellInstance> OnOnCooldownSpellCast;
@@ -94,10 +93,9 @@ namespace PlayerScripts {
                     DrawingManager.Instance.StartDrawing(camType, HandleAreaDraw);
                     break;
                 }
-                case SpellCastingType.Quickcast: {
+                case SpellCastingType.Quickcast when triedToClick: {
                     _stateManager.AddState(PlayerState.CastingSpell);
-                    var targetData = _indicatorHandler.GetCurrentTargetData(_quickcastLayermask);
-                    HandleQuickcastTarget(targetData);
+                    QuickcastTarget();
                     break;
                 }
             }
@@ -153,17 +151,16 @@ namespace PlayerScripts {
 
         #region Quickcast
 
-        private void HandleQuickcastTarget(SpellTargetData targetData) {
-            _spellTargetData = targetData;
+        private void QuickcastTarget() {
+            var iDatas = _spellInstances.Select(x => x.SpellDefinition.IndicatorData).ToArray();
+            _quickcastDrawIndicatorData = _indicatorHandler.GetCurrentTargetData(iDatas);
+            
             CameraMovementType camType = _player.PlayerReferences.PlayerCameraControls.CameraType;
             DrawingManager.Instance.StartDrawing(camType, HandleQuickcastDraw);
         }
 
         private void HandleQuickcastDraw(DrawingResults results) {
             _results = results;
-            // Reset the instant draw
-            _indicatorHandler.Setup(_instantDrawIndicatorData, HandleQuickcastTarget, false);
-            
             
             if (results.Completed == false) {
                 ResetState();
@@ -180,6 +177,15 @@ namespace PlayerScripts {
             
             // Handle targeting and recieve spell cast data
             _chosenSpell = _spellInstances.FirstOrDefault(x => x.SpellDefinition.Drawing == results.Drawing);
+            
+            // Now that we know the spell, we can choose the right targeting method
+            _spellTargetData = _quickcastDrawIndicatorData[_chosenSpell.SpellDefinition.IndicatorData];
+
+            if (_spellTargetData.Cancelled) {
+                ResetState();
+                return;
+            }
+            
             CastSpell();
         }
 
@@ -205,7 +211,7 @@ namespace PlayerScripts {
             }
             _chosenSpell = _spellInstances.FirstOrDefault(x => x.SpellDefinition.Drawing == _results.Drawing);
 
-            _indicatorHandler.Setup(_chosenSpell.SpellDefinition.IndicatorData, HandleIndicatorTarget, true);
+            _indicatorHandler.Setup(_chosenSpell.SpellDefinition.IndicatorData, HandleIndicatorTarget);
         }
 
         private void HandleIndicatorTarget(SpellTargetData targetData) {
@@ -251,7 +257,7 @@ namespace PlayerScripts {
             }
             
             
-            _indicatorHandler.Setup(_chosenSpell.SpellDefinition.IndicatorData, HandleDelayedTarget, true);
+            _indicatorHandler.Setup(_chosenSpell.SpellDefinition.IndicatorData, HandleDelayedTarget);
             _indicatorHandler.SetAutocast();
         }
         
@@ -292,9 +298,17 @@ namespace PlayerScripts {
             // top left and bottom right are in the results
             // choose the midpoint
             Vector2 midpoint = (results.BottomLeftScreenSpace + results.TopRightScreenSpace) * .5f;
+            Vector3 midpoint3 = new Vector3(midpoint.x, midpoint.y, 0);
 
-            _spellTargetData = _indicatorHandler.GetCurrentTargetData(_chosenSpell.SpellDefinition.IndicatorData.LayerMask, new Vector3(midpoint.x, midpoint.y, 0));
+            var targetData =
+                _indicatorHandler.GetCurrentTargetData(_chosenSpell.SpellDefinition.IndicatorData, midpoint3);
             
+            HandleAreaTarget(targetData);
+        }
+
+        // This gets called directly from handle area draw
+        private void HandleAreaTarget(SpellTargetData targetData) {
+            _spellTargetData = targetData;
             CastSpell();
         }
 

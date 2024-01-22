@@ -14,15 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Points:
   - X: 0.5
-    Y: 0.75
-    time: 0.3333
-  - X: 0.25
-    Y: 1
-    time: 0.6666
-  - X: 0
-    Y: 0.6
-    time: 0.6666
-  - X: 0.5
     Y: 0
     time: 0.6666
   - X: 1
@@ -34,9 +25,18 @@ MonoBehaviour:
   - X: 0.5
     Y: 0.75
     time: 0.6666
+  - X: 0.25
+    Y: 1
+    time: 0.6666
+  - X: 0
+    Y: 0.6
+    time: 0.6666
+  - X: 0.5
+    Y: 0
+    time: 0.3333
   TotalDistance: 4
-  CalculatedDistance: 3.2125547
+  CalculatedDistance: 3.212555
   TimeTarget: 1
-  PerfectScoreThreshold: 0.1
-  FailCastThreshold: 0.2
+  PerfectScoreThreshold: 0.05
+  FailCastThreshold: 0.09
   HelperImage: {fileID: 21300000, guid: 6027d9c411b560c4695d87a18707045d, type: 3}

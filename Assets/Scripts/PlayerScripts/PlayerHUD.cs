@@ -12,7 +12,8 @@ namespace PlayerScripts {
         }
 
         public void SetCrosshairActive(bool active) {
-            _crosshair.SetActive(active);
+            if(_crosshair != null)
+                _crosshair.SetActive(active);
         }
     }
 }
