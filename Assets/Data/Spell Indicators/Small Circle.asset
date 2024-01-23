@@ -18,7 +18,7 @@ MonoBehaviour:
   Indicator: 0
   LayerMask:
     serializedVersion: 2
-    m_Bits: 648
+    m_Bits: 640
   MinimumRange: 0
   MaximumRange: 25
   Size: 1

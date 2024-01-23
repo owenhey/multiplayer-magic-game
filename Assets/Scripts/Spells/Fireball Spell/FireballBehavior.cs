@@ -23,8 +23,6 @@ namespace Spells {
         [SyncVar] [ReadOnly]
         private SpawnablePrefabInitData _initData;
 
-        private float disToTarget;
-
         private void Awake() {
             _trigger.OnEnter += HandleCollision;
         }
@@ -70,27 +68,20 @@ namespace Spells {
         }
 
         private void Setup() {
-            Player castingPlayer = Player.GetPlayerFromClientId(_initData.CasterId);
-            Vector3 castingPlayerCenterPosition = castingPlayer.PlayerReferences.GetPlayerPosition() + Vector3.up;
-
-            Vector3 inFrontOfPlayer = (_initData.Position - castingPlayerCenterPosition).normalized * 2.5f +
-                                      castingPlayerCenterPosition;
-            
-            disToTarget = (_initData.Position - inFrontOfPlayer).magnitude;
-                
-            _contentTransform.position = inFrontOfPlayer;
+            // Place it slightly in front of the player in the direction it should go
+            float distanceInFront = _initData.SpellDefinition.GetAttributeValue("distance_in_front");
+            _contentTransform.position = _initData.Position + _initData.Direction.direction.normalized * distanceInFront;
             _contentTransform.rotation = _initData.Rotation;
         }
 
         private void Begin() {
-            Vector3 hitPosition = _initData.Position;
             _spawnSound.Play();
             float speed = _initData.SpellDefinition.GetAttributeValue("speed");
-            speed *= Misc.Remap(_initData.SpellEffectiveness, 0, 1, .7f, 1.0f);
-            float totalTime =  disToTarget / speed;
 
-            _contentTransform.DOScale(Vector3.one, .1f).From(Vector3.zero);
-            _contentTransform.DOMove(hitPosition, totalTime).SetDelay(.25f).SetEase(Ease.Linear).OnComplete(() => {
+            Vector3 targetAfter5Seconds = _initData.Direction.direction.normalized * (speed * 3.0f);
+            
+            _contentTransform.DOScale(Vector3.one, .5f).From(Vector3.zero);
+            _contentTransform.DOMove(targetAfter5Seconds, 2.5f).SetDelay(.5f).SetEase(Ease.Linear).OnComplete(() => {
                 _fireballEffect.Stop();
             });
 

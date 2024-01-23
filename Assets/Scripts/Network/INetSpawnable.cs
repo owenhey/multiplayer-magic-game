@@ -16,6 +16,7 @@ namespace Net {
         public float SpellEffectiveness;
         public SpellDefinition SpellDefinition => SpellIder.Instance.GetSpell(SpellId);
         public Vector3 Position;
+        public Ray Direction;
         public Quaternion Rotation;
     }
     

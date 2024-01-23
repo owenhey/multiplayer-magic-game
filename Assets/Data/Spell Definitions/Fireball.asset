@@ -30,3 +30,5 @@ MonoBehaviour:
     Value: 2.5
   - Key: knockback
     Value: 15
+  - Key: distance_in_front
+    Value: 2

@@ -118,6 +118,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Alpha: 1.67
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -166,7 +167,7 @@ Material:
     - _Color_Metal_Dark: {r: 0.17647055, g: 0.19607836, b: 0.21568623, a: 1}
     - _Color_Metal_Primary: {r: 0.5960785, g: 0.6117647, b: 0.62745106, a: 1}
     - _Color_Metal_Secondary: {r: 0.34509796, g: 0.37647057, b: 0.39607847, a: 1}
-    - _Color_Primary: {r: 0.24313727, g: 0.41960788, b: 0.6196079, a: 1}
+    - _Color_Primary: {r: 0.24313724, g: 0.41960785, b: 0.6196079, a: 1}
     - _Color_Scar: {r: 0.9294118, g: 0.68627447, b: 0.5921568, a: 1}
     - _Color_Secondary: {r: 0.8196079, g: 0.6431373, b: 0.29803917, a: 1}
     - _Color_Skin: {r: 1, g: 0.8000001, b: 0.682353, a: 1}

@@ -24,6 +24,7 @@ namespace Spells {
                 SpellId = _spellCastData.SpellId,
                 CasterId = _spellCastData.CastingPlayerId,
                 Position = _spellCastData.TargetData.TargetPosition,
+                Direction = _spellCastData.TargetData.CameraRay,
                 Rotation = _spawnedObjectRotation
             };
             
