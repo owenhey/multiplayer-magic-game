@@ -41,7 +41,7 @@ namespace Spells {
         }
 
         protected override void OnSpellTick(float percent, float remainingDuration) {
-            if (!_warped && percent > .4f) { // %40 way through, lerp the player
+            if (!_warped && percent > .40f) { // 40% way through, lerp the player
                 _warped = true;
                 _targetPlayer.PlayerReferences.PlayerMovement.Warp(_spellCastData.TargetData.TargetPosition);
             }

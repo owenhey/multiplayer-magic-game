@@ -20,5 +20,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 640
   MinimumRange: 0
-  MaximumRange: 1000
+  MaximumRange: 25
   Size: 0.5

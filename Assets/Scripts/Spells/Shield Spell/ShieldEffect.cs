@@ -9,7 +9,9 @@ namespace Spells{
         protected override bool CastOnSelf() => true;
 
         protected override void OnSpellStart() {
-            _targetPlayer.PlayerReferences.PlayerModel.ClientEnableShield(_spellCastData.TargetData.CameraRay.direction);
+            Vector3 direction = _spellCastData.TargetData.TargetPosition -
+                                (_targetPlayer.PlayerReferences.GetPlayerPosition() + Vector3.up);
+            _targetPlayer.PlayerReferences.PlayerModel.ClientEnableShield(direction);
         }
 
         protected override void OnSpellTick(float percent, float remainingDuration) {

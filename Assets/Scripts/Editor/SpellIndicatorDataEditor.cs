@@ -12,6 +12,7 @@ public class SpellIndicatorDataEditor : Editor {
     SerializedProperty maxRangeProp;
     SerializedProperty sizeProp;
     SerializedProperty layermaskProp;
+    SerializedProperty raycastRangeProp;
 
     private void OnEnable() {
         // Linking the SerializedProperty with the actual class properties
@@ -23,6 +24,7 @@ public class SpellIndicatorDataEditor : Editor {
         sizeProp = serializedObject.FindProperty("Size");
         defaultTargetProp = serializedObject.FindProperty("TargetDefault");
         layermaskProp = serializedObject.FindProperty("LayerMask");
+        raycastRangeProp = serializedObject.FindProperty("RaycastRange");
     }
 
     public override void OnInspectorGUI() {
@@ -34,7 +36,9 @@ public class SpellIndicatorDataEditor : Editor {
 
         switch (targetType) {
             case IndicatorTargetType.None:
-                // No additional fields for None
+                EditorGUILayout.PropertyField(layermaskProp);
+                EditorGUILayout.PropertyField(maxRangeProp);
+                EditorGUILayout.PropertyField(raycastRangeProp);
                 break;
             case IndicatorTargetType.Target:
                 // Show fields for Target
@@ -45,6 +49,7 @@ public class SpellIndicatorDataEditor : Editor {
                 EditorGUILayout.PropertyField(maxRangeProp);
                 EditorGUILayout.PropertyField(sizeProp);
                 EditorGUILayout.PropertyField(layermaskProp);
+                EditorGUILayout.PropertyField(raycastRangeProp);
                 break;
             case IndicatorTargetType.Area:
                 // Show fields for Area
@@ -53,6 +58,7 @@ public class SpellIndicatorDataEditor : Editor {
                 EditorGUILayout.PropertyField(maxRangeProp);
                 EditorGUILayout.PropertyField(sizeProp);
                 EditorGUILayout.PropertyField(layermaskProp);
+                EditorGUILayout.PropertyField(raycastRangeProp);
                 break;
         }
 

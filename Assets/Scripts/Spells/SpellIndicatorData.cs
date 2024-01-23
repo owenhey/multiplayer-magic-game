@@ -26,6 +26,8 @@ namespace Spells {
     [CreateAssetMenu(fileName = "SpellIndicatorData", menuName = "Spell Indicator Data", order = 0)]
     public class SpellIndicatorData : ScriptableObject {
         public IndicatorTargetType TargetType;
+        public float RaycastRange = 50.0f;
+        public float MaximumRange = 10.0f;
         // None doesn't need any fields
         
         // Target needs these ones
@@ -40,7 +42,6 @@ namespace Spells {
         public IndicatorTypes Indicator;
         public LayerMask LayerMask;
         public float MinimumRange = 0;
-        public float MaximumRange = 10.0f;
         [Range(0, 5)] public float Size = 1.0f;
     }
 }

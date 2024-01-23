@@ -19,9 +19,8 @@ namespace PlayerScripts {
         public bool CanRegisterClick;
 
         private static readonly string AUTOCAST_TIMER_NAME = "indicator_autocast_timer";
-        private static readonly float DEFAULT_MAX_INDICATOR_DISTANCE = 50;
         public static float AUTOCAST_TIME = .5f;
-        public static float SPHERECAST_RADIUS = .5f;
+        private static float SPHERECAST_RADIUS = .5f;
 
         public Action<float> OnAutocastTick;
         public Action<bool> OnAutocastSet;    
@@ -44,7 +43,13 @@ namespace PlayerScripts {
             
             // Handle no indicator
             if (indicator.TargetType == IndicatorTargetType.None) {
-                HandleNoneIndicator();
+                var (didHit, ray, hitData) = GetRaycastData(_currentIndicatorData.LayerMask, _currentIndicatorData.RaycastRange);
+                Vector3 defaultTarget = ray.origin + ray.direction * _currentIndicatorData.RaycastRange;
+                if (didHit) {
+                    defaultTarget = hitData.point;
+                }
+                var noneTargetData = NoneSpellTargetBuilder(defaultTarget, ray, indicator);
+                _callback?.Invoke(noneTargetData);
                 ResetState();
                 return;
             }
@@ -63,14 +68,17 @@ namespace PlayerScripts {
             }
             _updateLoop?.Invoke();
         }
+        
+        private SpellTargetData NoneSpellTargetBuilder(Vector3 target, Ray ray, SpellIndicatorData data) {
+            // Clamp the targetPos
+            target = ClampPositionOfRayTarget(target, data);
 
-        private void HandleNoneIndicator() {
-            SpellTargetData targetData = new() {
-                TargetPlayerId = _player.OwnerId,
-                CameraRay = _player.PlayerReferences.PlayerCameraControls.Cam.ScreenPointToRay(Input.mousePosition)
+            return new SpellTargetData {
+                Cancelled = false,
+                TargetPosition = target,
+                CameraRay = ray,
+                TargetPlayerId = -1
             };
-            _callback?.Invoke(targetData);
-            _currentIndicator = null;
         }
 
         private void Update() {
@@ -79,9 +87,9 @@ namespace PlayerScripts {
         }
 
         private void AreaIndicatorUpdate() {
-            var (didHit, ray, hitData) = GetRaycastData(_currentIndicatorData.LayerMask);
+            var (didHit, ray, hitData) = GetRaycastData(_currentIndicatorData.LayerMask, _currentIndicatorData.RaycastRange);
             // Default ray in case you don't hit anything
-            Vector3 rayTarget = ray.origin + ray.direction * DEFAULT_MAX_INDICATOR_DISTANCE;
+            Vector3 rayTarget = ray.origin + ray.direction * _currentIndicatorData.RaycastRange;
             
             // Default to true (or false if Hide is on)
             bool showIndicator = !Hide;
@@ -112,12 +120,13 @@ namespace PlayerScripts {
         }
         
         private void TargetIndicatorUpdate() {
-            var (didHit, ray, hitData) = GetSpherecastData(_currentIndicatorData.LayerMask);
-            Vector3 rayTarget = ray.origin + ray.direction * DEFAULT_MAX_INDICATOR_DISTANCE;
+            var (didHit, ray, hitData) = GetSpherecastData(_currentIndicatorData.LayerMask, _currentIndicatorData.RaycastRange);
+            Vector3 rayTarget = ray.origin + ray.direction * _currentIndicatorData.RaycastRange;
             
             bool showIndicator = !Hide;
             Player playerTarget = null;
-            if (didHit) {
+            bool closeEnough = IsTargetWithinRange(rayTarget, _currentIndicatorData);
+            if (didHit && closeEnough) {
                 // Try to get the player collider
                 if (hitData.collider.TryGetComponent(out PlayerCollider c)) {
                     // Can target local player?
@@ -174,16 +183,16 @@ namespace PlayerScripts {
             }
         }
 
-        private (bool, Ray, RaycastHit) GetRaycastData(LayerMask layerMask, Vector3? mousePos = null) {
+        private (bool, Ray, RaycastHit) GetRaycastData(LayerMask layerMask, float maxRange, Vector3? mousePos = null) {
             Vector3 mousePosition = mousePos == null ? Input.mousePosition : mousePos.Value;
             Ray ray = _player.PlayerReferences.PlayerCameraControls.Cam.ScreenPointToRay(mousePosition);
-            return (Physics.Raycast(ray, out RaycastHit hit, 50, layerMask), ray, hit);
+            return (Physics.Raycast(ray, out RaycastHit hit, maxRange, layerMask), ray, hit);
         }
         
-        private (bool, Ray, RaycastHit) GetSpherecastData(LayerMask layerMask, Vector3? mousePos = null) {
+        private (bool, Ray, RaycastHit) GetSpherecastData(LayerMask layerMask, float maxRange, Vector3? mousePos = null) {
             Vector3 mousePosition = mousePos == null ? Input.mousePosition : mousePos.Value;
             Ray ray = _player.PlayerReferences.PlayerCameraControls.Cam.ScreenPointToRay(mousePosition);
-            return (Physics.SphereCast(ray, SPHERECAST_RADIUS, out RaycastHit hit, 50, layerMask), ray, hit);
+            return (Physics.SphereCast(ray, SPHERECAST_RADIUS, out RaycastHit hit, maxRange, layerMask), ray, hit);
         }
 
         /// <summary>
@@ -205,10 +214,10 @@ namespace PlayerScripts {
             if (mousePos == null) mousePos = Input.mousePosition;
             
             if (indicator.TargetType == IndicatorTargetType.Area) {
-                var (didHit, ray, hitData) = GetRaycastData(indicator.LayerMask, mousePos);
+                var (didHit, ray, hitData) = GetRaycastData(indicator.LayerMask, indicator.RaycastRange, mousePos);
+                Vector3 targetPos = ray.origin + ray.direction.normalized * indicator.RaycastRange;
                 
                 // Clamp the magnitude of the positioning
-                Vector3 targetPos = GetDefaultPositionOfIndicator(ray);
                 if (didHit) targetPos = hitData.point;
                 Vector3 clampedPoint = ClampPositionOfRayTarget(targetPos, indicator);
 
@@ -222,10 +231,13 @@ namespace PlayerScripts {
                 return targetData;
             }
             else if (indicator.TargetType == IndicatorTargetType.Target) {
-                var (didHit, ray, hitData) = GetSpherecastData(indicator.LayerMask, mousePos);
-                Vector3 rayTarget = ray.origin + ray.direction * DEFAULT_MAX_INDICATOR_DISTANCE;
+                var (didHit, ray, hitData) = GetSpherecastData(indicator.LayerMask, indicator.RaycastRange, mousePos);
+                Vector3 rayTarget = ray.origin + ray.direction * indicator.RaycastRange;
+                if (didHit) rayTarget = hitData.point;
+                
+                bool closeEnough = IsTargetWithinRange(rayTarget, indicator);
                 Player playerTarget = null;
-                if (didHit) {
+                if (didHit && closeEnough) {
                     // Try to get the player collider
                     if (hitData.collider.TryGetComponent(out PlayerCollider c)) {
                         bool canTargetSelf = indicator.PossibleTargets.HasFlag(SpellTargets.Self);
@@ -241,6 +253,12 @@ namespace PlayerScripts {
 
                 var targetData = TargetSpellTargetBuilder(rayTarget, ray, playerTarget);
                 return targetData;
+            }
+            else if (indicator.TargetType == IndicatorTargetType.None) {
+                var (didHit, ray, hitData) = GetRaycastData(indicator.LayerMask, indicator.RaycastRange, mousePos);
+                Vector3 targetPos = ray.origin + ray.direction.normalized * indicator.RaycastRange;
+                if (didHit) targetPos = hitData.point;
+                return NoneSpellTargetBuilder(targetPos, ray, indicator);
             }
 
             return null;
@@ -271,7 +289,7 @@ namespace PlayerScripts {
         }
 
         private Vector3 ClampPositionOfRayTarget(Vector3 currentTarget, SpellIndicatorData indicator) {
-            Vector3 playerPos = _playerReferences.GetPlayerPosition();
+            Vector3 playerPos = _playerReferences.GetPlayerPosition() + Vector3.up;
             float distanceFromPlayer = (playerPos - currentTarget).magnitude;
             Vector3 point = currentTarget;
             if (distanceFromPlayer > indicator.MaximumRange) {
@@ -283,8 +301,15 @@ namespace PlayerScripts {
             return point;
         }
 
-        private Vector3 GetDefaultPositionOfIndicator(Ray ray) {
-            return ray.origin + ray.direction * DEFAULT_MAX_INDICATOR_DISTANCE;
+        private bool IsTargetWithinRange(Vector3 currentTarget, SpellIndicatorData indicator) {
+            Vector3 playerPos = _playerReferences.GetPlayerPosition() + Vector3.up;
+            float distanceFromPlayer = (playerPos - currentTarget).magnitude;
+            Vector3 point = currentTarget;
+            return distanceFromPlayer > indicator.MaximumRange;
+        }
+
+        private Vector3 GetDefaultPositionOfIndicator(Ray ray, float maxDis) {
+            return ray.origin + ray.direction * maxDis;
         }
 
         protected override void OnClientStart(bool isOwner) {

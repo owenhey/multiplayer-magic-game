@@ -12893,6 +12893,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 061618cc6aa12df41824b159e1093763, type: 2}
   - {fileID: 11400000, guid: b5269cd9971f5470e8196e681df7c7e2, type: 2}
   - {fileID: 11400000, guid: f63ca8a7391f807479afa09aafba6a16, type: 2}
+  - {fileID: 11400000, guid: f4612b592fc787d4b9c0a81a82a37e44, type: 2}
   _castingType: 0
 --- !u!114 &2092327897885649139
 MonoBehaviour:
@@ -13376,7 +13377,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 9e5dbda77b2320743805f38ec80575c3, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.15
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -16766,6 +16767,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6241540244220695615, guid: ce9cfb2fd569b68418a15a6cd47892d8,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 2.393787
+      objectReference: {fileID: 0}
+    - target: {fileID: 6241540244220695615, guid: ce9cfb2fd569b68418a15a6cd47892d8,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 2.4159088
+      objectReference: {fileID: 0}
+    - target: {fileID: 6241540244220695615, guid: ce9cfb2fd569b68418a15a6cd47892d8,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.027160645
+      objectReference: {fileID: 0}
+    - target: {fileID: 6241540244220695615, guid: ce9cfb2fd569b68418a15a6cd47892d8,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.018606007
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
