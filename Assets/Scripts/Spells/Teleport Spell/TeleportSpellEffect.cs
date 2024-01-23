@@ -10,6 +10,7 @@ namespace Spells {
         private bool _warped = false;
         private bool _unTwirled = false;
         private PlayerStateManager _stateManager;
+        private Vector3 _direction;
         
         protected override bool CastOnSelf() => true;
         
@@ -31,10 +32,12 @@ namespace Spells {
             if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Environment"))) {
                 _spellCastData.TargetData.TargetPosition = hit.point;
             }
+
+            _direction = _spellCastData.TargetData.TargetPosition - _targetPlayer.PlayerReferences.GetPlayerPosition();
             
             _stateManager = _targetPlayer.PlayerReferences.PlayerStateManager;
             _stateManager.AddState(PlayerState.Teleporting);
-            _targetPlayer.PlayerReferences.PlayerModel.AnimateTwirl(true);
+            _targetPlayer.PlayerReferences.PlayerModel.AnimateTwirl(true, _direction);
         }
 
         protected override void OnSpellTick(float percent, float remainingDuration) {
@@ -43,7 +46,7 @@ namespace Spells {
                 _targetPlayer.PlayerReferences.PlayerMovement.Warp(_spellCastData.TargetData.TargetPosition);
             }
             else if (!_unTwirled && percent > .9f) { // %90 way through, allow movement again
-                _targetPlayer.PlayerReferences.PlayerModel.AnimateTwirl(false);
+                _targetPlayer.PlayerReferences.PlayerModel.AnimateTwirl(false, _direction);
                 _unTwirled = true;
                
                 // _stateManager.RemoveState(PlayerState.Teleporting);

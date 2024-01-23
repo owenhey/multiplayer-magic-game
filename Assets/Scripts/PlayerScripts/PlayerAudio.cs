@@ -9,6 +9,7 @@ namespace PlayerScripts {
         [SerializeField] private AudioSource _apparateStart;
         [SerializeField] private AudioSource _apparateEnd;
         [SerializeField] private AudioSource _messUpSpell;
+        [SerializeField] private AudioSource _healSound;
 
         private PlayerModel _playerModel;
         private PlayerSpells _playerSpells;
@@ -22,11 +23,17 @@ namespace PlayerScripts {
         private void OnEnable() {
             _playerModel.OnTwirl += PlayApparateSound;
             _playerSpells.OnSpellMessUp += PlaySpellMessUp;
+            _playerModel.OnHealSpell += PlayHealSound;
         }
 
         private void OnDisable() {
             _playerModel.OnTwirl -= PlayApparateSound;
             _playerSpells.OnSpellMessUp -= PlaySpellMessUp;
+            _playerModel.OnHealSpell -= PlayHealSound;
+        }
+
+        private void PlayHealSound() {
+            _healSound.Play();
         }
 
         private void PlayApparateSound(bool start) {

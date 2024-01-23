@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Player
+  m_Name: _PlayerMatMMG
   m_Shader: {fileID: 4800000, guid: bf7776cc186ac3f41b394e390318469b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -152,7 +152,7 @@ Material:
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _Twirl: 0
-    - _TwirlAmount: 2.06
+    - _TwirlAmount: 0.06
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
@@ -174,5 +174,5 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OverrideColor: {r: 766.99615, g: 766.99615, b: 766.99615, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _TwirlCenterWorldSpace: {r: 0, g: 1.5, b: 0, a: 0}
+    - _TwirlCenterWorldSpace: {r: 1.5, g: 1.5, b: 5, a: 0}
   m_BuildTextureStacks: []

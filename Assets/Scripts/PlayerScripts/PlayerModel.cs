@@ -127,38 +127,40 @@ namespace PlayerScripts {
         }
 
         [Client(Logging = LoggingType.Error)]
-        public void AnimateTwirl(bool start) {
+        public void AnimateTwirl(bool start, Vector3 direction) {
             // Start it locally
-            StartTwirl(start);
+            StartTwirl(start, direction);
             
             // Send to server to tell others to do it too
-            ServerAnimateTwirl(start);
+            ServerAnimateTwirl(start, direction);
         }
 
         [ServerRpc]
-        private void ServerAnimateTwirl(bool start) {
+        private void ServerAnimateTwirl(bool start, Vector3 direction) {
             // Don't need to do this on the server, but why not
-            StartTwirl(start);
+            StartTwirl(start, direction);
 
-            ClientAnimateTwirl(start);
+            ClientAnimateTwirl(start, direction);
         }
 
         [ObserversRpc(ExcludeOwner = true)]
-        private void ClientAnimateTwirl(bool start) {
-            StartTwirl(start);
+        private void ClientAnimateTwirl(bool start, Vector3 direction) {
+            StartTwirl(start, direction);
         }
 
-        private void StartTwirl(bool start) {
+        private void StartTwirl(bool start, Vector3 direction) {
             if (start) {
-                _playerMat.SetVector(_twirlCenterWorldSpace, PlayerBody.transform.position);
+                Vector3 startPosition = PlayerBody.transform.position + (Vector3.up * .5f) + (direction.normalized * .5f);
+                _playerMat.SetVector(_twirlCenterWorldSpace, startPosition);
                 _playerMat.SetInt(_twirl, 1);
-                PlayerBody.DOScale(Vector3.zero, .15f).SetDelay(.15f);
-                _playerMat.DOFloat(20, _twirlAmount, .25f);
+                PlayerBody.DOScale(Vector3.zero, .15f).SetDelay(.1f);
+                _playerMat.DOFloat(25, _twirlAmount, .18f);
             }
             else {
-                _playerMat.SetVector(_twirlCenterWorldSpace, PlayerBody.transform.position);
-                PlayerBody.DOScale(Vector3.one, .15f);
-                _playerMat.DOFloat(0, _twirlAmount, .25f).OnComplete(() => {
+                Vector3 endPosition = PlayerBody.transform.position + (Vector3.up * .5f) + (direction.normalized * .5f);
+                _playerMat.SetVector(_twirlCenterWorldSpace, endPosition);
+                PlayerBody.DOScale(Vector3.one, .2f);
+                _playerMat.DOFloat(0, _twirlAmount, .2f).OnComplete(() => {
                     _playerMat.SetInt(_twirl, 0);
                 });
             }
