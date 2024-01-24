@@ -10,6 +10,7 @@ namespace Spells {
     /// </summary>
     public abstract class PlayerOverrideSpellEffect : SpellEffectBase {
         protected Player _targetPlayer;
+        protected float _duration;
         
         protected abstract void OnSpellStart();
 
@@ -21,13 +22,14 @@ namespace Spells {
             return _spellCastData.SpellDefinition.GetAttributeValue("duration");
         }
 
-        protected abstract bool CastOnSelf();
+        protected virtual bool AllowDuplicates() => true;
 
         public void BeginSpell() {
-            _targetPlayer = Player.GetPlayerFromClientId(CastOnSelf() ? _spellCastData.CastingPlayerId : _spellCastData.TargetData.TargetPlayerId);
+            _duration = GetDuration();
+            _targetPlayer = Player.GetPlayerFromClientId(_spellCastData.TargetData.TargetPlayerId);
             OnSpellStart();
-            // TODO: FIX this so it can be used over the network
-            _targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer($"spell_effect_{_spellCastData.SpellDefinition.SpellName}", false, GetDuration(), OnSpellEnd, OnSpellTick);
+            // This might only be happening locally
+            _targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer($"spell_effect_{_spellCastData.SpellDefinition.SpellName}", AllowDuplicates(), _duration, OnSpellEnd, OnSpellTick);
         }
     }
 }

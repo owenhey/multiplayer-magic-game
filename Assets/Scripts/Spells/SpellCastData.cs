@@ -24,6 +24,7 @@ namespace Spells {
         public bool Cancelled;
         public Vector3 TargetPosition;
         public Ray CameraRay;
+        public Vector2 ScreenSpacePosition;
         public int TargetPlayerId;
     }
 }

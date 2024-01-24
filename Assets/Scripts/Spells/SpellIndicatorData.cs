@@ -5,7 +5,8 @@ namespace Spells {
     public enum IndicatorTargetType {
         None,
         Target,
-        Area
+        Area,
+        Ground
     }
 
     [System.Flags]
@@ -38,10 +39,12 @@ namespace Spells {
         // Area need these
         [Space(20)]  
         
-        // Both target and area need these
+        // Everything needs these
         public IndicatorTypes Indicator;
         public LayerMask LayerMask;
         public float MinimumRange = 0;
-        [Range(0, 5)] public float Size = 1.0f;
+        public Vector3 Size = new Vector3(1,1,1);
+        
+        
     }
 }

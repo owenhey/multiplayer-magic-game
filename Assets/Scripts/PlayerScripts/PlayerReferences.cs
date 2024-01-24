@@ -20,6 +20,7 @@ namespace PlayerScripts {
         [field:SerializeField] public PlayerPrefabSpawner PlayerPrefabSpawner { get; private set; }
         
         [field:SerializeField] public PlayerCameraControls PlayerCameraControls { get; private set; }
+        [field:SerializeField] public PlayerStatuses PlayerStatus { get; private set; }
         
         
         protected override void OnClientStart(bool isOwner) {

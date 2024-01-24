@@ -7,6 +7,8 @@ using Visuals;
 
 namespace PlayerScripts {
     public class PlayerSpellIndicatorHandler : LocalPlayerScript {
+        [SerializeField] private LayerMask _groundLayerMask;
+        
         private PlayerReferences _playerReferences;
         private IIndicator _currentIndicator;
         private SpellIndicatorData _currentIndicatorData;
@@ -48,7 +50,7 @@ namespace PlayerScripts {
                 if (didHit) {
                     defaultTarget = hitData.point;
                 }
-                var noneTargetData = NoneSpellTargetBuilder(defaultTarget, ray, indicator);
+                var noneTargetData = NoneSpellTargetBuilder(defaultTarget, ray, Input.mousePosition, indicator);
                 _callback?.Invoke(noneTargetData);
                 ResetState();
                 return;
@@ -56,12 +58,15 @@ namespace PlayerScripts {
 
             _currentIndicator.ResetIndicator();
             // Set update loop
-            switch (indicator.Indicator) {
-                case IndicatorTypes.Sphere:
+            switch (indicator.TargetType) {
+                case IndicatorTargetType.Area:
                     _updateLoop = AreaIndicatorUpdate;
                     break;
-                case IndicatorTypes.TargetPlayer:
+                case IndicatorTargetType.Target:
                     _updateLoop = TargetIndicatorUpdate;
+                    break;
+                case IndicatorTargetType.Ground:
+                    _updateLoop = GroundIndicatorUpdate;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -69,7 +74,7 @@ namespace PlayerScripts {
             _updateLoop?.Invoke();
         }
         
-        private SpellTargetData NoneSpellTargetBuilder(Vector3 target, Ray ray, SpellIndicatorData data) {
+        private SpellTargetData NoneSpellTargetBuilder(Vector3 target, Ray ray, Vector2 screenPos, SpellIndicatorData data) {
             // Clamp the targetPos
             target = ClampPositionOfRayTarget(target, data);
 
@@ -77,7 +82,8 @@ namespace PlayerScripts {
                 Cancelled = false,
                 TargetPosition = target,
                 CameraRay = ray,
-                TargetPlayerId = -1
+                ScreenSpacePosition = screenPos / new Vector2(Screen.width, Screen.height),
+                TargetPlayerId = _player.OwnerId // These default to the target being the casting player
             };
         }
 
@@ -91,31 +97,68 @@ namespace PlayerScripts {
             // Default ray in case you don't hit anything
             Vector3 rayTarget = ray.origin + ray.direction * _currentIndicatorData.RaycastRange;
             
-            // Default to true (or false if Hide is on)
             bool showIndicator = !Hide;
             if (didHit) {
-                showIndicator = true;
                 rayTarget = hitData.point;
-
-                // Calculate the maxmium distance
-                Vector3 clampedPosition = ClampPositionOfRayTarget(hitData.point, _currentIndicatorData);
-                _currentIndicator?.SetPosition(clampedPosition);
+                Debug.Log($"Fireball indicator here: " + rayTarget);
             }
+            rayTarget = ClampPositionOfRayTarget(rayTarget, _currentIndicatorData);
+            _currentIndicator?.SetPosition(rayTarget);
             _currentIndicator.SetActive(showIndicator);
             
             // Builder for targeting
-            BuildSpellTargetDataDelegate builder = () => AreaSpellTargetBuilder(rayTarget, ray);
+            BuildSpellTargetDataDelegate builder = () => AreaSpellTargetBuilder(rayTarget, ray, Input.mousePosition);
 
             // Check for the click
             CheckForClick(builder);
         }
 
-        private SpellTargetData AreaSpellTargetBuilder(Vector3 rayTarget, Ray ray) {
+        private SpellTargetData AreaSpellTargetBuilder(Vector3 rayTarget, Ray ray, Vector2 screenPos) {
             return new SpellTargetData {
                 Cancelled = false,
                 TargetPosition = rayTarget,
                 CameraRay = ray,
-                TargetPlayerId = -1
+                ScreenSpacePosition = screenPos /  new Vector2(Screen.width, Screen.height),
+                TargetPlayerId = _player.OwnerId
+            };
+        }
+        
+        private void GroundIndicatorUpdate() {
+            var (didHit, ray, hitData) = GetRaycastData(_currentIndicatorData.LayerMask, _currentIndicatorData.RaycastRange);
+            // Default ray in case you don't hit anything
+            Vector3 rayTarget = ray.origin + ray.direction * _currentIndicatorData.RaycastRange;
+            
+            // Default to true (or false if Hide is on)
+            bool showIndicator = !Hide;
+            // Calculate the maxmium distance
+            if (didHit) {
+                rayTarget = hitData.point;
+            }
+            rayTarget = ClampPositionOfRayTarget(rayTarget, _currentIndicatorData);
+            
+            // Send another ray straight down to collide with the environment
+            Ray groundedRay = new Ray(rayTarget + Vector3.up, Vector3.down);
+            if (Physics.Raycast(groundedRay, out RaycastHit hit, 50, _groundLayerMask)) {
+                rayTarget = hit.point;
+            }
+            
+            _currentIndicator?.SetPosition(rayTarget);
+            _currentIndicator.SetActive(showIndicator);
+            
+            // Builder for targeting
+            BuildSpellTargetDataDelegate builder = () => GroundSpellTargetBuilder(rayTarget, ray, Input.mousePosition);
+
+            // Check for the click
+            CheckForClick(builder);
+        }
+
+        private SpellTargetData GroundSpellTargetBuilder(Vector3 rayTarget, Ray ray, Vector2 screenPos) {
+            return new SpellTargetData {
+                Cancelled = false,
+                TargetPosition = rayTarget,
+                CameraRay = ray,
+                ScreenSpacePosition = screenPos /  new Vector2(Screen.width, Screen.height),
+                TargetPlayerId = _player.OwnerId
             };
         }
         
@@ -148,17 +191,18 @@ namespace PlayerScripts {
             _currentIndicator.SetPlayer(playerTarget);
 
             // Spell creator for targeting
-            BuildSpellTargetDataDelegate builder = () => TargetSpellTargetBuilder(rayTarget, ray, playerTarget);
+            BuildSpellTargetDataDelegate builder = () => TargetSpellTargetBuilder(rayTarget, ray, playerTarget, Input.mousePosition);
 
             // Check for click
             CheckForClick(builder);
         }
 
-        private SpellTargetData TargetSpellTargetBuilder(Vector3 rayTarget, Ray ray, Player player) {
+        private SpellTargetData TargetSpellTargetBuilder(Vector3 rayTarget, Ray ray, Player player, Vector2 screenPos) {
             return new SpellTargetData {
                 Cancelled = player == null,
                 TargetPosition = rayTarget,
                 CameraRay = ray,
+                ScreenSpacePosition = screenPos / new Vector2(Screen.width, Screen.height),
                 TargetPlayerId = player != null ? player.OwnerId : -1
             };
         }
@@ -219,16 +263,9 @@ namespace PlayerScripts {
                 
                 // Clamp the magnitude of the positioning
                 if (didHit) targetPos = hitData.point;
-                Vector3 clampedPoint = ClampPositionOfRayTarget(targetPos, indicator);
+                targetPos = ClampPositionOfRayTarget(targetPos, indicator);
 
-                var targetData = new SpellTargetData {
-                    Cancelled = false,
-                    TargetPosition = clampedPoint,
-                    CameraRay = ray,
-                    TargetPlayerId = 0
-                };
-
-                return targetData;
+                return AreaSpellTargetBuilder(targetPos, ray, mousePos.Value);
             }
             else if (indicator.TargetType == IndicatorTargetType.Target) {
                 var (didHit, ray, hitData) = GetSpherecastData(indicator.LayerMask, indicator.RaycastRange, mousePos);
@@ -251,14 +288,29 @@ namespace PlayerScripts {
                     playerTarget = _player;
                 }
 
-                var targetData = TargetSpellTargetBuilder(rayTarget, ray, playerTarget);
+                var targetData = TargetSpellTargetBuilder(rayTarget, ray, playerTarget, mousePos.Value);
                 return targetData;
             }
             else if (indicator.TargetType == IndicatorTargetType.None) {
                 var (didHit, ray, hitData) = GetRaycastData(indicator.LayerMask, indicator.RaycastRange, mousePos);
                 Vector3 targetPos = ray.origin + ray.direction.normalized * indicator.RaycastRange;
                 if (didHit) targetPos = hitData.point;
-                return NoneSpellTargetBuilder(targetPos, ray, indicator);
+                return NoneSpellTargetBuilder(targetPos, ray,  mousePos.Value, indicator);
+            }
+            else if (indicator.TargetType == IndicatorTargetType.Ground) {
+                var (didHit, ray, hitData) = GetRaycastData(indicator.LayerMask, indicator.RaycastRange, mousePos);
+                Vector3 targetPos = ray.origin + ray.direction.normalized * indicator.RaycastRange;
+                
+                // Clamp the magnitude of the positioning
+                if (didHit) targetPos = hitData.point;
+                targetPos = ClampPositionOfRayTarget(targetPos, indicator);
+                
+                Ray groundedRay = new Ray(targetPos + Vector3.up, Vector3.down);
+                if (Physics.Raycast(groundedRay, out RaycastHit hit, 50, _groundLayerMask)) {
+                    targetPos = hit.point;
+                }
+
+                return GroundSpellTargetBuilder(targetPos, ray, mousePos.Value);
             }
 
             return null;
@@ -304,8 +356,7 @@ namespace PlayerScripts {
         private bool IsTargetWithinRange(Vector3 currentTarget, SpellIndicatorData indicator) {
             Vector3 playerPos = _playerReferences.GetPlayerPosition() + Vector3.up;
             float distanceFromPlayer = (playerPos - currentTarget).magnitude;
-            Vector3 point = currentTarget;
-            return distanceFromPlayer > indicator.MaximumRange;
+            return distanceFromPlayer <= indicator.MaximumRange;
         }
 
         private Vector3 GetDefaultPositionOfIndicator(Ray ray, float maxDis) {

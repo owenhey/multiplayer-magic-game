@@ -26,6 +26,7 @@ namespace PlayerScripts {
         private static readonly int _velY = Animator.StringToHash("VelY");
         private static readonly int _isMoving = Animator.StringToHash("isMoving");
         private static readonly int _isSprinting = Animator.StringToHash("isSprinting");
+        private static readonly int _isStunned = Animator.StringToHash("isStunned");
 
         // Automatic update values
         
@@ -75,6 +76,13 @@ namespace PlayerScripts {
 
         protected override void OnClientStart(bool isOwner) {
             ManuallyUpdate = isOwner; // Only manually update when you are the owner
+
+            _player.PlayerReferences.PlayerStatus.OnSetMovementSpeedMultiplier += x => SetAnimationSpeed(x);
+            _player.PlayerReferences.PlayerStatus.OnSetStunned += HandleStunnedStatus;
+        }
+
+        private void HandleStunnedStatus(bool stunned) {
+            _animator.SetBool(_isStunned, stunned);
         }
     }
 }

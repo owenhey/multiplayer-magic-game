@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -78,10 +79,10 @@ namespace Spells {
             _spawnSound.Play();
             float speed = _initData.SpellDefinition.GetAttributeValue("speed");
 
-            Vector3 targetAfter5Seconds = _initData.Direction.direction.normalized * (speed * 3.0f);
+            Vector3 targetAfter3Seconds = _initData.Position + _initData.Direction.direction.normalized * (speed * 3.0f);
             
             _contentTransform.DOScale(Vector3.one, .5f).From(Vector3.zero);
-            _contentTransform.DOMove(targetAfter5Seconds, 2.5f).SetDelay(.5f).SetEase(Ease.Linear).OnComplete(() => {
+            _contentTransform.DOMove(targetAfter3Seconds, 2.5f).SetDelay(.5f).SetEase(Ease.Linear).OnComplete(() => {
                 _fireballEffect.Stop();
             });
 
@@ -133,6 +134,11 @@ namespace Spells {
         private void DespawnObject() {
             // Only on server
             Despawn(gameObject);
+        }
+
+        private void OnDrawGizmos() {
+            Gizmos.DrawRay(_initData.Direction);
+            Gizmos.DrawSphere(_initData.Position, 1);
         }
 
         [ObserversRpc]

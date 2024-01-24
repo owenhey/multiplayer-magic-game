@@ -3961,6 +3961,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3221139974834353332}
   - component: {fileID: 7268911732262308109}
+  - component: {fileID: 4941720875359105551}
   m_Layer: 6
   m_Name: AutocastIndicator
   m_TagString: Untagged
@@ -4003,6 +4004,18 @@ MonoBehaviour:
   _playerCanvas: {fileID: 314538409066721412}
   _indicatorHandler: {fileID: -8941229978140903528}
   _sprite: {fileID: 2885648615511571997}
+--- !u!225 &4941720875359105551
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574607339666618369}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1600882403058569439
 GameObject:
   m_ObjectHideFlags: 0
@@ -7215,6 +7228,7 @@ GameObject:
   m_Component:
   - component: {fileID: 745677594320963183}
   - component: {fileID: 7726102406009696389}
+  - component: {fileID: 4706979724392762930}
   m_Layer: 6
   m_Name: BottomHUD
   m_TagString: Untagged
@@ -7250,6 +7264,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3529904157820068038}
   m_CullTransparentMesh: 1
+--- !u!225 &4706979724392762930
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3529904157820068038}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &3593655420275323000
 GameObject:
   m_ObjectHideFlags: 0
@@ -12409,7 +12435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be2d6d52cf143d040929aac0606574bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 5
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _player: {fileID: 8286632864543236906}
@@ -12418,7 +12444,6 @@ MonoBehaviour:
   _isSprinting: 0
   _moveSpeed: 4.5
   _sprintSpeed: 7
-  SpeedMultiplier: 1
   _forwardMovementSpeedFactor:
     serializedVersion: 2
     m_Curve:
@@ -12526,7 +12551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 6
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _componentConfiguration: 0
@@ -12671,6 +12696,7 @@ GameObject:
   - component: {fileID: 8286632864543236906}
   - component: {fileID: 1056872705930149825}
   - component: {fileID: 8975781504269218941}
+  - component: {fileID: 672021032283539339}
   - component: {fileID: 9214829115622678224}
   - component: {fileID: 3726133492282219349}
   - component: {fileID: 2971408110657330839}
@@ -12755,6 +12781,7 @@ MonoBehaviour:
   <PlayerStats>k__BackingField: {fileID: 5901419383538486834}
   <PlayerPrefabSpawner>k__BackingField: {fileID: 6230999115221547090}
   <PlayerCameraControls>k__BackingField: {fileID: 3515319197144848206}
+  <PlayerStatus>k__BackingField: {fileID: 672021032283539339}
 --- !u!114 &8975781504269218941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12779,6 +12806,24 @@ MonoBehaviour:
   PlayerIndicators: {fileID: -8941229978140903528}
   CameraControls: {fileID: 3515319197144848206}
   ShowStateCounts: 1
+--- !u!114 &672021032283539339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6987246984701191043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5652174595045ed9e6024712a1d3490, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 3726133492282219349}
+  _networkObjectCache: {fileID: 3726133492282219349}
+  _player: {fileID: 8286632864543236906}
+  _playerTimers: {fileID: 2092327897885649139}
+  <StatusList>k__BackingField: []
 --- !u!114 &9214829115622678224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12791,7 +12836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 584913d91030cdb4fbf6ee5d86d1f415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 1
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _player: {fileID: 8286632864543236906}
@@ -12818,6 +12863,7 @@ MonoBehaviour:
   <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
   - {fileID: 8286632864543236906}
+  - {fileID: 672021032283539339}
   - {fileID: 9214829115622678224}
   - {fileID: 6230999115221547090}
   - {fileID: 5901419383538486834}
@@ -12870,6 +12916,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
+  _groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   Hide: 0
   CanRegisterClick: 0
 --- !u!114 &-5970099899597951696
@@ -12921,7 +12970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c650b2006893a4337acf9a7b18e52fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _player: {fileID: 8286632864543236906}
@@ -12947,7 +12996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d288f84faa159af438368a7899163047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 3
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _player: {fileID: 8286632864543236906}
@@ -12980,7 +13029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7d22a0ce2207d445850660a84a29cb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 4
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _player: {fileID: 8286632864543236906}
@@ -15062,6 +15111,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7096845395606940137}
   - component: {fileID: 3665704814427312589}
+  - component: {fileID: 7319647334336924390}
   m_Layer: 6
   m_Name: InteractUI
   m_TagString: Untagged
@@ -15105,6 +15155,18 @@ MonoBehaviour:
   _playerCanvas: {fileID: 314538409066721412}
   _indicator: {fileID: 5436515374460517737}
   _horizontalOffset: 25
+--- !u!225 &7319647334336924390
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8538173822814211531}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &8600576419835009050
 GameObject:
   m_ObjectHideFlags: 0
@@ -15211,6 +15273,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1054017037203147187}
+  - component: {fileID: 7530043475702308116}
   m_Layer: 6
   m_Name: Center HUD
   m_TagString: Untagged
@@ -15238,6 +15301,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &7530043475702308116
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8606425988679518264}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &8621267947670487312
 GameObject:
   m_ObjectHideFlags: 0
@@ -16767,6 +16842,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4310450441223571859, guid: ce9cfb2fd569b68418a15a6cd47892d8,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6241540244220695615, guid: ce9cfb2fd569b68418a15a6cd47892d8,
         type: 3}

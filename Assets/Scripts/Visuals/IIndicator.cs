@@ -10,7 +10,7 @@ namespace Visuals {
         Transform GetTransform();
         void SetPlayer(Player player);
         void SetPosition(Vector3 position);
-        void SetSize(float size);
+        void SetSize(Vector3 size);
         void SetValid(bool valid);
         void SetActive(bool active);
     }

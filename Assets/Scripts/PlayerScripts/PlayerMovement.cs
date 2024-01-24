@@ -18,7 +18,6 @@ namespace PlayerScripts {
         [Header("Stats")]
             [SerializeField] private float _moveSpeed = 4;
             [SerializeField] private float _sprintSpeed = 6;
-            [FormerlySerializedAs("_speedModifier")] [ReadOnly] public float SpeedMultiplier = 1;
             [Tooltip("Based on the dot between the forward vector and the desired direction, what percentage of the max speed you get.")]
             [SerializeField] private AnimationCurve _forwardMovementSpeedFactor;
             [SerializeField] private float _rotateSpeed = 360;
@@ -33,6 +32,8 @@ namespace PlayerScripts {
         private InputData _inputData = new();
         private Transform _cam;
         private Transform _ccTrans;
+        private float _speedMultiplier = 1;
+        private bool _stunned = false;
 
         private Vector3 _knockbackVector;
 
@@ -49,6 +50,20 @@ namespace PlayerScripts {
             }
             else {
                 enabled = false;
+            }
+            
+            // Sub to client events
+            if (isOwner) {
+                _refs.PlayerStatus.OnSetMovementSpeedMultiplier += HandleMovementSpeedStatus;
+                _refs.PlayerStatus.OnSetStunned += HandleStunnedStatus;
+            }
+        }
+
+        public override void OnStopClient() {
+            base.OnStopClient();
+            if (IsOwner) {
+                _refs.PlayerStatus.OnSetMovementSpeedMultiplier -= HandleMovementSpeedStatus;
+                _refs.PlayerStatus.OnSetStunned -= HandleStunnedStatus;
             }
         }
 
@@ -146,7 +161,7 @@ namespace PlayerScripts {
         }
 
         private Vector3 GetTargetLookDirection(){
-            if(_inputData.wasd == Vector2.zero) return _ccTrans.forward;
+            if(_inputData.wasd == Vector2.zero || _stunned) return _ccTrans.forward;
 
             return _refs.PlayerCameraControls.CamHorizontal;
         }
@@ -172,7 +187,7 @@ namespace PlayerScripts {
                     _inputData.wasd = Vector2.up;
                     Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
                     movementVector += _ccTrans.TransformDirection(wasdInputVector3) * _sprintSpeed;
-                    movementVector *= SpeedMultiplier;
+                    movementVector *= _stunned ? 0 : _speedMultiplier;
                     _isSprinting = true;
                 }
             }
@@ -182,7 +197,7 @@ namespace PlayerScripts {
                 float finalSpeed = _moveSpeed * _forwardMovementSpeedFactor.Evaluate(dotValue);
                 Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
                 movementVector += _ccTrans.TransformDirection(wasdInputVector3) * finalSpeed;
-                movementVector *= SpeedMultiplier;
+                movementVector *= _stunned ? 0 : _speedMultiplier;
             }
         }
 
@@ -193,6 +208,14 @@ namespace PlayerScripts {
 
         private Vector3 GetMovementVectorStart() {
             return Vector3.zero;
+        }
+
+        private void HandleMovementSpeedStatus(float factor) {
+            _speedMultiplier = factor;
+        }
+        
+        private void HandleStunnedStatus(bool stunned) {
+            _stunned = stunned;
         }
 
         public InputData GetInputData(){

@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d6938eb0908499bb95b72dcbaa14ba8, type: 3}
-  m_Name: Small Circle
+  m_Name: Fire Strike
   m_EditorClassIdentifier: 
-  TargetType: 2
+  TargetType: 3
+  RaycastRange: 30
+  MaximumRange: 20
   PossibleTargets: 0
   TargetDefault: 0
-  Indicator: 0
+  Indicator: 2
   LayerMask:
     serializedVersion: 2
     m_Bits: 640
   MinimumRange: 0
-  MaximumRange: 25
-  Size: 1
+  Size: {x: 2.5, y: 3, z: 2.5}

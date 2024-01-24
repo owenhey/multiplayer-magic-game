@@ -4,7 +4,7 @@ using PlayerScripts;
 using UnityEngine;
 
 namespace Visuals{
-    public class SphereIndicator : MonoBehaviour, IIndicator {
+    public class CylinderIndicator : MonoBehaviour, IIndicator {
         [SerializeField] private Color _validColor;
         [SerializeField] private Color _invalidColor;
         
@@ -34,7 +34,8 @@ namespace Visuals{
         public void SetSize(Vector3 size) {
             transform.localScale = size;
         }
-        
+
+
         public void SetValid(bool valid) {
             _copiedMaterial.SetColor("_MainColor", valid ? _validColor : _invalidColor);
         }

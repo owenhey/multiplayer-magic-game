@@ -23,3 +23,5 @@ MonoBehaviour:
   SpellAttributes:
   - Key: duration
     Value: 3
+  - Key: speed_factor
+    Value: 1.5

@@ -60,6 +60,15 @@ public class SpellIndicatorDataEditor : Editor {
                 EditorGUILayout.PropertyField(layermaskProp);
                 EditorGUILayout.PropertyField(raycastRangeProp);
                 break;
+            case IndicatorTargetType.Ground:
+                // Show fields for Area
+                EditorGUILayout.PropertyField(indicatorProp);
+                EditorGUILayout.PropertyField(minRangeProp);
+                EditorGUILayout.PropertyField(maxRangeProp);
+                EditorGUILayout.PropertyField(sizeProp);
+                EditorGUILayout.PropertyField(layermaskProp);
+                EditorGUILayout.PropertyField(raycastRangeProp);
+                break;
         }
 
         serializedObject.ApplyModifiedProperties(); // Apply changes if any

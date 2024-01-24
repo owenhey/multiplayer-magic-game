@@ -10,39 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f37f03dec991b624687a900c30947a94, type: 3}
-  m_Name: Complicated
+  m_Name: S
   m_EditorClassIdentifier: 
   Points:
-  - X: 0
-    Y: 0.329
-    time: 0
-  - X: 0.363
-    Y: 0.799
-    time: 0
-  - X: 0.382
-    Y: 0.171
-    time: 0
   - X: 1
-    Y: 0
+    Y: 0.705
     time: 0
-  - X: 0.806
-    Y: 0.188
-    time: 0
-  - X: 0.806
-    Y: 0.729
-    time: 0
-  - X: 0
+  - X: 0.497
     Y: 1
     time: 0
   - X: 0
-    Y: 0
+    Y: 0.591
     time: 0
   - X: 1
-    Y: 1
+    Y: 0.382
+    time: 0
+  - X: 0.537
+    Y: 0
+    time: 0
+  - X: 0
+    Y: 0.268
     time: 0
   TotalDistance: 0
-  CalculatedDistance: 5.9390693
+  CalculatedDistance: 3.4487898
   TimeTarget: 0
-  PerfectScoreThreshold: 0.05
-  FailCastThreshold: 0.25
+  PerfectScoreThreshold: 0.1
+  FailCastThreshold: 0.2
   HelperImage: {fileID: 0}

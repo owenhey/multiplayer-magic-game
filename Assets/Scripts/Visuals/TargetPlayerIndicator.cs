@@ -57,8 +57,8 @@ namespace Visuals {
 
         public void SetPosition(Vector3 position) { }
 
-        public void SetSize(float size) { }
-
+        public void SetSize(Vector3 size) { }
+        
         public void SetValid(bool valid) { }
 
         public void SetActive(bool active) => _active = active;
