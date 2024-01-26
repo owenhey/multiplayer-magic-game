@@ -11,7 +11,9 @@ namespace PlayerScripts {
     public enum SpawnablePrefabTypes {
         FireStrike,
         Wall,
-        Fireball
+        Fireball,
+        Freeze,
+        ChaosBolt
     }
     
     public class PlayerPrefabSpawner : NetworkedPlayerScript {

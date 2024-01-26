@@ -35,6 +35,7 @@ namespace PlayerScripts {
     
     public class PlayerStatuses : NetworkedPlayerScript {
         [SerializeField] private PlayerTimers _playerTimers;
+        [SerializeField] private PlayerStateManager _playerStateManager;
         [field: SerializeField] public List<PlayerStatusEffect> StatusList { get; private set; } = new(8);
 
         public System.Action<float> OnSetMovementSpeedMultiplier;
@@ -99,6 +100,13 @@ namespace PlayerScripts {
 
         [ObserversRpc]
         private void ClientHandleStatusUpdate(NetworkConnection player, PlayerStatusesData statusData) {
+            if (statusData.Stunned) {
+                _playerStateManager.AddState(PlayerState.Stunned);
+            }
+            else {
+                _playerStateManager.RemoveState(PlayerState.Stunned);
+            }
+            
             OnSetMovementSpeedMultiplier?.Invoke(statusData.SpeedMultiplier);
             OnSetStunned?.Invoke(statusData.Stunned);
         }

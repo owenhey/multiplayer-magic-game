@@ -165,18 +165,21 @@ namespace PlayerScripts {
         private void TargetIndicatorUpdate() {
             var (didHit, ray, hitData) = GetSpherecastData(_currentIndicatorData.LayerMask, _currentIndicatorData.RaycastRange);
             Vector3 rayTarget = ray.origin + ray.direction * _currentIndicatorData.RaycastRange;
-            
             bool showIndicator = !Hide;
             Player playerTarget = null;
-            bool closeEnough = IsTargetWithinRange(rayTarget, _currentIndicatorData);
-            if (didHit && closeEnough) {
+            if (didHit) {
                 // Try to get the player collider
-                if (hitData.collider.TryGetComponent(out PlayerCollider c)) {
+                bool closeEnough = IsTargetWithinRange(hitData.point, _currentIndicatorData);
+                if (closeEnough && hitData.collider.TryGetComponent(out PlayerCollider c)) {
                     // Can target local player?
                     bool canTargetSelf = _currentIndicatorData.PossibleTargets.HasFlag(SpellTargets.Self);
                     bool targetingSelf = c.Player.IsOwner;
-                    if (canTargetSelf || !targetingSelf) {
-                        // This means we are good!
+                    if (targetingSelf) {
+                        if (canTargetSelf) {
+                            playerTarget = c.Player;
+                        }
+                    }
+                    else {
                         playerTarget = c.Player;
                     }
                     // This means the player is just null. Which might be fine!

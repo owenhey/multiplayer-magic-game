@@ -21,7 +21,7 @@ namespace Spells {
             directionVector = Vector3.ClampMagnitude(directionVector, maxDistanceAllowed);
             
             // Figure out the true spot of teleport
-            Vector3 startPos = (playerPos + directionVector) + Vector3.up;
+            Vector3 startPos = (playerPos + directionVector) + Vector3.up * .1f;
             
             // Randomize the start pos a bit if the player cast it poorly
             startPos += Misc.GetRandomOffsetFromScore(_spellCastData.Effectiveness, 5, false);

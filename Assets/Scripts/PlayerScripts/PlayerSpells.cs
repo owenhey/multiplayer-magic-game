@@ -61,7 +61,7 @@ namespace PlayerScripts {
                 _spellInstances.Add(new SpellInstance(_spells[i], _player.PlayerReferences.PlayerTimers));
             }
 
-            CastingType = SpellCastingType.Quickcast;
+            CastingType = SpellCastingType.Indicator;
         }
 
         private void SetCastingType(SpellCastingType type) {
@@ -320,7 +320,7 @@ namespace PlayerScripts {
             _results = null;
             _stateManager.RemoveState(PlayerState.CastingSpell);
         }
-
+        
         protected override void OnClientStart(bool isOwner) {
             if (!isOwner) enabled = false;
 
