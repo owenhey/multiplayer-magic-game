@@ -7,13 +7,18 @@ namespace Visuals {
     public class PlayerEffectVisuals : LocalPlayerScript {
         [SerializeField] private VisualEffect _healEffect;
         [SerializeField] private VisualEffect _teleportEffect;
+        [SerializeField] private VisualEffect _teleportArriveEffect;
         private void HealHandler() {
             _healEffect.Play();
         }
 
-        private void TeleportHandler(bool start) {
-            if(start)
+        private void TeleportHandler(bool start, Vector3 endPos) {
+            if (start) {
                 _teleportEffect.Play();
+                _teleportArriveEffect.transform.position = endPos + Vector3.up;
+                _teleportArriveEffect.Play();
+            }
+
         }
         
         private void OnEnable() {

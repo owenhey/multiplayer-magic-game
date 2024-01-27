@@ -20,6 +20,6 @@ MonoBehaviour:
   Indicator: 2
   LayerMask:
     serializedVersion: 2
-    m_Bits: 640
+    m_Bits: 128
   MinimumRange: 0
   Size: {x: 2.5, y: 3, z: 2.5}

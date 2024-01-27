@@ -67,6 +67,14 @@ namespace PlayerScripts {
             }
         }
 
+        private void OnDisable() {
+            var cam = _refs.PlayerCameraControls.CMCam;
+            if (cam == null) return;
+            
+            cam.m_YAxis.m_InputAxisValue = 0;
+            cam.m_XAxis.m_InputAxisValue = 0;
+        }
+
         // Update is called once per frame
         void Update() {
             if (_cam == false) return;

@@ -36,7 +36,7 @@ namespace PlayerScripts {
             _healSound.Play();
         }
 
-        private void PlayApparateSound(bool start) {
+        private void PlayApparateSound(bool start, Vector3 _) {
             if (start) {
                 _apparateStart.Play();
             }

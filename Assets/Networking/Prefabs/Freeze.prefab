@@ -109,9 +109,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: df2ba8fcc50522643b103536ab7c13e5, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ebb7ad81d5c48974b8092af7c1883ee2, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.1
+  m_Volume: 0.64
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -205,9 +205,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c0d0ba3b369835a449436948ce77aaac, type: 3}
+  m_audioClip: {fileID: 8300000, guid: cc550c8ff2d17694e8042df9f6592b8a, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.2
+  m_Volume: 0.756
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_DecalLayerMask: 1
   m_ScaleMode: 0
   m_Offset: {x: 0, y: 0, z: 0}
-  m_Size: {x: 5, y: 5, z: 1}
+  m_Size: {x: 5, y: 5, z: 0.25}
   m_FadeFactor: 0
 --- !u!1 &2417084719198066091
 GameObject:
@@ -616,9 +616,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70cdcca3ded24e048e8bf6a6b6bbddeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 0
   _addedNetworkObject: {fileID: 8264046528775499405}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 8264046528775499405}
   _netSpawnType: 3
   _contentTransform: {fileID: 4276230399832535851}
   _damageLayerMask:
@@ -627,12 +627,13 @@ MonoBehaviour:
   _explosionGameObject: {fileID: 2417084719198066091}
   _smallIceEffect: {fileID: 67475797757167126}
   _decalProjector: {fileID: 6888621423343704742}
-  _spawnSound: {fileID: 0}
-  _explosionSound: {fileID: 0}
+  _spawnSound: {fileID: 1363597941473314440}
+  _explosionSound: {fileID: 10027081455312790}
   _initData:
     CasterId: 0
     SpellId: 0
     SpellEffectiveness: 0
+    TargetPlayerId: 0
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &8264046528775499405
@@ -651,7 +652,7 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
-  - {fileID: 0}
+  - {fileID: 424564118788497328}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:

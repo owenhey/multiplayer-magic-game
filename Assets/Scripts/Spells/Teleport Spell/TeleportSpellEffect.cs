@@ -35,16 +35,16 @@ namespace Spells {
             
             _stateManager = _targetPlayer.PlayerReferences.PlayerStateManager;
             _stateManager.AddState(PlayerState.Teleporting);
-            _targetPlayer.PlayerReferences.PlayerModel.AnimateTwirl(true, _direction);
+            _targetPlayer.PlayerReferences.PlayerModel.AnimateTwirl(true, _spellCastData.TargetData.TargetPosition);
         }
 
         protected override void OnSpellTick(float percent, float remainingDuration) {
-            if (!_warped && percent > .40f) { // 40% way through, lerp the player
+            if (!_warped && percent > .25f) { // 25% way through, lerp the player
                 _warped = true;
                 _targetPlayer.PlayerReferences.PlayerMovement.Warp(_spellCastData.TargetData.TargetPosition);
             }
-            else if (!_unTwirled && percent > .9f) { // %90 way through, allow movement again
-                _targetPlayer.PlayerReferences.PlayerModel.AnimateTwirl(false, _direction);
+            else if (!_unTwirled && percent > .8f) { // %80 way through, allow movement again
+                _targetPlayer.PlayerReferences.PlayerModel.AnimateTwirl(false, _spellCastData.TargetData.TargetPosition);
                 _unTwirled = true;
                
                 // _stateManager.RemoveState(PlayerState.Teleporting);

@@ -24,6 +24,7 @@ namespace Spells {
 
         private Player _targetPlayer;
         private float _speed;
+        private Vector3 _direction;
         private bool _ready = false;
 
         private void Awake() {
@@ -33,12 +34,6 @@ namespace Spells {
         private void HandleCollision(Collider c) {
             if (!IsServer) return;
             
-            // Check to make sure it isn't the casting player
-            if (c.TryGetComponent<PlayerCollider>(out PlayerCollider notPlayer)) {
-                if (notPlayer.Player.OwnerId != _initData.TargetPlayerId) {
-                    return;
-                }
-            }
             if (c.CompareTag("Shield")) {
                 // Make sure it's not my own shield
                 if (c.GetComponentInParent<Player>().OwnerId != _initData.CasterId) {
@@ -47,12 +42,23 @@ namespace Spells {
                     return;
                 }
                 else {
-                    Debug.Log("Ran into my own shield but it's fine");
+                    // This mean it's my own shield. Continue going;
+                    return;
+                }
+            }
+            // Check to make sure it isn't the casting player
+            if (c.TryGetComponent<PlayerCollider>(out PlayerCollider playerHit)) {
+                if (playerHit.Player.OwnerId != _initData.TargetPlayerId) {
+                    return;
+                }
+                else {
+                    ServerOnContact(true);
+                    return;
                 }
             }
             
-            // Otherwise, explode
-            ServerOnContact(true);
+            // Otherwise, hit a wall
+            ServerOnContact(false);
         }
 
         private void Update() {
@@ -83,14 +89,15 @@ namespace Spells {
             _targetPlayer = Player.GetPlayerFromClientId(_initData.TargetPlayerId);
             // Place it slightly in front of the player in the direction it should go
             float distanceInFront = _initData.SpellDefinition.GetAttributeValue("distance_in_front");
-            
-            _contentTransform.position = _initData.Position + (GetTargetPosition() - _initData.Position).normalized * distanceInFront;
+
+            _direction = (GetTargetPosition() - _initData.Position).normalized;
+            _contentTransform.position = _initData.Position + _direction * distanceInFront;
             _contentTransform.rotation = _initData.Rotation;
         }
 
         private void Begin() {
             _ready = true;
-            // _spawnSound.Play();
+            _spawnSound.Play();
             _speed = _initData.SpellDefinition.GetAttributeValue("speed");
 
             _contentTransform.DOScale(Vector3.one, 0).SetDelay(5.0f).OnComplete(() => {
@@ -103,18 +110,18 @@ namespace Spells {
 
         [Server]
         private void ServerOnContact(bool explode) {
-            int damage = (int)_initData.SpellDefinition.GetAttributeValue("damage");
-            float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
-            Vector3 knockbackDirection = (GetTargetPosition() - _contentTransform.position).normalized;
-            
-            
-            _targetPlayer.PlayerReferences.PlayerStats.DamageAndKnockback(damage, knockback * knockbackDirection);
-            
+            if (explode) {
+                int damage = (int)_initData.SpellDefinition.GetAttributeValue("damage");
+                float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
+                Vector3 knockbackDirection = _direction;
+                _targetPlayer.PlayerReferences.PlayerStats.DamageAndKnockback(damage, knockback * knockbackDirection);
+            }
+
+            _ready = false;
+            ClientExplode(explode);
             _trigger.SetEnabled(false);
-            _contentTransform.DOKill();
             _fireballEffect.Stop();
             
-            ClientExplode(explode);
             Invoke(nameof(DespawnObject), 5);
         }
 
@@ -134,11 +141,10 @@ namespace Spells {
 
         [ObserversRpc]
         private void ClientExplode(bool explode) {
-            _contentTransform.DOKill();
-            _fireballEffect.Stop();
             if (explode) {
-                // _explosionSound.Play();
+                _explosionSound.Play();
             }
+            _fireballEffect.Stop();
         }
     }
 }

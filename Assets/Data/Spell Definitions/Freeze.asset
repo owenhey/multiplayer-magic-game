@@ -27,4 +27,4 @@ MonoBehaviour:
   - Key: max_distance
     Value: 15
   - Key: spell_delay
-    Value: 1.25
+    Value: 0.8

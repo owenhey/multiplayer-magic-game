@@ -26,7 +26,7 @@ namespace PlayerScripts {
         private Material _shieldMat;
 
         public System.Action OnHealSpell;
-        public System.Action<bool> OnTwirl;
+        public System.Action<bool, Vector3> OnTwirl;
         
         private static readonly int _isOverridingColor = Shader.PropertyToID("_IsOverridingColor");
         private static readonly int _OverrideColor = Shader.PropertyToID("_OverrideColor");
@@ -127,28 +127,32 @@ namespace PlayerScripts {
         }
 
         [Client(Logging = LoggingType.Error)]
-        public void AnimateTwirl(bool start, Vector3 direction) {
+        public void AnimateTwirl(bool start, Vector3 endPosition) {
+            
             // Start it locally
-            StartTwirl(start, direction);
+            StartTwirl(start, endPosition);
             
             // Send to server to tell others to do it too
-            ServerAnimateTwirl(start, direction);
+            ServerAnimateTwirl(start, endPosition);
         }
 
         [ServerRpc]
-        private void ServerAnimateTwirl(bool start, Vector3 direction) {
+        private void ServerAnimateTwirl(bool start, Vector3 endPosition) {
+            
             // Don't need to do this on the server, but why not
-            StartTwirl(start, direction);
+            StartTwirl(start, endPosition);
 
-            ClientAnimateTwirl(start, direction);
+            ClientAnimateTwirl(start, endPosition);
         }
 
         [ObserversRpc(ExcludeOwner = true)]
-        private void ClientAnimateTwirl(bool start, Vector3 direction) {
-            StartTwirl(start, direction);
+        private void ClientAnimateTwirl(bool start, Vector3 endPosition) {
+            
+            StartTwirl(start, endPosition);
         }
 
-        private void StartTwirl(bool start, Vector3 direction) {
+        private void StartTwirl(bool start, Vector3 endPosition) {
+            Vector3 direction = endPosition - PlayerBody.position;
             if (start) {
                 Vector3 startPosition = PlayerBody.transform.position + (Vector3.up * .5f) + (direction.normalized * .5f);
                 _playerMat.SetVector(_twirlCenterWorldSpace, startPosition);
@@ -157,14 +161,14 @@ namespace PlayerScripts {
                 _playerMat.DOFloat(25, _twirlAmount, .18f);
             }
             else {
-                Vector3 endPosition = PlayerBody.transform.position + (Vector3.up * .5f) + (direction.normalized * .5f);
-                _playerMat.SetVector(_twirlCenterWorldSpace, endPosition);
+                Vector3 endTwirlCenter = PlayerBody.transform.position + (Vector3.up * .5f) - (direction.normalized * .5f);
+                _playerMat.SetVector(_twirlCenterWorldSpace, endTwirlCenter);
                 PlayerBody.DOScale(Vector3.one, .2f);
                 _playerMat.DOFloat(0, _twirlAmount, .2f).OnComplete(() => {
                     _playerMat.SetInt(_twirl, 0);
                 });
             }
-            OnTwirl?.Invoke(start);
+            OnTwirl?.Invoke(start, endPosition);
         }
 
         public void ClientEnableShield(Vector3 worldDirection) {

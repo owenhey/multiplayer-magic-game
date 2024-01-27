@@ -8,6 +8,7 @@ using Visuals;
 namespace PlayerScripts {
     public class PlayerSpellIndicatorHandler : LocalPlayerScript {
         [SerializeField] private LayerMask _groundLayerMask;
+        [SerializeField] private PlayerLockOn _lockOn;
         
         private PlayerReferences _playerReferences;
         private IIndicator _currentIndicator;
@@ -22,7 +23,7 @@ namespace PlayerScripts {
 
         private static readonly string AUTOCAST_TIMER_NAME = "indicator_autocast_timer";
         public static float AUTOCAST_TIME = .5f;
-        private static float SPHERECAST_RADIUS = .5f;
+        private static float SPHERECAST_RADIUS = .1f;
 
         public Action<float> OnAutocastTick;
         public Action<bool> OnAutocastSet;    
@@ -63,8 +64,23 @@ namespace PlayerScripts {
                     _updateLoop = AreaIndicatorUpdate;
                     break;
                 case IndicatorTargetType.Target:
-                    _updateLoop = TargetIndicatorUpdate;
-                    break;
+                    // Check for lock on
+                    var lockedOnPlayer = _lockOn.LockedOnPlayer;
+                    if (lockedOnPlayer != null) {
+                        _callback?.Invoke(new SpellTargetData {
+                            Cancelled = false,
+                            TargetPosition = default,
+                            CameraRay = default,
+                            ScreenSpacePosition = default,
+                            TargetPlayerId = lockedOnPlayer.OwnerId
+                        });                        
+                        ResetState();
+                        return;
+                    }
+                    else {
+                        _updateLoop = TargetIndicatorUpdate; 
+                        break;
+                    }
                 case IndicatorTargetType.Ground:
                     _updateLoop = GroundIndicatorUpdate;
                     break;
@@ -271,6 +287,20 @@ namespace PlayerScripts {
                 return AreaSpellTargetBuilder(targetPos, ray, mousePos.Value);
             }
             else if (indicator.TargetType == IndicatorTargetType.Target) {
+                // Check for lock on
+                var lockedOnPlayer = _lockOn.LockedOnPlayer;
+                if (lockedOnPlayer != null) {
+                    var tData = new SpellTargetData (){
+                        Cancelled = false,
+                        TargetPosition = default,
+                        CameraRay = default,
+                        ScreenSpacePosition = default,
+                        TargetPlayerId = lockedOnPlayer.OwnerId
+                    };                        
+                    ResetState();
+                    return tData;
+                }
+                
                 var (didHit, ray, hitData) = GetSpherecastData(indicator.LayerMask, indicator.RaycastRange, mousePos);
                 Vector3 rayTarget = ray.origin + ray.direction * indicator.RaycastRange;
                 if (didHit) rayTarget = hitData.point;

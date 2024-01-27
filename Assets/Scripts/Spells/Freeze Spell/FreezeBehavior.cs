@@ -48,7 +48,7 @@ namespace Spells {
 
         private void Begin() {
             DOTween.To(()=> _decalProjector.fadeFactor, x=> _decalProjector.fadeFactor = x, 1.0f, .15f).From(0);
-            // _spawnSound?.Play();
+            _spawnSound.Play();
             float spellDelay = _initData.SpellDefinition.GetAttributeValue("spell_delay");
             _contentTransform.DOScale(Vector3.one, spellDelay).OnComplete(() => {
                 if (IsClient) {
@@ -77,7 +77,6 @@ namespace Spells {
                     pc.PlayerReferences.PlayerStatus.ServerAddStatus(new PlayerStatusEffect("freeze_spell", PlayerStatusType.Stunned, 0, 2.0f));
                 }
             }
-            Debug.Log("3");
         }
 
         [ObserversRpc]
@@ -100,9 +99,10 @@ namespace Spells {
 
         private void ClientFreeze() {
             _smallIceEffect.Stop();
-            DOTween.To(()=> _decalProjector.fadeFactor, x=> _decalProjector.fadeFactor = x, 0, 1.0f);
-            _decalProjector.gameObject.SetActive(false);
-            // _explosionSound?.Play();
+            DOTween.To(()=> _decalProjector.fadeFactor, x=> _decalProjector.fadeFactor = x, 0, 1.0f).OnComplete(() => {
+                _decalProjector.gameObject.SetActive(false);
+            });
+            _explosionSound.Play();
             _explosionGameObject.SetActive(true);
         }
     }

@@ -56,7 +56,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.1
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7391908778235933484
 Rigidbody:
@@ -110,8 +110,8 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 53034051b39ac5b4ebfc76f29c46b585, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.1
-  m_Pitch: 1
+  m_Volume: 0.069
+  m_Pitch: 2.5
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -206,8 +206,8 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c0d0ba3b369835a449436948ce77aaac, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.2
-  m_Pitch: 1
+  m_Volume: 0.127
+  m_Pitch: 2.5
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -456,8 +456,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   _fireballEffect: {fileID: 5455450423904108430}
-  _spawnSound: {fileID: 0}
-  _explosionSound: {fileID: 0}
+  _spawnSound: {fileID: 9159630094939664212}
+  _explosionSound: {fileID: 1273364922853855076}
   _trigger: {fileID: 8089928895858691228}
   _initData:
     CasterId: 0
