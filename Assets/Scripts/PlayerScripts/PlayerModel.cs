@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core.TeamScripts;
 using FishNet.Managing.Logging;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -60,6 +61,39 @@ namespace PlayerScripts {
             base.Awake();
             InitMaterial();
         }
+        
+        protected override void OnClientStart(bool isOwner) {
+            // Sub to events
+            _player.PlayerReferences.PlayerStatus.OnSetStunned += OnStunnedHandler;
+            
+            if (!isOwner) return;
+            
+            SelectRandomColor();
+        }
+
+        public override void OnStartNetwork() {
+            base.OnStartNetwork();
+            SetTeamColors(_player.PlayerTeam);
+        }
+
+        public void SetTeamColors(Teams team) {
+            TeamDefinition teamDef = TeamIDer.GetTeamDefinition(team);
+            Color color = teamDef.TeamColor;
+            _playerMat.SetColor(_colorPrimary, color);
+        }
+
+        public override void OnStopClient() {
+            _player.PlayerReferences.PlayerStatus.OnSetStunned -= OnStunnedHandler;
+        }
+
+        private void OnStunnedHandler(bool stunned) {
+            if (stunned) {
+                ForceTint = new Color(.6f, .6f, 1.0f, 1.0f);
+            }
+            else {
+                ForceTint = null;
+            }
+        }
 
         private void InitMaterial() {
             _playerMat = new Material(_playerMaterialBase);
@@ -67,12 +101,6 @@ namespace PlayerScripts {
             foreach (var smr in allSMR) {
                 smr.material = _playerMat;
             }
-        }
-        
-        protected override void OnClientStart(bool isOwner) {
-            if (!isOwner) return;
-            
-            SelectRandomColor();
         }
 
         private void SelectRandomColor() {
@@ -90,8 +118,8 @@ namespace PlayerScripts {
         }
         
         private void ClientHandleColorChange(Color old, Color newColor, bool server) {
-            _playerMat.SetColor(_colorPrimary, newColor);
-            _playerMat.SetColor(_colorMetalDark, newColor);
+            // _playerMat.SetColor(_colorPrimary, newColor);
+            // _playerMat.SetColor(_colorMetalDark, newColor);
         }
 
         [Client]

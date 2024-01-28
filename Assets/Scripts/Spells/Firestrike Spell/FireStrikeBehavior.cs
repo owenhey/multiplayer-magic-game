@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core.Damage;
 using UnityEngine;
 using DG.Tweening;
 using FishNet.Object;
@@ -16,7 +17,6 @@ namespace Spells {
         public SpawnablePrefabTypes SpawnablePrefabType => _netSpawnType;
 
         [SerializeField] private Transform _contentTransform;
-        [SerializeField] private LayerMask _damageLayerMask;
         [SerializeField] private GameObject _explosionGameObject;
         [SerializeField] private VisualEffect _fireballEffect;
         [SerializeField] private DecalProjector _decalProjector;
@@ -34,13 +34,6 @@ namespace Spells {
         private void HandleCollision(Collider c) {
             if (!IsServer) return;
             
-            // Check to make sure it isn't the casting player
-            if (c.TryGetComponent<PlayerCollider>(out PlayerCollider player)) {
-                if (player.Player.OwnerId == _initData.CasterId) {
-                    return;
-                }
-            }
-
             if (c.CompareTag("Shield")) {
                 ServerOnContact(false);
                 c.GetComponentInParent<Player>().PlayerReferences.PlayerModel.ServerDisableShield(true);
@@ -99,7 +92,7 @@ namespace Spells {
             damage *= Misc.Remap(_initData.SpellEffectiveness, 0, 1, .5f, 1.0f);
             float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
 
-            int numHit = Physics.OverlapSphereNonAlloc(_contentTransform.position, radius, ColliderBuffer.Buffer, _damageLayerMask);
+            int numHit = Physics.OverlapSphereNonAlloc(_contentTransform.position, radius, ColliderBuffer.Buffer, DamageableLayerMask.GetMask);
             for (int i = 0; i < numHit; i++) {
                 var col = ColliderBuffer.Buffer[i];
                 
@@ -107,8 +100,8 @@ namespace Spells {
                 damageDirection.y = 0;
                 damageDirection.Normalize();
 
-                if (col.TryGetComponent(out PlayerCollider pc)) {
-                    pc.PlayerReferences.PlayerStats.DamageAndKnockback((int)damage, damageDirection * knockback);
+                if (col.TryGetComponent(out DamagableCollider dc)) {
+                    dc.Damagable.TakeDamageAndKnockback((int)damage, damageDirection * knockback);
                 }
             }
         }

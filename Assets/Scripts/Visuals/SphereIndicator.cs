@@ -21,7 +21,7 @@ namespace Visuals{
             // nothing to do here
         }
 
-        public void SetPlayer(Player player) { }
+        public void SetTarget(TargetableBase b) { }
 
         public Transform GetTransform() {
             return transform;

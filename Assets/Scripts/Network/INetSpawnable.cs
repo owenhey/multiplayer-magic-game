@@ -14,7 +14,7 @@ namespace Net {
         public int CasterId;
         public int SpellId;
         public float SpellEffectiveness;
-        public int TargetPlayerId;
+        public int TargetId;
         public SpellDefinition SpellDefinition => SpellIder.Instance.GetSpell(SpellId);
         public Vector3 Position;
         public Ray Direction;

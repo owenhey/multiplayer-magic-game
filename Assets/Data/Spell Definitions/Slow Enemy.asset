@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7db8ff4c9304fd19fab4f4c0de4c731, type: 3}
+  m_Name: Slow Enemy
+  m_EditorClassIdentifier: 
+  EffectId: Slow Enemy
+  SpellId: 9
+  SpellName: Slow Enemy
+  SpellCooldown: 5
+  SpellIcon: {fileID: 21300000, guid: b0e3851cadd1c0847bdf97afd3ab6be7, type: 3}
+  Drawing: {fileID: 11400000, guid: 8373cfb4fb7b15c49af711768fe39f63, type: 2}
+  IndicatorData: {fileID: 11400000, guid: 3a662937262364a41820f4f7295d2eaa, type: 2}
+  TargetTypes: 12
+  SpellPrefab: {fileID: 0}
+  SpellAttributes:
+  - Key: duration
+    Value: 1.5
+  - Key: speed_factor
+    Value: 0.55

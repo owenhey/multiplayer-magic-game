@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Helpers;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ namespace Spells {
         public DefinedDrawing Drawing;
         [Space(10)] 
         public SpellIndicatorData IndicatorData;
+        public TargetTypes TargetTypes;
 
         public GameObject SpellPrefab;
 

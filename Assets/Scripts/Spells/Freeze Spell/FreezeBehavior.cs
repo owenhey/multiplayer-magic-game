@@ -1,4 +1,5 @@
 using System.Collections;
+using Core.Damage;
 using DG.Tweening;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -15,7 +16,6 @@ namespace Spells {
         public SpawnablePrefabTypes SpawnablePrefabType => _netSpawnType;
 
         [SerializeField] private Transform _contentTransform;
-        [SerializeField] private LayerMask _damageLayerMask;
         [SerializeField] private GameObject _explosionGameObject;
         [SerializeField] private VisualEffect _smallIceEffect;
         [SerializeField] private DecalProjector _decalProjector;
@@ -68,28 +68,14 @@ namespace Spells {
         [Server]
         private void FreezeInArea() {
             float radius = _initData.SpellDefinition.GetAttributeValue("radius");
-            int numHit = Physics.OverlapSphereNonAlloc(_contentTransform.position, radius, ColliderBuffer.Buffer, _damageLayerMask);
+            int numHit = Physics.OverlapSphereNonAlloc(_contentTransform.position, radius, ColliderBuffer.Buffer, DamageableLayerMask.GetMask);
 
             for (int i = 0; i < numHit; i++) {
                 var col = ColliderBuffer.Buffer[i];
-                if (col.TryGetComponent(out PlayerCollider pc)) {
-                    FreezeEffectOnPlayer(pc.Player.OwnerId);
-                    pc.PlayerReferences.PlayerStatus.ServerAddStatus(new PlayerStatusEffect("freeze_spell", PlayerStatusType.Stunned, 0, 2.0f));
+                if (col.TryGetComponent(out DamagableCollider dc)) {
+                    dc.Damagable.ApplyStatus(new PlayerStatusEffect("freeze_spell", PlayerStatusType.Stunned, 0, 2.0f));
                 }
             }
-        }
-
-        [ObserversRpc]
-        private void FreezeEffectOnPlayer(int playerId) {
-            var player = Player.GetPlayerFromClientId(playerId);
-            player.PlayerReferences.PlayerModel.ForceTint = new Color(.6f, .6f, 1.0f, 1.0f);
-            StartCoroutine(StopFreezeEffect(playerId));
-        }
-
-        private IEnumerator StopFreezeEffect(int playerId) {
-            yield return new WaitForSeconds(2.0f);
-            var player = Player.GetPlayerFromClientId(playerId);
-            player.PlayerReferences.PlayerModel.ForceTint = null;
         }
 
         private void DespawnObject() {

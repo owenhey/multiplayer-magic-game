@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9170943389498672818}
   - component: {fileID: 1363597941473314440}
   - component: {fileID: 10027081455312790}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,7 +301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6290366438582152278}
   - component: {fileID: 6888621423343704742}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Freeze Ground Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -358,7 +358,7 @@ GameObject:
   - component: {fileID: 2949051665580349840}
   - component: {fileID: 2371371451501856856}
   - component: {fileID: 2195707107011880266}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Ice Burst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -469,7 +469,7 @@ GameObject:
   - component: {fileID: 5403902298234039379}
   - component: {fileID: 67475797757167126}
   - component: {fileID: 2515927500088934875}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Small Ice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -580,7 +580,7 @@ GameObject:
   - component: {fileID: 1485923488132671122}
   - component: {fileID: 424564118788497328}
   - component: {fileID: 8264046528775499405}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Freeze
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -621,9 +621,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8264046528775499405}
   _netSpawnType: 3
   _contentTransform: {fileID: 4276230399832535851}
-  _damageLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
   _explosionGameObject: {fileID: 2417084719198066091}
   _smallIceEffect: {fileID: 67475797757167126}
   _decalProjector: {fileID: 6888621423343704742}
@@ -633,7 +630,7 @@ MonoBehaviour:
     CasterId: 0
     SpellId: 0
     SpellEffectiveness: 0
-    TargetPlayerId: 0
+    TargetId: 0
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &8264046528775499405
@@ -664,7 +661,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 2
+  <PrefabId>k__BackingField: 4
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0

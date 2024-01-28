@@ -1,7 +1,9 @@
+using Core;
 using FishNet;
 using FishNet.Connection;
 using PlayerScripts;
 using UnityEngine;
+using Visuals;
 
 namespace Spells {
     /// <summary>
@@ -26,7 +28,7 @@ namespace Spells {
 
         public void BeginSpell() {
             _duration = GetDuration();
-            _targetPlayer = Player.GetPlayerFromClientId(_spellCastData.TargetData.TargetPlayerId);
+            _targetPlayer = (TargetManager.GetTargetable(_spellCastData.TargetData.TargetId) as PlayerTargetable).Player;
             OnSpellStart();
             // This might only be happening locally
             _targetPlayer.PlayerReferences.PlayerTimers.RegisterTimer($"spell_effect_{_spellCastData.SpellDefinition.SpellName}", AllowDuplicates(), _duration, OnSpellEnd, OnSpellTick);

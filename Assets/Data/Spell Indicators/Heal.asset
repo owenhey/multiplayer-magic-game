@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d6938eb0908499bb95b72dcbaa14ba8, type: 3}
+  m_Name: Heal
+  m_EditorClassIdentifier: 
+  TargetType: 1
+  RaycastRange: 35
+  MaximumRange: 25
+  PossibleTargets: 3
+  TargetDefault: 0
+  Indicator: 1
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  MinimumRange: 0
+  Size: {x: 1, y: 1, z: 1}

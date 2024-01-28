@@ -2,6 +2,7 @@ using Spells;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using Core;
 using UnityEngine.EventSystems;
 using Visuals;
 
@@ -64,20 +65,22 @@ namespace PlayerScripts {
                     _updateLoop = AreaIndicatorUpdate;
                     break;
                 case IndicatorTargetType.Target:
+                    var possibleTagets = _currentIndicatorData.PossibleTargets;
                     // Check for lock on
-                    var lockedOnPlayer = _lockOn.LockedOnPlayer;
-                    if (lockedOnPlayer != null) {
+                    var lockedOnPlayer = _lockOn.LockOn;
+                    if (lockedOnPlayer != null && lockedOnPlayer.IsValidTarget(_player.PlayerTeam, possibleTagets)) {
                         _callback?.Invoke(new SpellTargetData {
                             Cancelled = false,
                             TargetPosition = default,
                             CameraRay = default,
                             ScreenSpacePosition = default,
-                            TargetPlayerId = lockedOnPlayer.OwnerId
+                            TargetId = _lockOn.LockOn.GetId()
                         });                        
                         ResetState();
                         return;
                     }
                     else {
+                        TargetManager.SetTargetOptions(_player.PlayerTeam, possibleTagets);
                         _updateLoop = TargetIndicatorUpdate; 
                         break;
                     }
@@ -93,13 +96,12 @@ namespace PlayerScripts {
         private SpellTargetData NoneSpellTargetBuilder(Vector3 target, Ray ray, Vector2 screenPos, SpellIndicatorData data) {
             // Clamp the targetPos
             target = ClampPositionOfRayTarget(target, data);
-
             return new SpellTargetData {
                 Cancelled = false,
                 TargetPosition = target,
                 CameraRay = ray,
                 ScreenSpacePosition = screenPos / new Vector2(Screen.width, Screen.height),
-                TargetPlayerId = _player.OwnerId // These default to the target being the casting player
+                TargetId = _player.PlayerReferences.PlayerTargetable.GetId() // These default to the target being the casting player
             };
         }
 
@@ -116,7 +118,6 @@ namespace PlayerScripts {
             bool showIndicator = !Hide;
             if (didHit) {
                 rayTarget = hitData.point;
-                Debug.Log($"Fireball indicator here: " + rayTarget);
             }
             rayTarget = ClampPositionOfRayTarget(rayTarget, _currentIndicatorData);
             _currentIndicator?.SetPosition(rayTarget);
@@ -135,7 +136,7 @@ namespace PlayerScripts {
                 TargetPosition = rayTarget,
                 CameraRay = ray,
                 ScreenSpacePosition = screenPos /  new Vector2(Screen.width, Screen.height),
-                TargetPlayerId = _player.OwnerId
+                TargetId = _player.PlayerReferences.PlayerTargetable.GetId()
             };
         }
         
@@ -174,7 +175,7 @@ namespace PlayerScripts {
                 TargetPosition = rayTarget,
                 CameraRay = ray,
                 ScreenSpacePosition = screenPos /  new Vector2(Screen.width, Screen.height),
-                TargetPlayerId = _player.OwnerId
+                TargetId = _player.PlayerReferences.PlayerTargetable.GetId()
             };
         }
         
@@ -182,47 +183,37 @@ namespace PlayerScripts {
             var (didHit, ray, hitData) = GetSpherecastData(_currentIndicatorData.LayerMask, _currentIndicatorData.RaycastRange);
             Vector3 rayTarget = ray.origin + ray.direction * _currentIndicatorData.RaycastRange;
             bool showIndicator = !Hide;
-            Player playerTarget = null;
+            TargetableBase target = null;
             if (didHit) {
                 // Try to get the player collider
                 bool closeEnough = IsTargetWithinRange(hitData.point, _currentIndicatorData);
-                if (closeEnough && hitData.collider.TryGetComponent(out PlayerCollider c)) {
-                    // Can target local player?
-                    bool canTargetSelf = _currentIndicatorData.PossibleTargets.HasFlag(SpellTargets.Self);
-                    bool targetingSelf = c.Player.IsOwner;
-                    if (targetingSelf) {
-                        if (canTargetSelf) {
-                            playerTarget = c.Player;
-                        }
-                    }
-                    else {
-                        playerTarget = c.Player;
-                    }
-                    // This means the player is just null. Which might be fine!
+                if (closeEnough && hitData.collider.TryGetComponent(out TargetableBase tb)) {
+                    // Can we actually target this thing?
+                    target = tb;
                 }
             }
             // Potentially set the player to self if not hitting anything
             else if (_currentIndicatorData.TargetDefault == IndicatorTargetDefaultType.Self) {
-                playerTarget = _player;
+                target = _player.PlayerReferences.PlayerTargetable;
             }
             
             _currentIndicator.SetActive(showIndicator);
-            _currentIndicator.SetPlayer(playerTarget);
+            _currentIndicator.SetTarget(target);
 
             // Spell creator for targeting
-            BuildSpellTargetDataDelegate builder = () => TargetSpellTargetBuilder(rayTarget, ray, playerTarget, Input.mousePosition);
+            BuildSpellTargetDataDelegate builder = () => TargetSpellTargetBuilder(rayTarget, ray, target, Input.mousePosition);
 
             // Check for click
             CheckForClick(builder);
         }
 
-        private SpellTargetData TargetSpellTargetBuilder(Vector3 rayTarget, Ray ray, Player player, Vector2 screenPos) {
+        private SpellTargetData TargetSpellTargetBuilder(Vector3 rayTarget, Ray ray, TargetableBase target, Vector2 screenPos) {
             return new SpellTargetData {
-                Cancelled = player == null,
+                Cancelled = target == null,
                 TargetPosition = rayTarget,
                 CameraRay = ray,
                 ScreenSpacePosition = screenPos / new Vector2(Screen.width, Screen.height),
-                TargetPlayerId = player != null ? player.OwnerId : -1
+                TargetId = target != null ? target.GetId() : -1
             };
         }
         
@@ -288,14 +279,14 @@ namespace PlayerScripts {
             }
             else if (indicator.TargetType == IndicatorTargetType.Target) {
                 // Check for lock on
-                var lockedOnPlayer = _lockOn.LockedOnPlayer;
-                if (lockedOnPlayer != null) {
+                var lockOn = _lockOn.LockOn;
+                if (lockOn != null) {
                     var tData = new SpellTargetData (){
                         Cancelled = false,
                         TargetPosition = default,
                         CameraRay = default,
                         ScreenSpacePosition = default,
-                        TargetPlayerId = lockedOnPlayer.OwnerId
+                        TargetId = lockOn.GetId()
                     };                        
                     ResetState();
                     return tData;
@@ -305,23 +296,21 @@ namespace PlayerScripts {
                 Vector3 rayTarget = ray.origin + ray.direction * indicator.RaycastRange;
                 if (didHit) rayTarget = hitData.point;
                 
-                bool closeEnough = IsTargetWithinRange(rayTarget, indicator);
-                Player playerTarget = null;
-                if (didHit && closeEnough) {
+                TargetableBase target = null;
+                if (didHit) {
                     // Try to get the player collider
-                    if (hitData.collider.TryGetComponent(out PlayerCollider c)) {
-                        bool canTargetSelf = indicator.PossibleTargets.HasFlag(SpellTargets.Self);
-                        bool targetingSelf = c.Player.IsOwner;
-                        if (canTargetSelf || !targetingSelf) {
-                            playerTarget = c.Player;
-                        }
+                    bool closeEnough = IsTargetWithinRange(hitData.point, _currentIndicatorData);
+                    if (closeEnough && hitData.collider.TryGetComponent(out TargetableBase tb)) {
+                        // Can we actually target this thing?
+                        target = tb;
                     }
                 }
-                else if (indicator.TargetDefault == IndicatorTargetDefaultType.Self) {
-                    playerTarget = _player;
+                // Potentially set the player to self if not hitting anything
+                else if (_currentIndicatorData.TargetDefault == IndicatorTargetDefaultType.Self) {
+                    target = _player.PlayerReferences.PlayerTargetable;
                 }
 
-                var targetData = TargetSpellTargetBuilder(rayTarget, ray, playerTarget, mousePos.Value);
+                var targetData = TargetSpellTargetBuilder(rayTarget, ray, target, mousePos.Value);
                 return targetData;
             }
             else if (indicator.TargetType == IndicatorTargetType.None) {
@@ -369,6 +358,8 @@ namespace PlayerScripts {
             
             _currentIndicator?.SetActive(false);
             _currentIndicator = null;
+            
+            TargetManager.ResetTargetingOptions();
             
             CancelAutocast();
         }

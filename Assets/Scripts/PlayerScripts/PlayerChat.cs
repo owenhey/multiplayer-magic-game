@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core.TeamScripts;
 using FishNet.Object;
 using Net;
 using PlayerScripts;
@@ -62,11 +63,31 @@ namespace PlayerScripts{
         /// <returns></returns>
         [Server]
         private bool CheckForCommands(ChatMessage message) {
-            string key = "/name ";
-            if (message.Message.StartsWith(key)) {
-                string newName = message.Message.Substring(key.Length);
+            string nameKey = "/name ";
+            string teamKey = "/team ";
+            if (message.Message.StartsWith(nameKey)) {
+                string newName = message.Message.Substring(nameKey.Length);
                 _player.ServerSetName(newName);
                 
+                return true;
+            }
+            if (message.Message.StartsWith(teamKey)) {
+                string newTeam = message.Message.Substring(teamKey.Length);
+                if (newTeam.Length != 1) return true;
+                switch (newTeam.ToLower()) {
+                    case "a":
+                        _player.ServerSetTeam(Teams.TeamA);
+                        break;
+                    case "b":
+                        _player.ServerSetTeam(Teams.TeamB);
+                        break;
+                    case "c":
+                        _player.ServerSetTeam(Teams.TeamC);
+                        break;
+                    case "d":
+                        _player.ServerSetTeam(Teams.TeamD);
+                        break;
+                }
                 return true;
             }
 

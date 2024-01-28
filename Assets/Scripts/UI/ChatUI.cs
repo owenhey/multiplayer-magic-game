@@ -86,6 +86,7 @@ namespace UI {
             SetChatActive(false);
             _inputField.onSubmit.AddListener(HandleMessageSubmit);
             HandleMessage(new ChatMessage(-1, "Help", "Type /name <new name> to set your name."));
+            HandleMessage(new ChatMessage(-1, "Help", "Type /team <a,b,c,d> to set your team."));
         }
         
         private void OnEnable() {

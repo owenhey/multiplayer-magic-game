@@ -8,7 +8,7 @@ namespace Visuals {
         void ResetIndicator();
         void Init();
         Transform GetTransform();
-        void SetPlayer(Player player);
+        void SetTarget(TargetableBase target);
         void SetPosition(Vector3 position);
         void SetSize(Vector3 size);
         void SetValid(bool valid);

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8089928895858691228}
   - component: {fileID: 9159630094939664212}
   - component: {fileID: 1273364922853855076}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 0.25
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7391908778235933484
 Rigidbody:
@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 308294089404429830}
   - component: {fileID: 5455450423904108430}
   - component: {fileID: 5755520452129511287}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: VFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -412,7 +412,7 @@ GameObject:
   - component: {fileID: 1485923488132671122}
   - component: {fileID: 3625815390832271880}
   - component: {fileID: 8264046528775499405}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Chaos Bolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +463,7 @@ MonoBehaviour:
     CasterId: 0
     SpellId: 0
     SpellEffectiveness: 0
-    TargetPlayerId: 0
+    TargetId: 0
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &8264046528775499405
@@ -494,7 +494,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 0
+  <PrefabId>k__BackingField: 5
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0

@@ -12,12 +12,12 @@ TagManager:
   - Player
   - Water
   - UI
-  - 
+  - Damagable
   - Environment
   - Shield
   - Indicator
-  - 
-  - 
+  - Targetable
+  - Attacks
   - 
   - 
   - 

@@ -33,7 +33,7 @@ namespace Visuals {
 
             if (type == IndicatorTypes.Player) {
                 if (_targetPlayer == null) {
-                    _targetPlayer = new TargetPlayerIndicator();
+                    _targetPlayer = new TargetIndicator();
                     _targetPlayer.Init();
                 }
                 return _targetPlayer;

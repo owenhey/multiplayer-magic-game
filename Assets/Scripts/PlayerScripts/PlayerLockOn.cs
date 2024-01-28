@@ -1,44 +1,51 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Visuals;
 
 namespace PlayerScripts {
     public class PlayerLockOn : LocalPlayerScript {
-        [SerializeField] private LayerMask _playerLayerMask;
+        [SerializeField] private LayerMask _targetableLayerMask;
         [SerializeField] private GameObject _lockedOnIndicator;
         
-        public Player LockedOnPlayer;
+        public TargetableBase LockOn;
 
         private void Update() {
             if (Clicking()) {
                 // Fire a ray
                 Ray ray = _player.PlayerReferences.PlayerCameraControls.Cam.ScreenPointToRay(Input.mousePosition);
-                if(Physics.Raycast(ray, out RaycastHit hit, 50, _playerLayerMask)) {
-                    if (hit.collider.TryGetComponent(out PlayerCollider c)) {
-                        if (c.Player == LockedOnPlayer) {
-                            LockedOnPlayer = null;
+                if(Physics.Raycast(ray, out RaycastHit hit, 50, _targetableLayerMask)) {
+                    if (hit.collider.TryGetComponent(out TargetableBase b)) {
+                        if (LockOn == b) {
+                            LockOn = null;
                         }
-                        if (c.Player == _player) {
-                            LockedOnPlayer = null;
+
+                        if (b is PlayerTargetable) {
+                            PlayerTargetable pt = (PlayerTargetable)b;
+                            if (pt.IsOwner) {
+                                LockOn = null;
+                            }
+                            else {
+                                LockOn = pt;
+                            }
                         }
                         else {
-                            LockedOnPlayer = c.Player;
+                            LockOn = b;
                         }
                     }
                 }
                 else {
-                    LockedOnPlayer = null;
+                    LockOn = null;
                 }
                 
                 // Update the locked on indicator
-                if (LockedOnPlayer == null) {
+                if (LockOn == null) {
                     _lockedOnIndicator.transform.parent = transform;
                     _lockedOnIndicator.SetActive(false);
                 }
                 else {
                     _lockedOnIndicator.SetActive(true);
-                    _lockedOnIndicator.transform.position =
-                        LockedOnPlayer.PlayerReferences.GetPlayerPosition() + Vector3.up * 2.25f;
-                    _lockedOnIndicator.transform.parent = LockedOnPlayer.PlayerReferences.PlayerMovement.transform;
+                    _lockedOnIndicator.transform.position = LockOn.transform.position + Vector3.up * 1.5f;
+                    _lockedOnIndicator.transform.parent = LockOn.transform;
                 }
             }
         }

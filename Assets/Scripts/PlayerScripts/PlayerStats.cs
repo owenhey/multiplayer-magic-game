@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core.Damage;
+using Core.TeamScripts;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
 namespace PlayerScripts {
-    public class PlayerStats : NetworkedPlayerScript {
+    public class PlayerStats : NetworkedPlayerScript, IDamagable{
         [SerializeField] private int _maxHealth = 1000;
         public int MaxHealth => _maxHealth;
 
@@ -103,5 +105,17 @@ namespace PlayerScripts {
         private void OnHealthChangeHandler(int oldHealth, int newHealth, bool asServer) {
             OnHealthChange?.Invoke(newHealth, newHealth - oldHealth);
         }
+
+        public void TakeDamage(int damage) => throw new System.NotImplementedException();
+
+        public void TakeKnockback(Vector3 knockback) => throw new System.NotImplementedException();
+
+        public void TakeDamageAndKnockback(int damage, Vector3 knockback) => DamageAndKnockback(damage, knockback);
+
+        public void ApplyStatus(PlayerStatusEffect statusEffect) {
+            _player.PlayerReferences.PlayerStatus.ServerAddStatus(statusEffect);
+        }
+
+        public Teams GetTeam() => _player.PlayerTeam;
     }
 }

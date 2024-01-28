@@ -1,22 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core.TeamScripts;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using FishNet.Transporting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace PlayerScripts {
     public class Player : NetworkBehaviour {
         public PlayerReferences PlayerReferences;
         
-        [SyncVar(Channel = Channel.Unreliable, OnChange = nameof(HandleNameChange))]
+        [SyncVar(Channel = Channel.Reliable, OnChange = nameof(HandleNameChange))]
         public string PlayerName;
+        [SyncVar(Channel = Channel.Reliable, OnChange = nameof(HandleTeamChange))]
+        public Teams PlayerTeam = 0;
 
         [SerializeField] 
         private TMPro.TextMeshProUGUI NameDisplay;
 
         private Action<bool> _onClientStart;
+        public static Action OnLocalPlayerSetTeam;
 
         public static Player LocalPlayer;
 
@@ -30,12 +35,30 @@ namespace PlayerScripts {
             _onClientStart += method;
         }
 
+        public override void OnStartServer() {
+            base.OnStartServer();
+            int ranTeam = Random.Range(0, 4);
+            switch (ranTeam) {
+                case 0:
+                    PlayerTeam = Teams.TeamA;
+                    break;
+                case 1:
+                    PlayerTeam = Teams.TeamB;
+                    break;
+                case 2:
+                    PlayerTeam = Teams.TeamC;
+                    break;
+                case 3:
+                    PlayerTeam = Teams.TeamD;
+                    break;
+            }
+        }
+
         public override void OnStartClient() {
             base.OnStartClient();
             _onClientStart.Invoke(IsOwner);
         }
 
-        private int h;
         private void Update() {
             if (Input.GetKeyDown(KeyCode.Mouse1)) {
                 PlayerReferences.PlayerStateManager.AddState(PlayerState.MovingCamera);
@@ -73,6 +96,7 @@ namespace PlayerScripts {
         
         [ServerRpc]
         private void ServerRpcSetName(string name) {
+            if (string.IsNullOrEmpty(name)) return;
             PlayerName = name;
         }
 
@@ -81,9 +105,23 @@ namespace PlayerScripts {
             if (string.IsNullOrEmpty(name)) return;
             PlayerName = name;
         }
+        
+        [ServerRpc]
+        private void ServerRpcSetTeam(Teams team) {
+            PlayerName = name;
+        }
+
+        [Server]
+        public void ServerSetTeam(Teams team) {
+            PlayerTeam = team;
+        }
 
         private void HandleNameChange(string old, string newName, bool server) {
             NameDisplay.text = newName;
+        }
+        
+        private void HandleTeamChange(Teams old, Teams newTeam, bool server) {
+            PlayerReferences.PlayerModel.SetTeamColors(newTeam);
         }
         
         public static Player GetPlayerFromClientId(int clientId) {

@@ -23,7 +23,7 @@ namespace Spells {
                 SpellEffectiveness = _spellCastData.Effectiveness,
                 SpellId = _spellCastData.SpellId,
                 CasterId = _spellCastData.CastingPlayerId,
-                TargetPlayerId = _spellCastData.TargetData.TargetPlayerId,
+                TargetId = _spellCastData.TargetData.TargetId,
                 Position = _spellCastData.TargetData.TargetPosition,
                 Direction = _spellCastData.TargetData.CameraRay,
                 Rotation = _spawnedObjectRotation,

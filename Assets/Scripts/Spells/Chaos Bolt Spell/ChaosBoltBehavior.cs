@@ -1,3 +1,5 @@
+using Core;
+using Core.Damage;
 using DG.Tweening;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -6,6 +8,7 @@ using Net;
 using PlayerScripts;
 using UnityEngine;
 using UnityEngine.VFX;
+using Visuals;
 
 namespace Spells {
     public class ChaosBoltBehavior : NetworkBehaviour, INetSpawnable {
@@ -22,7 +25,7 @@ namespace Spells {
         [SyncVar] [ReadOnly]
         private SpawnablePrefabInitData _initData;
 
-        private Player _targetPlayer;
+        private TargetableBase _target;
         private float _speed;
         private Vector3 _direction;
         private bool _ready = false;
@@ -47,15 +50,15 @@ namespace Spells {
                 }
             }
             // Check to make sure it isn't the casting player
-            if (c.TryGetComponent<PlayerCollider>(out PlayerCollider playerHit)) {
-                if (playerHit.Player.OwnerId != _initData.TargetPlayerId) {
-                    return;
-                }
-                else {
+            if (c.TryGetComponent(out DamagableCollider damagable)) {
+                if (damagable.Damagable == _target.Damagable) {
                     ServerOnContact(true);
                     return;
                 }
+
+                return;
             }
+            
             
             // Otherwise, hit a wall
             ServerOnContact(false);
@@ -86,11 +89,13 @@ namespace Spells {
         }
 
         private void Setup() {
-            _targetPlayer = Player.GetPlayerFromClientId(_initData.TargetPlayerId);
+            _target = TargetManager.GetTargetable(_initData.TargetId);
             // Place it slightly in front of the player in the direction it should go
             float distanceInFront = _initData.SpellDefinition.GetAttributeValue("distance_in_front");
 
             _direction = (GetTargetPosition() - _initData.Position).normalized;
+            _direction.y = 0;
+            Debug.Log($"Spawning at location: {_initData.Position + _direction * distanceInFront}");
             _contentTransform.position = _initData.Position + _direction * distanceInFront;
             _contentTransform.rotation = _initData.Rotation;
         }
@@ -114,7 +119,7 @@ namespace Spells {
                 int damage = (int)_initData.SpellDefinition.GetAttributeValue("damage");
                 float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
                 Vector3 knockbackDirection = _direction;
-                _targetPlayer.PlayerReferences.PlayerStats.DamageAndKnockback(damage, knockback * knockbackDirection);
+                _target.Damagable.TakeDamageAndKnockback(damage, knockback * knockbackDirection);
             }
 
             _ready = false;
@@ -131,7 +136,7 @@ namespace Spells {
         }
 
         private Vector3 GetTargetPosition() {
-            return Vector3.up + _targetPlayer.PlayerReferences.GetPlayerPosition();
+            return _target.transform.position;
         }
 
         private void OnDrawGizmos() {

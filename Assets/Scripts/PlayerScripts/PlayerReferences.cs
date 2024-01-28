@@ -5,6 +5,7 @@ using Cinemachine;
 using FishNet.Object;
 using FishNet.Connection;
 using UnityEngine.Serialization;
+using Visuals;
 
 namespace PlayerScripts {
     public class PlayerReferences : LocalPlayerScript {
@@ -21,6 +22,7 @@ namespace PlayerScripts {
         
         [field:SerializeField] public PlayerCameraControls PlayerCameraControls { get; private set; }
         [field:SerializeField] public PlayerStatuses PlayerStatus { get; private set; }
+        [field:SerializeField] public PlayerTargetable PlayerTargetable { get; private set; }
         
         
         protected override void OnClientStart(bool isOwner) {

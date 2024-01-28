@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 using Visuals;
 
@@ -7,13 +8,6 @@ namespace Spells {
         Target,
         Area,
         Ground
-    }
-
-    [System.Flags]
-    public enum SpellTargets {
-        Self = 1,
-        Allies = 2,
-        Enemies = 4,
     }
 
     /// <summary>
@@ -33,7 +27,7 @@ namespace Spells {
         
         // Target needs these ones
         [Space(20)]  
-        public SpellTargets PossibleTargets;
+        public TargetTypes PossibleTargets;
         public IndicatorTargetDefaultType TargetDefault;
         
         // Area need these

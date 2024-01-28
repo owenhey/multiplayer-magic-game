@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9170943389498672818}
   - component: {fileID: 1363597941473314440}
   - component: {fileID: 10027081455312790}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,7 +301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6290366438582152278}
   - component: {fileID: 6888621423343704742}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Fire Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -358,7 +358,7 @@ GameObject:
   - component: {fileID: 1485923488132671122}
   - component: {fileID: 7906388077570866321}
   - component: {fileID: 8264046528775499405}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Fire Strike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,9 +399,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8264046528775499405}
   _netSpawnType: 0
   _contentTransform: {fileID: 4276230399832535851}
-  _damageLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
   _explosionGameObject: {fileID: 2648797487154239343}
   _fireballEffect: {fileID: 7435742775830097355}
   _decalProjector: {fileID: 6888621423343704742}
@@ -412,6 +409,7 @@ MonoBehaviour:
     CasterId: 0
     SpellId: 0
     SpellEffectiveness: 0
+    TargetId: 0
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &8264046528775499405
@@ -459,6 +457,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PolyFireball
+      objectReference: {fileID: 0}
+    - target: {fileID: 1495615669804155241, guid: d38d8c460d3cade4ab3d1ddfc6c02ed1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2705113769885364322, guid: d38d8c460d3cade4ab3d1ddfc6c02ed1,
         type: 3}
@@ -529,6 +532,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PolyFireExplosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 6652299254313018857, guid: 69bda257c9d006d46b702ebf230cab8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6652299254313018857, guid: 69bda257c9d006d46b702ebf230cab8b,
         type: 3}
