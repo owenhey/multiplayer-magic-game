@@ -1,9 +1,11 @@
 using System;
 using Cinemachine;
 using Drawing;
+using FishNet.Managing;
 using Helpers;
 using PlayerScripts;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI {
@@ -167,7 +169,9 @@ namespace UI {
         }
 
         private void OnCloseGameClick() {
-            Application.Quit();
+            var _networkManager = FindObjectOfType<NetworkManager>();
+            _networkManager.ServerManager.StopConnection(true);
+            SceneManager.LoadScene("Title");
         }
     }
 }

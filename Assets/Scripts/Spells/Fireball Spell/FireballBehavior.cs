@@ -30,6 +30,8 @@ namespace Spells {
 
         private void HandleCollision(Collider c) {
             if (!IsServer) return;
+
+            Debug.Log($"Collided with something. Name is: {c.name}");
             
             if (c.CompareTag("Shield")) {
                 // Make sure it's not my own shield

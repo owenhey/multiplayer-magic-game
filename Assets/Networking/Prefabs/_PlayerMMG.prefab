@@ -6923,7 +6923,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit Game
+  m_text: Disconnect
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15cbc2eca4ef5e14285885f860adefe3, type: 2}
   m_sharedMaterial: {fileID: -7226123236466651442, guid: 15cbc2eca4ef5e14285885f860adefe3,

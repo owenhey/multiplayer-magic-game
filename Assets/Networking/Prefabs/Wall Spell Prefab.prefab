@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 2918515196118401138}
   - component: {fileID: 6282919635620424103}
   - component: {fileID: 6963963976758790572}
+  - component: {fileID: 8168871612270176917}
   m_Layer: 7
   m_Name: Wall Spell Prefab
   m_TagString: Untagged
@@ -87,6 +88,9 @@ MonoBehaviour:
   _slamSound: {fileID: 1993527645417905860}
   _initData:
     CasterId: 0
+    SpellId: 0
+    SpellEffectiveness: 0
+    TargetId: 0
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &6963963976758790572
@@ -106,6 +110,7 @@ MonoBehaviour:
   <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
   - {fileID: 6282919635620424103}
+  - {fileID: 8168871612270176917}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:
@@ -122,6 +127,24 @@ MonoBehaviour:
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 0
+--- !u!114 &8168871612270176917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2376978816892767402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a38fa2217e24de9a76dd3fea04cf955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 6963963976758790572}
+  _networkObjectCache: {fileID: 6963963976758790572}
+  _maxHealth: 50
+  _currentHealth: 0
+  _transform: {fileID: 2248949152855588621}
 --- !u!1 &5909784628883584661
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,7 +159,8 @@ GameObject:
   - component: {fileID: 2070255052488357414}
   - component: {fileID: 1993527645417905860}
   - component: {fileID: 8240047616106519697}
-  m_Layer: 7
+  - component: {fileID: 6310978245033962009}
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -421,3 +445,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6310978245033962009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5909784628883584661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f67dbd44cf439f4dbdf0cf182f74d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damagableGameObject: {fileID: 2376978816892767402}
+  _collider: {fileID: 8240047616106519697}
