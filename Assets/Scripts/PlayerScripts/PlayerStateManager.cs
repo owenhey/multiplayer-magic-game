@@ -81,6 +81,7 @@ namespace PlayerScripts {
             // Spells 
             _spellsEnabled = !(_teleporting || _inInventory || _stunned || _castingSpell || _dead || _chatting || _inSettings); 
             PlayerSpells.enabled = _spellsEnabled;
+            PlayerMovement.CastingSpell = _castingSpell;
             
             // Interaction 
             _interactionEnabled = !(_teleporting || _inInventory || _stunned || _castingSpell || _movingCamera || _dead || _chatting || _inSettings); 

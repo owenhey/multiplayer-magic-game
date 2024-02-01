@@ -3323,7 +3323,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -11245,8 +11245,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0.000017795923, b: 0.8113208, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0, g: 0.000017795923, b: 0.8113208, a: 0.67058825}
+      key1: {r: 1, g: 1, b: 1, a: 0.67058825}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -13093,6 +13093,7 @@ MonoBehaviour:
   _cc: {fileID: 3347838807021769093}
   _refs: {fileID: 1056872705930149825}
   RequireRightClickToMoveMouse: 1
+  CastingSpell: 0
 --- !u!114 &459770775653816622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13246,10 +13247,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
   _rigWeightMax: 0.9
-  _rigWeightMin: 0.25
+  _rigWeightMin: 0
   _rigAnimationTime: 0.1
   _trail: {fileID: 6762613002161579478}
-  _targetPositionFactor: 0.65
+  _targetPositionFactor: 0.9
   _rig: {fileID: 789251904970805487}
   _handTarget: {fileID: 2660351929538090761}
 --- !u!114 &3266277838387852362

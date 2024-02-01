@@ -42,13 +42,13 @@ namespace PlayerScripts {
             DrawingManager.OnDrawCancelled -= OnDrawCancelled;
         }
 
+
         private void OnStartDraw() {
             if (_rigWeightTween != null) {
                 _rigWeightTween.Kill();
             }
-            _trail.emitting = true;
 
-            _rigWeightTween = DOTween.To(() => _rig.weight, x => _rig.weight = x, _rigWeightMax, _rigAnimationTime);
+            _rigWeightTween = DOTween.To(() => _rig.weight, x => _rig.weight = x, _rigWeightMax, _rigAnimationTime).OnComplete(()=>_trail.emitting = true);
         }
 
         private void OnDraw(Vector2 point) {

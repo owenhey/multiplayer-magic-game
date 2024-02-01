@@ -8,7 +8,7 @@ namespace PlayerScripts {
 
         private bool _active;
 
-        public static int CanvasSettingSize = 500;
+        public static int CanvasSettingSize = 750;
         public static float TextSize = 35;
 
         public bool Active {

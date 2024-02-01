@@ -27,6 +27,10 @@ namespace PlayerScripts {
             [SerializeField] private PlayerReferences _refs;
 
         public bool RequireRightClickToMoveMouse = true;
+
+        private readonly float _castingSpellMoveFactor = .7f;
+
+        [HideInInspector] public bool CastingSpell;
             
         private Vector3 _currentVelocity;
         private InputData _inputData = new();
@@ -196,6 +200,7 @@ namespace PlayerScripts {
                     Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
                     movementVector += _ccTrans.TransformDirection(wasdInputVector3) * _sprintSpeed;
                     movementVector *= _stunned ? 0 : _speedMultiplier;
+                    movementVector *= CastingSpell ? _castingSpellMoveFactor : 1.0f;
                     _isSprinting = true;
                 }
             }
@@ -206,6 +211,8 @@ namespace PlayerScripts {
                 Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
                 movementVector += _ccTrans.TransformDirection(wasdInputVector3) * finalSpeed;
                 movementVector *= _stunned ? 0 : _speedMultiplier;
+                movementVector *= CastingSpell ? _castingSpellMoveFactor : 1.0f;
+                
             }
         }
 
