@@ -13247,7 +13247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 8286632864543236906}
   _rigWeightMax: 0.9
-  _rigWeightMin: 0
+  _rigWeightMin: 0.1
   _rigAnimationTime: 0.1
   _trail: {fileID: 6762613002161579478}
   _targetPositionFactor: 0.9
