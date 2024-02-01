@@ -42,6 +42,7 @@ namespace Drawing {
         public static System.Action<Vector2> OnTranslatedDraw;
         public static System.Action OnTranslatedStartDraw;
         public static System.Action<Vector2[], float> OnTranslatedEndDraw;
+        public static System.Action OnDrawCancelled;
 
         public static readonly Vector2 HALF = new Vector2(.5f, .5f);
 
@@ -97,6 +98,7 @@ namespace Drawing {
         private void CancelDrawing() {
             var cancelledResults = new DrawingResults(false);
             Finish(cancelledResults);
+            OnDrawCancelled.Invoke();
         }
 
         private void PositionDrawing(Vector2 position) {
