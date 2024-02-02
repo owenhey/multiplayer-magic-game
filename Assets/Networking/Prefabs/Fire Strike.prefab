@@ -35,7 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7933631490204426399}
-  - {fileID: 4359461200895344065}
+  - {fileID: 7951743792920173816}
   m_Father: {fileID: 1485923488132671122}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &1302740676521153021
@@ -399,7 +399,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8264046528775499405}
   _netSpawnType: 0
   _contentTransform: {fileID: 4276230399832535851}
-  _explosionGameObject: {fileID: 2648797487154239343}
+  _explosionGameObject: {fileID: 1830428518887598460}
   _fireballEffect: {fileID: 7435742775830097355}
   _decalProjector: {fileID: 6888621423343704742}
   _spawnSound: {fileID: 1363597941473314440}
@@ -445,6 +445,61 @@ MonoBehaviour:
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 0
+--- !u!1001 &446676298776506759
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4276230399832535851}
+    m_Modifications:
+    - target: {fileID: 2257452059653757179, guid: 752c8f40bd9b134419dfe5a151691afa,
+        type: 3}
+      propertyPath: m_Name
+      value: Toon Colored Explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 2257452059653757179, guid: 752c8f40bd9b134419dfe5a151691afa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5388082455659242432, guid: 752c8f40bd9b134419dfe5a151691afa,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7523453819842489727, guid: 752c8f40bd9b134419dfe5a151691afa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7523453819842489727, guid: 752c8f40bd9b134419dfe5a151691afa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7523453819842489727, guid: 752c8f40bd9b134419dfe5a151691afa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 752c8f40bd9b134419dfe5a151691afa, type: 3}
+--- !u!1 &1830428518887598460 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2257452059653757179, guid: 752c8f40bd9b134419dfe5a151691afa,
+    type: 3}
+  m_PrefabInstance: {fileID: 446676298776506759}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7951743792920173816 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7523453819842489727, guid: 752c8f40bd9b134419dfe5a151691afa,
+    type: 3}
+  m_PrefabInstance: {fileID: 446676298776506759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5445860658320249085
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -499,64 +554,4 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2705113769885364322, guid: d38d8c460d3cade4ab3d1ddfc6c02ed1,
     type: 3}
   m_PrefabInstance: {fileID: 5445860658320249085}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &8688531832623002246
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 4276230399832535851}
-    m_Modifications:
-    - target: {fileID: 2562860115875794608, guid: 69bda257c9d006d46b702ebf230cab8b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4966405475946729287, guid: 69bda257c9d006d46b702ebf230cab8b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4966405475946729287, guid: 69bda257c9d006d46b702ebf230cab8b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4966405475946729287, guid: 69bda257c9d006d46b702ebf230cab8b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6652299254313018857, guid: 69bda257c9d006d46b702ebf230cab8b,
-        type: 3}
-      propertyPath: m_Name
-      value: PolyFireExplosion
-      objectReference: {fileID: 0}
-    - target: {fileID: 6652299254313018857, guid: 69bda257c9d006d46b702ebf230cab8b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 6652299254313018857, guid: 69bda257c9d006d46b702ebf230cab8b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 69bda257c9d006d46b702ebf230cab8b, type: 3}
---- !u!1 &2648797487154239343 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6652299254313018857, guid: 69bda257c9d006d46b702ebf230cab8b,
-    type: 3}
-  m_PrefabInstance: {fileID: 8688531832623002246}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &4359461200895344065 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4966405475946729287, guid: 69bda257c9d006d46b702ebf230cab8b,
-    type: 3}
-  m_PrefabInstance: {fileID: 8688531832623002246}
   m_PrefabAsset: {fileID: 0}
