@@ -14,7 +14,12 @@ namespace Spells {
     public class ChaosBoltBehavior : NetworkBehaviour, INetSpawnable {
         [SerializeField] private SpawnablePrefabTypes _netSpawnType;
         public SpawnablePrefabTypes SpawnablePrefabType => _netSpawnType;
-
+        
+        [Header("Animation")] 
+        [SerializeField] private float _wobbleAmp;
+        [SerializeField] private int _wobbleFreq;
+        
+        [Header("Refs")] 
         [SerializeField] private Transform _contentTransform;
         [SerializeField] private LayerMask _playerLayerMask;
         [SerializeField] private VisualEffect _fireballEffect;
@@ -86,6 +91,7 @@ namespace Spells {
 
         public void ClientEnableObject() {
             _contentTransform.gameObject.SetActive(true);
+            _fireballEffect.transform.DOShakePosition(10, _wobbleAmp * Vector3.one, _wobbleFreq);
         }
 
         private void Setup() {
