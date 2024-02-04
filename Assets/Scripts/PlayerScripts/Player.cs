@@ -22,6 +22,7 @@ namespace PlayerScripts {
 
         private Action<bool> _onClientStart;
         public static Action OnLocalPlayerSetTeam;
+        public static Action<Player> ServerOnPlayerConnected;
 
         public static Player LocalPlayer;
 
@@ -131,6 +132,7 @@ namespace PlayerScripts {
         public override void OnStartNetwork() {
             base.OnStartNetwork();
             AddToStaticData();
+            ServerOnPlayerConnected?.Invoke(this);
         }
         
         private void AddToStaticData() {

@@ -36,7 +36,7 @@ namespace PlayerScripts {
         }
 
         [Server]
-        private void ServerSpawnPlayer() {
+        public void ServerSpawnPlayer() {
             SetHealth(_maxHealth);
             ClientSpawnPlayer(Owner);
             OnPlayerSpawn?.Invoke();
@@ -57,10 +57,10 @@ namespace PlayerScripts {
 
         [TargetRpc]
         private void ClientSpawnPlayer(NetworkConnection targetPlayer = null) {
-            ClientRevive();
+            ClientSpawn();
         }
 
-        private void ClientRevive() {
+        private void ClientSpawn() {
             _player.PlayerReferences.PlayerStateManager.RemoveState(PlayerState.Dead);
             OnPlayerSpawn?.Invoke();
         }

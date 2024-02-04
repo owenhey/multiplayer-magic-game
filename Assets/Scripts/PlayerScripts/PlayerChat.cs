@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.TeamScripts;
+using FishNet.Connection;
 using FishNet.Object;
 using Net;
 using PlayerScripts;
@@ -30,6 +31,16 @@ namespace PlayerScripts{
         [Server]
         private void ServerSendMessageToClients(ChatMessage message) {
             ServerChat.Instance.SendMessageToClients(message);
+        }
+        
+        [Server]
+        public void ServerSendMessageToThisClient(ChatMessage message) {
+            ClientGetPersonalMessageFromServer(Owner, message);
+        }
+
+        [TargetRpc]
+        private void ClientGetPersonalMessageFromServer(NetworkConnection conn, ChatMessage message) {
+            OnClientMessageReceived?.Invoke(message);
         }
             
         [Server]
