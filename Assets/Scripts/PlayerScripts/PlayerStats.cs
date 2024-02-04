@@ -17,8 +17,10 @@ namespace PlayerScripts {
         public int CurrentHealth => _currentHealth;
 
         public System.Action<int, int> OnHealthChange;
-        public System.Action OnPlayerDeath;
-        public System.Action OnPlayerSpawn;
+        public System.Action OnServerPlayerDeath;
+        public System.Action OnClientPlayerDeath;
+        public System.Action OnServerPlayerSpawn;
+        public System.Action OnClientPlayerSpawn;
         
         protected override void OnClientStart(bool isOwner) {
             base.OnClientStart(isOwner);
@@ -39,7 +41,7 @@ namespace PlayerScripts {
         public void ServerSpawnPlayer() {
             SetHealth(_maxHealth);
             ClientSpawnPlayer(Owner);
-            OnPlayerSpawn?.Invoke();
+            OnServerPlayerSpawn?.Invoke();
         }
 
         [Server]
@@ -62,7 +64,7 @@ namespace PlayerScripts {
 
         private void ClientSpawn() {
             _player.PlayerReferences.PlayerStateManager.RemoveState(PlayerState.Dead);
-            OnPlayerSpawn?.Invoke();
+            OnClientPlayerSpawn?.Invoke();
         }
 
         [Client]
@@ -91,7 +93,7 @@ namespace PlayerScripts {
         private void CheckForDeath() {
             Debug.Log("Health: " + _currentHealth);
             if (_currentHealth <= 0) {
-                OnPlayerDeath?.Invoke();
+                OnServerPlayerDeath?.Invoke();
                 ObserverDeath();
             }
         }
@@ -99,7 +101,7 @@ namespace PlayerScripts {
         [ObserversRpc]
         private void ObserverDeath() {
             _player.PlayerReferences.PlayerStateManager.AddState(PlayerState.Dead);
-            OnPlayerDeath?.Invoke();
+            OnClientPlayerDeath?.Invoke();
         }
         
         private void OnHealthChangeHandler(int oldHealth, int newHealth, bool asServer) {

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using FishNet.Managing;
+using FishNet.Managing.Logging;
 using FishNet.Object;
 using PlayerScripts;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Core {
         public static GameManager Instance {
             get {
                 if (_instance == null) {
-                    _instance = GameObject.FindObjectOfType<GameManager>();
+                    _instance = GameObject.FindObjectOfType<GameManager>(true);
                 }
 
                 return _instance;
@@ -27,11 +28,12 @@ namespace Core {
         
         [Server]
         private void PlayerConnectedHandler(Player p) {
-            p.PlayerReferences.PlayerStats.OnPlayerDeath += ()=> PlayerDeathHandler(p);
+            p.PlayerReferences.PlayerStats.OnServerPlayerDeath += ()=> PlayerDeathHandler(p);
         }
 
         [Server]
         private void PlayerDeathHandler(Player p) {
+            Debug.Log($"How many times does this run?");
             _playerSpawner.RespawnAfterTime(p);
         }
 
@@ -40,14 +42,14 @@ namespace Core {
             base.OnStartServer();
             Player.ServerOnPlayerConnected += PlayerConnectedHandler;
         }
-
+        
         [Server]
         public override void OnStopServer() {
             base.OnStopServer();
             Player.ServerOnPlayerConnected -= PlayerConnectedHandler;
         }
         
-        [Server]
+        [Server(Logging = LoggingType.Off)]
         private void Awake() {
             Instance = this;
         }

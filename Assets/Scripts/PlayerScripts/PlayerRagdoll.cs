@@ -18,13 +18,13 @@ namespace PlayerScripts {
         }
 
         private void OnEnable() {
-            _player.PlayerReferences.PlayerStats.OnPlayerDeath += EnableRagdoll;
-            _player.PlayerReferences.PlayerStats.OnPlayerSpawn += DisableRagdoll;
+            _player.PlayerReferences.PlayerStats.OnClientPlayerDeath += EnableRagdoll;
+            _player.PlayerReferences.PlayerStats.OnClientPlayerSpawn += DisableRagdoll;
         }
 
         private void OnDisable() {
-            _player.PlayerReferences.PlayerStats.OnPlayerDeath -= EnableRagdoll;
-            _player.PlayerReferences.PlayerStats.OnPlayerSpawn -= DisableRagdoll;
+            _player.PlayerReferences.PlayerStats.OnClientPlayerDeath -= EnableRagdoll;
+            _player.PlayerReferences.PlayerStats.OnClientPlayerSpawn -= DisableRagdoll;
         }
 
         public void DisableRagdoll() {

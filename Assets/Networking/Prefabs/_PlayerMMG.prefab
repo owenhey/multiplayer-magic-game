@@ -13712,7 +13712,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _player: {fileID: 8286632864543236906}
-  _maxHealth: 100
+  _maxHealth: 35
   _currentHealth: 0
 --- !u!114 &651983594242769555
 MonoBehaviour:
