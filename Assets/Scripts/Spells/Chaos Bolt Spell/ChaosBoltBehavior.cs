@@ -21,7 +21,6 @@ namespace Spells {
         
         [Header("Refs")] 
         [SerializeField] private Transform _contentTransform;
-        [SerializeField] private LayerMask _playerLayerMask;
         [SerializeField] private VisualEffect _fireballEffect;
         [SerializeField] private AudioSource _spawnSound;
         [SerializeField] private AudioSource _explosionSound;

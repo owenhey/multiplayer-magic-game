@@ -10,23 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f37f03dec991b624687a900c30947a94, type: 3}
-  m_Name: Plus
+  m_Name: L
   m_EditorClassIdentifier: 
   Points:
-  - X: 0.5
+  - X: 0
     Y: 1
+    time: 0
+  - X: 0
+    Y: 0.3
     time: 0.6666
+  - X: 0
+    Y: 0.6666
+    time: 0.6666
+  - X: 0
+    Y: 0
+    time: 0.3333
   - X: 0.5
     Y: 0
     time: 0.6666
-  - X: 0
-    Y: 0.5
-    time: 0.6666
   - X: 1
-    Y: 0.5
-    time: 0.6666
+    Y: 0
+    time: 0.857
   TotalDistance: 4
-  CalculatedDistance: 2.7071068
+  CalculatedDistance: 2.7332
   TimeTarget: 1
   PerfectScoreThreshold: 0.1
   FailCastThreshold: 0.2

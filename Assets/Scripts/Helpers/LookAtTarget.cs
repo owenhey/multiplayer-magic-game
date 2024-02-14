@@ -7,6 +7,7 @@ namespace Helpers{
     public class LookAtTarget : MonoBehaviour {
         public Transform Target;
         public bool Reverse;
+        public bool LockYAxis;
 
         private Transform trans;
 
@@ -17,15 +18,19 @@ namespace Helpers{
         }
 
         // Update is called once per frame
-        void LateUpdate()
-        {
+        void LateUpdate() {
+            var position = Target.position;
+            Vector3 target = LockYAxis
+                ? new Vector3(position.x, trans.position.y, position.z)
+                : Target.position;
             if (Reverse) {
-                trans.LookAt(trans.position - (Target.position - trans.position));
-                _gizmo = trans.position - (Target.position - trans.position);
+                var position2 = trans.position;
+                trans.LookAt(position2 - (target - position2));
+                _gizmo = position2 - (target - position2);
             }
             else {
                 trans.LookAt(Target.position);
-                _gizmo = Target.position;
+                _gizmo = target;
             }
         }
 

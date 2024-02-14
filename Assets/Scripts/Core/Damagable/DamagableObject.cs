@@ -53,6 +53,10 @@ namespace Core.Damage {
             }
         }
 
+        public Transform GetTransform() {
+            return _transform;
+        }
+
         public void ApplyStatus(PlayerStatusEffect statusEffect) {
             // Don't have to do anything here
         }

@@ -10,19 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7db8ff4c9304fd19fab4f4c0de4c731, type: 3}
-  m_Name: Slow Enemy
+  m_Name: Lightning
   m_EditorClassIdentifier: 
-  EffectId: Slow Enemy
-  SpellId: 9
-  SpellName: Slow Enemy
-  SpellCooldown: 5
+  EffectId: Lightning
+  SpellId: 10
+  SpellName: Lightning
+  SpellCooldown: 1
   SpellIcon: {fileID: 21300000, guid: b0e3851cadd1c0847bdf97afd3ab6be7, type: 3}
-  Drawing: {fileID: 11400000, guid: 8373cfb4fb7b15c49af711768fe39f63, type: 2}
-  IndicatorData: {fileID: 11400000, guid: 3a662937262364a41820f4f7295d2eaa, type: 2}
-  TargetTypes: 13
-  SpellPrefab: {fileID: 0}
-  SpellAttributes:
-  - Key: duration
-    Value: 1.5
-  - Key: speed_factor
-    Value: 0.55
+  Drawing: {fileID: 11400000, guid: 45030e23a7aa7df4283538a8710fcbe9, type: 2}
+  IndicatorData: {fileID: 11400000, guid: fbdc007acd50eb94a926df6038ae72da, type: 2}
+  TargetTypes: 4
+  SpellPrefab: {fileID: 5569929556040501193, guid: cd5649472a658374eb8a4f212f2a88f9,
+    type: 3}
+  SpellAttributes: []

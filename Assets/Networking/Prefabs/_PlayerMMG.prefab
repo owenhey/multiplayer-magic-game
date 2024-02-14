@@ -7490,6 +7490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   Reverse: 1
+  LockYAxis: 0
 --- !u!114 &4244592894743455015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11214,7 +11215,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.35
+  m_Time: 0.5
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -13649,6 +13650,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 91dba268d3ae04a4098823b132d95194, type: 2}
   - {fileID: 11400000, guid: 4f0d4e0d7ec05924aa17a4be15167360, type: 2}
   - {fileID: 11400000, guid: 28725835605f8bd438d9408a78cff849, type: 2}
+  - {fileID: 11400000, guid: bb90e419a932ea948a55fc573a5dd6f3, type: 2}
   _castingType: 0
 --- !u!114 &2092327897885649139
 MonoBehaviour:
@@ -13696,6 +13698,9 @@ MonoBehaviour:
   - _type: 4
     _prefab: {fileID: 5569929556040501193, guid: 5e1d8b468e2a08743a42f56cbc11b865,
       type: 3}
+  - _type: 5
+    _prefab: {fileID: 5569929556040501193, guid: cd5649472a658374eb8a4f212f2a88f9,
+      type: 3}
 --- !u!114 &5901419383538486834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13712,7 +13717,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _player: {fileID: 8286632864543236906}
-  _maxHealth: 35
+  _maxHealth: 1000
   _currentHealth: 0
 --- !u!114 &651983594242769555
 MonoBehaviour:
@@ -19188,6 +19193,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6336008043593946860}
     m_Modifications:
+    - target: {fileID: 2763605424328707468, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5514250314181621047, guid: 513cebbed744e5d489bb5e23d7c9a1d4,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -19844,6 +19854,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5493308921862782476, guid: 31d35608a32b3444798ea7e7771803b0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20196,6 +20211,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5493308921862782476, guid: dfb1903b803839049bfa10d822242629,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20221,6 +20241,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6336008043593946860}
     m_Modifications:
+    - target: {fileID: 2763605424328707468, guid: 0008a47cba209e640b3347f1b0a67f3c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5514250314181621047, guid: 0008a47cba209e640b3347f1b0a67f3c,
         type: 3}
       propertyPath: m_LocalRotation.w

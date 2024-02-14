@@ -13,6 +13,8 @@ namespace Core.Damage {
 
         void ApplyStatus(PlayerStatusEffect statusEffect);
         Teams GetTeam();
+
+        Transform GetTransform();
     }
 
     public static class DamageableLayerMask {

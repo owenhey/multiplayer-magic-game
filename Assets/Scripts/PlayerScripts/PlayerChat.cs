@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Core.TeamScripts;
 using FishNet.Connection;
+using FishNet.Managing.Logging;
 using FishNet.Object;
 using Net;
 using PlayerScripts;
@@ -19,6 +20,7 @@ namespace PlayerScripts{
         public Action<ChatMessage> OnClientMessageReceived;
         public Action OnRequestChatFocus;
 
+        [Client(Logging = LoggingType.Off)]
         private void Update() {
             if (!IsOwner) return;
             if (!Active) return;

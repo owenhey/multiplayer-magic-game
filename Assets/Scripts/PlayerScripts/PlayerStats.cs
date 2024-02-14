@@ -118,6 +118,10 @@ namespace PlayerScripts {
             _player.PlayerReferences.PlayerStatus.ServerAddStatus(statusEffect);
         }
 
+        public Transform GetTransform() {
+            return _player.PlayerReferences.PlayerMovement.transform;
+        }
+
         public Teams GetTeam() => _player.PlayerTeam;
     }
 }
