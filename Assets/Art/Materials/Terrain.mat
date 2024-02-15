@@ -62,7 +62,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Dirt:
-        m_Texture: {fileID: 2800000, guid: 7398bb67ed8be71419fc85a6cd756f85, type: 3}
+        m_Texture: {fileID: 2800000, guid: f43016fca86ec644ca67deea9a23f8e6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -145,7 +145,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Rock_Tiling: 0.25
-    - _Smoothing: 0.062
+    - _Smoothing: 0.068
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -154,7 +154,7 @@ Material:
     - _Surface: 0
     - _Tiling_Dirt: 0.3
     - _Tiling_Grass: 0.5
-    - _Tiling_Path: 0.355
+    - _Tiling_Path: 0.53
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:

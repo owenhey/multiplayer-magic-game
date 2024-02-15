@@ -47,7 +47,7 @@ public class EditorGrassPainter : Editor
     public override void OnInspectorGUI()
     {
         EditorGUILayout.LabelField("Grass Limit", EditorStyles.boldLabel);
-
+        grassPainter.GrassAdjustHeight = EditorGUILayout.Slider("Adjust Height", grassPainter.GrassAdjustHeight, 0f, 1f);
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField(grassPainter.i.ToString() + "/", EditorStyles.label);
         grassPainter.grassLimit = EditorGUILayout.IntField(grassPainter.grassLimit);

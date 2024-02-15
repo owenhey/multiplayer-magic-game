@@ -8,9 +8,8 @@ using UnityEditor;
 
 [RequireComponent(typeof(MeshFilter))]
 [ExecuteInEditMode]
-public class GrassPainter : MonoBehaviour
-{
-
+public class GrassPainter : MonoBehaviour {
+    public float GrassAdjustHeight;
     public Mesh mesh;
     MeshFilter filter;
 
@@ -69,9 +68,6 @@ public class GrassPainter : MonoBehaviour
 
     int[] indi;
 
-    private void Awake(){
-        transform.position += Vector3.up * .1f;
-    }
 #if UNITY_EDITOR
     void OnFocus()
     {
@@ -130,7 +126,7 @@ public class GrassPainter : MonoBehaviour
             // calculate area of zone
             float area = brushSize * brushSize * Mathf.PI;
 
-            if (e.type == EventType.MouseDrag && e.button == 1 && toolbarInt == 0)
+            if (e.type == EventType.MouseDrag && e.button == 2 && toolbarInt == 0)
             {
                 // place based on density
                 for (int k = 0; k < density * area; k++)
@@ -167,6 +163,7 @@ public class GrassPainter : MonoBehaviour
                             if (k != 0)
                             {
                                 var grassPosition = hitPos;// + Vector3.Cross(origin, hitNormal);
+                                grassPosition += Vector3.up * GrassAdjustHeight;
                                 grassPosition -= this.transform.position;
 
                                 positions.Add((grassPosition));
@@ -213,6 +210,7 @@ public class GrassPainter : MonoBehaviour
                 if (Physics.Raycast(ray, out terrainHit, 200f, hitMask.value))
                 {
                     hitPos = terrainHit.point;
+                    hitPos += Vector3.up * GrassAdjustHeight;
                     hitPosGizmo = hitPos;
                     hitNormal = terrainHit.normal;
                     for (int j = 0; j < positions.Count; j++)
