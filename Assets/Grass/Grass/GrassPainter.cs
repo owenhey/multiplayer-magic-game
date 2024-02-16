@@ -159,11 +159,11 @@ public class GrassPainter : MonoBehaviour {
                         if ((paintMask.value & (1 << terrainHit.transform.gameObject.layer)) > 0)
                         {
                             hitPos = terrainHit.point;
+                            hitPos += Vector3.up * GrassAdjustHeight;
                             hitNormal = terrainHit.normal;
                             if (k != 0)
                             {
                                 var grassPosition = hitPos;// + Vector3.Cross(origin, hitNormal);
-                                grassPosition += Vector3.up * GrassAdjustHeight;
                                 grassPosition -= this.transform.position;
 
                                 positions.Add((grassPosition));
@@ -203,7 +203,7 @@ public class GrassPainter : MonoBehaviour {
                 e.Use();
             }
             // removing mesh points
-            if (e.type == EventType.MouseDrag && e.button == 1 && toolbarInt == 1)
+            if (e.type == EventType.MouseDrag && e.button == 2 && toolbarInt == 1)
             {
                 Ray ray = scene.camera.ScreenPointToRay(mousePos);
 

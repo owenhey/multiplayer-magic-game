@@ -70,7 +70,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Grass:
-        m_Texture: {fileID: 2800000, guid: 0abf065c36088fa4088737c86d59a4d3, type: 3}
+        m_Texture: {fileID: 2800000, guid: aa1d601b065ff834b8be837b5b66653a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GrassNormal:
+        m_Texture: {fileID: 2800000, guid: edddba054057d7c49b0669dc00b76644, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -90,7 +94,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Path:
-        m_Texture: {fileID: 2800000, guid: 7398bb67ed8be71419fc85a6cd756f85, type: 3}
+        m_Texture: {fileID: 2800000, guid: be18432581826fa4181e0dac68758f32, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Rock:
@@ -132,6 +136,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _GrassNormalStrength: 0.446
     - _Metallic: 0
     - _Normal_Value_1: 0.39
     - _Normal_Value_2: 0.776
@@ -153,7 +158,7 @@ Material:
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _Tiling_Dirt: 0.3
-    - _Tiling_Grass: 0.5
+    - _Tiling_Grass: 0.412
     - _Tiling_Path: 0.53
     - _WorkflowMode: 1
     - _ZWrite: 1
