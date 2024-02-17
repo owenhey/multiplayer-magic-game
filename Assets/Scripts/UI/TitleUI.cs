@@ -29,7 +29,7 @@ namespace UI {
         private void LoadGame() {
             _interactableCanvasGroup.interactable = false;
             _fadeScreen.DOFade(1.0f, .5f).OnComplete(() => {
-                SceneManager.LoadScene("SampleScene");
+                SceneManager.LoadScene("Main");
             });
         }
 
