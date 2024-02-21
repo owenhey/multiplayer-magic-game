@@ -185,7 +185,7 @@ Material:
     - __dirty: 1
     m_Colors:
     - Color_369F793F: {r: 0.9810127, g: 1, b: 0, a: 0}
-    - Color_FA85148A: {r: 0.4339623, g: 0.42568392, b: 0.18627627, a: 0.22745098}
+    - Color_FA85148A: {r: 0, g: 0, b: 0, a: 0.22745098}
     - Vector2_3D1D1E3D: {r: 1, g: 0, b: 0, a: 0}
     - Vector2_B578DC94: {r: 0.5, g: 0.5, b: 0.5, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}

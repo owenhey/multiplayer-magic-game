@@ -22,7 +22,7 @@ MonoBehaviour:
   bottomWidth: 0.571
   MinWidth: 0.01
   MinHeight: 0.01
-  MaxWidth: 1
+  MaxWidth: 1.0000001
   MaxHeight: 1
   windSpeed: 1
   windStrength: 0.03
@@ -30,7 +30,7 @@ MonoBehaviour:
   allowedSegmentsPerBlade: 4
   affectStrength: 1
   topTint: {r: 1, g: 1, b: 1, a: 1}
-  bottomTint: {r: 1, g: 0.93006563, b: 0.8537736, a: 1}
+  bottomTint: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 1}
   drawBounds: 0
   minFadeDistance: 40
   maxDrawDistance: 125

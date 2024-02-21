@@ -45,7 +45,7 @@ namespace PlayerScripts {
         }
 
         private void FPS() {
-            Application.targetFrameRate = 144;
+            Application.targetFrameRate = -1;
         }
 
         private void CursorSettings() {
