@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace PlayerScripts {
-    public enum PlayerState { MovingCamera, Teleporting, CastingSpell, InInventory, Stunned, Dead, Chatting, InSettings }
+    public enum PlayerState { MovingCamera, Teleporting, CastingSpell, InInventory, Stunned, Dead, Chatting, InSettings, InCharacterSelect }
 
     public class PlayerStateManager : LocalPlayerScript {
         public bool WaitTilNextFrame;
@@ -28,6 +28,7 @@ namespace PlayerScripts {
         private bool _dead;
         private bool _chatting;
         private bool _inSettings;
+        private bool _inCharacterSelect;
 
         private bool _movementEnabled;
         private bool _spellsEnabled;
@@ -71,39 +72,40 @@ namespace PlayerScripts {
             _dead = Active(PlayerState.Dead);
             _chatting = Active(PlayerState.Chatting);
             _inSettings = Active(PlayerState.InSettings);
+            _inCharacterSelect = Active(PlayerState.InCharacterSelect);
             
             // MAIN LOGIC HERE
             
             // Movement 
-            _movementEnabled = !(_teleporting || _inInventory || _stunned || _dead || _chatting || _inSettings); 
+            _movementEnabled = !(_teleporting || _inInventory || _stunned || _dead || _chatting || _inSettings || _inCharacterSelect); 
             PlayerMovement.enabled = _movementEnabled;
 
             // Spells 
-            _spellsEnabled = !(_teleporting || _inInventory || _stunned || _castingSpell || _dead || _chatting || _inSettings); 
+            _spellsEnabled = !(_teleporting || _inInventory || _stunned || _castingSpell || _dead || _chatting || _inSettings || _inCharacterSelect); 
             PlayerSpells.enabled = _spellsEnabled;
             PlayerMovement.CastingSpell = _castingSpell;
             
             // Interaction 
-            _interactionEnabled = !(_teleporting || _inInventory || _stunned || _castingSpell || _movingCamera || _dead || _chatting || _inSettings); 
+            _interactionEnabled = !(_teleporting || _inInventory || _stunned || _castingSpell || _movingCamera || _dead || _chatting || _inSettings || _inCharacterSelect); 
             PlayerInteract.enabled = _interactionEnabled;
             
             // Indicators
-            _indicatorsShowing = !(_teleporting || _inInventory || _stunned || _dead || _chatting || _inSettings);
+            _indicatorsShowing = !(_teleporting || _inInventory || _stunned || _dead || _chatting || _inSettings || _inCharacterSelect);
             PlayerIndicators.Hide = !_indicatorsShowing;
             
-            _indicatorsActive = !(_teleporting || _inInventory || _stunned || _dead || _chatting || _inSettings);
+            _indicatorsActive = !(_teleporting || _inInventory || _stunned || _dead || _chatting || _inSettings || _inCharacterSelect);
             PlayerIndicators.CanRegisterClick = _indicatorsActive;
             
             // Animations
-            _animatorActive = !(_dead);
+            _animatorActive = !(_dead || _inCharacterSelect);
             PlayerAnimator.SetEnabled(_animatorActive);
             
             // Player Collisions
-            _collidersActive = !(_dead);
+            _collidersActive = !(_dead || _inCharacterSelect);
             PlayerMovement.SetColliderEnabled(_collidersActive);
             
             // Player Chat
-            _chatActive = !(_chatting || _inSettings || _inInventory);
+            _chatActive = !(_chatting || _inSettings || _inInventory || _inCharacterSelect);
             PlayerChat.Active = _chatActive;
             
             // Player settings
@@ -111,7 +113,7 @@ namespace PlayerScripts {
             PlayerSettings.Active = _settingsEnabled;
             
             // Camera Controls
-            _cameraControlsEnabled = !(_chatting || _inSettings || _inInventory);
+            _cameraControlsEnabled = !(_chatting || _inSettings || _inInventory || _inCharacterSelect);
             CameraControls.enabled = _cameraControlsEnabled;
         }
 
