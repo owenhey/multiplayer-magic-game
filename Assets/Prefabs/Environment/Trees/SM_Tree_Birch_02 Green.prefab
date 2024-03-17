@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1253559240392430145}
   - component: {fileID: 8167964343022213284}
   - component: {fileID: 7959573365338488728}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_Tree_Birch_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6920998827948364579}
   - component: {fileID: 8836524932598311997}
   - component: {fileID: 4212944526944761375}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_Tree_Birch_02 Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 6416545530067584879}
   - component: {fileID: 3196511459225771292}
   - component: {fileID: 5159789991915962827}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_Tree_Birch_02_LOD_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

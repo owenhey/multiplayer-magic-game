@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4128203946440554222}
   - component: {fileID: 8099284103238506201}
   - component: {fileID: 1135654159150347104}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_Rock_Wall_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
