@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core.Damage;
+using Core.TeamScripts;
 using UnityEngine;
 using DG.Tweening;
 using FishNet.Object;
@@ -43,6 +44,17 @@ namespace Spells {
                 ServerOnContact(false);
                 c.GetComponentInParent<Player>().PlayerReferences.PlayerModel.ServerDisableShield(true);
                 return;
+            }
+            
+            var damagableCollider = c.GetComponent<DamagableCollider>();
+            if (damagableCollider != null) {
+                // Figure out if this is an ally
+                IDamagable damagable = damagableCollider.Damagable;
+                Teams castingTeam = Player.GetPlayerFromClientId(_initData.CasterId).PlayerTeam;
+
+                if (!damagable.CanDamage(castingTeam, _initData.SpellDefinition.TargetTypes)) {
+                    return;
+                }
             }
             
             // Otherwise, explode
@@ -97,7 +109,8 @@ namespace Spells {
             float damage = _initData.SpellDefinition.GetAttributeValue("damage");
             damage *= Misc.Remap(_initData.SpellEffectiveness, 0, 1, .5f, 1.0f);
             float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
-
+            Teams castingTeam = Player.GetPlayerFromClientId(_initData.CasterId).PlayerTeam;
+            
             int numHit = Physics.OverlapSphereNonAlloc(_contentTransform.position, radius, ColliderBuffer.Buffer, DamageableLayerMask.GetMask);
             for (int i = 0; i < numHit; i++) {
                 var col = ColliderBuffer.Buffer[i];
@@ -107,6 +120,9 @@ namespace Spells {
                 damageDirection.Normalize();
 
                 if (col.TryGetComponent(out DamagableCollider dc)) {
+                    if (!dc.Damagable.CanDamage(castingTeam, _initData.SpellDefinition.TargetTypes)) {
+                        continue;
+                    }
                     dc.Damagable.TakeDamageAndKnockback((int)damage, damageDirection * knockback);
                 }
             }

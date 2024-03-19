@@ -1,5 +1,6 @@
 using System;
 using Core.Damage;
+using Core.TeamScripts;
 using DG.Tweening;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -36,8 +37,6 @@ namespace Spells {
         private void HandleCollision(Collider c) {
             if (!IsServer) return;
 
-            Debug.Log($"Collided with something. Name is: {c.name}");
-            
             if (c.CompareTag("Shield")) {
                 // Make sure it's not my own shield
                 if (c.GetComponentInParent<Player>().OwnerId != _initData.CasterId) {
@@ -47,6 +46,17 @@ namespace Spells {
                 }
                 else {
                     Debug.Log("Ran into my own shield but it's fine");
+                }
+            }
+
+            var damagableCollider = c.GetComponent<DamagableCollider>();
+            if (damagableCollider != null) {
+                // Figure out if this is an ally
+                IDamagable damagable = damagableCollider.Damagable;
+                Teams castingTeam = Player.GetPlayerFromClientId(_initData.CasterId).PlayerTeam;
+
+                if (!damagable.CanDamage(castingTeam, _initData.SpellDefinition.TargetTypes)) {
+                    return;
                 }
             }
             
@@ -104,6 +114,7 @@ namespace Spells {
             float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
 
             int numHit = Physics.OverlapSphereNonAlloc(_contentTransform.position, radius, ColliderBuffer.Buffer, DamageableLayerMask.GetMask);
+            Teams castingTeam = Player.GetPlayerFromClientId(_initData.CasterId).PlayerTeam;
             for (int i = 0; i < numHit; i++) {
                 var col = ColliderBuffer.Buffer[i];
                 
@@ -112,6 +123,9 @@ namespace Spells {
                 damageDirection.Normalize();
 
                 if (col.TryGetComponent(out DamagableCollider dc)) {
+                    if (!dc.Damagable.CanDamage(castingTeam, _initData.SpellDefinition.TargetTypes)) {
+                        continue;
+                    }
                     dc.Damagable.TakeDamageAndKnockback((int)damage, damageDirection * knockback);
                 }
             }

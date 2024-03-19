@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Teleport
   m_EditorClassIdentifier: 
   TargetType: 3
-  RaycastRange: 20
-  MaximumRange: 12
+  RaycastRange: 30
+  MaximumRange: 20
   PossibleTargets: 0
   TargetDefault: 0
   Indicator: 2
