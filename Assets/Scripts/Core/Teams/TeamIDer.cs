@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Core.TeamScripts {
-    [CreateAssetMenu(fileName = "TeamIder", menuName = "ScriptableObjects/TeamIder", order = 0)]
+    [CreateAssetMenu(fileName = "TeamIder", menuName = "ScriptableObjects/Singletons/TeamIder", order = 0)]
     public class TeamIDer : ScriptableObject {
         private static TeamIDer Instance {
             get {

@@ -9,6 +9,7 @@ using UnityEngine;
 using DG.Tweening;
 using FishNet.Connection;
 using GameKit.Utilities;
+using PlayerScripts.Classes;
 using Spells;
 
 namespace PlayerScripts {
@@ -32,7 +33,9 @@ namespace PlayerScripts {
         private static readonly int _isOverridingColor = Shader.PropertyToID("_IsOverridingColor");
         private static readonly int _OverrideColor = Shader.PropertyToID("_OverrideColor");
         private static readonly int _colorPrimary = Shader.PropertyToID("_Color_Primary");
-        private static readonly int _colorMetalDark = Shader.PropertyToID("_Color_Metal_Dark");
+        private static readonly int _colorMetalPrimary = Shader.PropertyToID("_Color_Metal_Primary");
+        private static readonly int _colorSecondary = Shader.PropertyToID("_Color_Secondary");
+        private static readonly int _colorLeatherPrimary = Shader.PropertyToID("_Color_Leather_Primary");
         private static readonly int _twirlCenterWorldSpace = Shader.PropertyToID("_TwirlCenterWorldSpace");
         private static readonly int _twirlAmount = Shader.PropertyToID("_TwirlAmount");
         private static readonly int _twirl = Shader.PropertyToID("_Twirl");
@@ -74,12 +77,21 @@ namespace PlayerScripts {
         public override void OnStartNetwork() {
             base.OnStartNetwork();
             SetTeamColors(_player.PlayerTeam);
+            SetClassColors(_player.PlayerClass);
         }
 
         public void SetTeamColors(Teams team) {
             TeamDefinition teamDef = TeamIDer.GetTeamDefinition(team);
             Color color = teamDef.TeamColor;
             _playerMat.SetColor(_colorPrimary, color);
+            _playerMat.SetColor(_colorMetalPrimary, color);
+        }
+
+        public void SetClassColors(PlayerClass playerClass) {
+            PlayerClassDefinition classDef = PlayerClassIDer.GetClassDefinition(playerClass);
+            Color tintColor = classDef.ClassColor;
+            _playerMat.SetColor(_colorSecondary, tintColor);
+            _playerMat.SetColor(_colorLeatherPrimary, tintColor);
         }
 
         public override void OnStopClient() {

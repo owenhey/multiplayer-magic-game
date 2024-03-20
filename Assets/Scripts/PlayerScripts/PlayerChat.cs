@@ -7,6 +7,7 @@ using FishNet.Managing.Logging;
 using FishNet.Object;
 using Net;
 using PlayerScripts;
+using PlayerScripts.Classes;
 using UnityEngine;
 
 namespace PlayerScripts{
@@ -38,6 +39,12 @@ namespace PlayerScripts{
         [Server]
         public void ServerSendMessageToThisClient(ChatMessage message) {
             ClientGetPersonalMessageFromServer(Owner, message);
+        }
+        
+        [Server]
+        public void ServerSendMessageToThisClient(string message) {
+            ChatMessage chatMsg = new ChatMessage(-1, "Server", message);
+            ServerSendMessageToThisClient(chatMsg);
         }
 
         [TargetRpc]
@@ -78,27 +85,52 @@ namespace PlayerScripts{
         private bool CheckForCommands(ChatMessage message) {
             string nameKey = "/name ";
             string teamKey = "/team ";
+            string classKey = "/class ";
             if (message.Message.StartsWith(nameKey)) {
                 string newName = message.Message.Substring(nameKey.Length);
                 _player.ServerSetName(newName);
+                ServerSendMessageToThisClient("Setting name to " + newName);
                 
                 return true;
             }
             if (message.Message.StartsWith(teamKey)) {
                 string newTeam = message.Message.Substring(teamKey.Length);
-                if (newTeam.Length != 1) return true;
                 switch (newTeam.ToLower()) {
                     case "a":
                         _player.ServerSetTeam(Teams.TeamA);
+                        ServerSendMessageToThisClient("Setting team to A");
                         break;
                     case "b":
                         _player.ServerSetTeam(Teams.TeamB);
+                        ServerSendMessageToThisClient("Setting team to B");
                         break;
                     case "c":
                         _player.ServerSetTeam(Teams.TeamC);
+                        ServerSendMessageToThisClient("Setting team to C");
                         break;
                     case "d":
                         _player.ServerSetTeam(Teams.TeamD);
+                        ServerSendMessageToThisClient("Setting team to D");
+                        break;
+                    default:
+                        ServerSendMessageToThisClient("Invalid team entered. Options are <a,b,c,d>");
+                        break;
+                }
+                return true;
+            }
+            if (message.Message.StartsWith(classKey)) {
+                string newClass = message.Message.Substring(classKey.Length);
+                switch (newClass.ToLower()) {
+                    case "dps":
+                        _player.ServerSetClass(PlayerClass.DPS);
+                        ServerSendMessageToThisClient("Setting class to DPS");
+                        break;
+                    case "support":
+                        _player.ServerSetClass(PlayerClass.Support);
+                        ServerSendMessageToThisClient("Setting class to Support");
+                        break;
+                    default:
+                        ServerSendMessageToThisClient("Invalid class entered. Options are <dps, support>");
                         break;
                 }
                 return true;

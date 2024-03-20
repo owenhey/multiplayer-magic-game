@@ -5,6 +5,7 @@ using Core.TeamScripts;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using FishNet.Transporting;
+using PlayerScripts.Classes;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -16,6 +17,8 @@ namespace PlayerScripts {
         public string PlayerName;
         [SyncVar(Channel = Channel.Reliable, OnChange = nameof(HandleTeamChange))]
         public Teams PlayerTeam = 0;
+        [SyncVar(Channel = Channel.Reliable, OnChange = nameof(HandleClassSelect))]
+        public PlayerClass PlayerClass = 0;
 
         [SerializeField] 
         private TMPro.TextMeshProUGUI NameDisplay;
@@ -53,6 +56,8 @@ namespace PlayerScripts {
                     PlayerTeam = Teams.TeamD;
                     break;
             }
+
+            PlayerClass = (PlayerClass)(Random.Range(0, 2));
         }
 
         public override void OnStartClient() {
@@ -116,6 +121,11 @@ namespace PlayerScripts {
         public void ServerSetTeam(Teams team) {
             PlayerTeam = team;
         }
+        
+        [Server]
+        public void ServerSetClass(PlayerClass playerClass) {
+            PlayerClass = playerClass;
+        }
 
         private void HandleNameChange(string old, string newName, bool server) {
             NameDisplay.text = newName;
@@ -123,6 +133,10 @@ namespace PlayerScripts {
         
         private void HandleTeamChange(Teams old, Teams newTeam, bool server) {
             PlayerReferences.PlayerModel.SetTeamColors(newTeam);
+        }
+        
+        private void HandleClassSelect(PlayerClass old, PlayerClass newClass, bool server) {
+            PlayerReferences.PlayerModel.SetClassColors(newClass);
         }
         
         public static Player GetPlayerFromClientId(int clientId) {
