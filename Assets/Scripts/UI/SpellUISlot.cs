@@ -31,13 +31,21 @@ namespace UI {
         private void DrawShape() {
             var points = _spellInstance.SpellDefinition.Drawing.Points;
             for (int i = 0; i < points.Count - 1; i++) {
-                Vector2 start = points[i].Vector * _lineParent.rect.width;
-                Vector2 end = points[i + 1].Vector * _lineParent.rect.width;
+                var rect = _lineParent.rect;
+                Vector2 start = TranslatePoint(points[i].Vector, .75f) * ((rect.width + .125f) * .75f);
+                Vector2 end = TranslatePoint(points[i + 1].Vector, .75f) * ((rect.width + .125f) * .75f);
                 
                 var line = Instantiate(_linePrefab, _lineParent);
                 line.Setup(start, end, 10);
                 if(i == 0) line.SetColor(Color.green);
             }
+        }
+
+        private Vector2 TranslatePoint(Vector2 point, float factor) {
+            float newX = (1 - factor) * point.x + factor * 0.5f;
+            float newY = (1 - factor) * point.y + factor * 0.5f;
+
+            return new Vector2(newX, newY);
         }
 
         private void UpdateUI() {
