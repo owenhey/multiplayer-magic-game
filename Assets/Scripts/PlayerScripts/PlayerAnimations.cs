@@ -28,9 +28,6 @@ namespace PlayerScripts {
         private static readonly int _isSprinting = Animator.StringToHash("isSprinting");
         private static readonly int _isStunned = Animator.StringToHash("isStunned");
 
-        // Automatic update values
-        
-
         private void Start() {
             _player.RegisterOnClientStartListener(OnClientStart);
             _previousPosition = _playerMovement.GetCurrentPosition();

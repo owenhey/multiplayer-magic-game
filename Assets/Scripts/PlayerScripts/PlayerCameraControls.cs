@@ -14,6 +14,7 @@ namespace PlayerScripts {
 
         [Header("Stats")] 
         [SerializeField] private Vector3 _baseCamOffset;
+        [SerializeField] private float _cameraXOffset;
         public bool AdjustCenterAsCameraTurns;
         
         [ReadOnly] public CinemachineFreeLook CMCam;
@@ -75,21 +76,31 @@ namespace PlayerScripts {
 
         private void SetCamHorizontal() {
             _helperForward = Cam.transform.forward;
-            CamHorizontal = new Vector3(_helperForward.x, 0, _helperForward.z);
+            CamHorizontal = new Vector3(_helperForward.x, 0, _helperForward.z).normalized;
         }
 
         private void AdjustTargetPoint() {
-            float offsetX = _baseCamOffset.x;
-            // Dot between Camera forward vec and player forward
-            if (AdjustCenterAsCameraTurns) {
-                float dotResult = Vector3.Dot(CamHorizontal, _playerMovement.GetModelForwardDirection());
-                float camDirectionFactor = Misc.RemapClamp(dotResult, -1, 0, 0, 1);
-                offsetX *= camDirectionFactor;
-            }
+            // Get right direction based off of camera
+            Vector3 newForwardDirection = CamHorizontal;
+            Quaternion rotationToNewForward = Quaternion.FromToRotation(Vector3.forward, newForwardDirection);
+            Vector3 relativeOffset = rotationToNewForward * Vector3.right * _cameraXOffset;
 
-            // float zoomFactor = Misc.RemapClamp(_camZoom, 1, 2.0f, 1, .5f);
-            // offsetX *= zoomFactor;
-            _camTarget.localPosition = new Vector3(offsetX, _baseCamOffset.y, 0);
+            _camTarget.position = _playerMovement.GetCurrentPosition() + _baseCamOffset + relativeOffset;
+
+            // Let's keep this old code around. It would make it so when looking at the character from the front,
+            // the player would be positioned in the middle of the screen. Not actually wanted, I think
+
+            // float offsetX = _baseCamOffset.x;
+            // // Dot between Camera forward vec and player forward
+            // if (AdjustCenterAsCameraTurns) {
+            //     float dotResult = Vector3.Dot(CamHorizontal, _playerMovement.GetModelForwardDirection());
+            //     float camDirectionFactor = Misc.RemapClamp(dotResult, -1, 0, 0, 1);
+            //     offsetX *= camDirectionFactor;
+            // }
+            //
+            // // float zoomFactor = Misc.RemapClamp(_camZoom, 1, 2.0f, 1, .5f);
+            // // offsetX *= zoomFactor;
+            // _camTarget.localPosition = new Vector3(offsetX, _baseCamOffset.y, 0);
         }
 
         protected override void OnClientStart(bool isOwner) {

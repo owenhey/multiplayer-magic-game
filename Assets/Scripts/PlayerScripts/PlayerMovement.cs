@@ -44,6 +44,8 @@ namespace PlayerScripts {
         protected override void Awake() {
             base.Awake();
             _ccTrans = _cc.transform;
+
+            // Time.timeScale = .2f;
         }
 
         protected override void OnClientStart(bool isOwner) {
@@ -96,7 +98,7 @@ namespace PlayerScripts {
             movementVector += GetMovementVectorStart();
 
             // Rotate player accordingly
-            LookAt(GetTargetLookDirection());
+            LookAt(GetTargetLookDirection(movementVector));
 
             // Move player in direction
             Move(movementVector);
@@ -172,13 +174,13 @@ namespace PlayerScripts {
             _cc.Move((movementVector + _knockbackVector) * Time.deltaTime);
         }
 
-        private Vector3 GetTargetLookDirection(){
-            if(_inputData.wasd == Vector2.zero || _stunned) return _ccTrans.forward;
-
-            return _refs.PlayerCameraControls.CamHorizontal;
+        private Vector3 GetTargetLookDirection(Vector3 movementVector) {
+            movementVector.y = 0;
+            return movementVector;
         }
 
         private void LookAt(Vector3 targetLookDirection){
+            if(targetLookDirection == Vector3.zero) return;
             // Slowly turn towards the target look direction
             Quaternion targetRot = Quaternion.LookRotation(targetLookDirection);
             Quaternion newRotation = Quaternion.RotateTowards(_ccTrans.rotation, targetRot, _rotateSpeed * Time.deltaTime);
@@ -186,34 +188,23 @@ namespace PlayerScripts {
             _ccTrans.rotation = newRotation;
         }
 
-        // Reads WASD input and moves player accoringly
+        // Reads WASD input and sets movement vector
         private void WASDMovement(ref Vector3 movementVector){
             if(!_canMove) return;
 
-            _isSprinting = false;
+            // Grab input
+            _isSprinting = (_inputData.leftShift && !_stunned);
+            Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
+
+            // Get movement direction based off of camera
+            Vector3 newForwardDirection = _refs.PlayerCameraControls.CamHorizontal;
+            Quaternion rotationToNewForward = Quaternion.FromToRotation(Vector3.forward, newForwardDirection);
+            Vector3 worldMovementInput = rotationToNewForward * wasdInputVector3;
             
-            
-            // If we are sprinting
-            if(_inputData.wasd.y >= 1 && _inputData.leftShift){
-                if(_inputData.wasd.y > 0 && _inputData.wasd != Vector2.zero){
-                    _inputData.wasd = Vector2.up;
-                    Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
-                    movementVector += _ccTrans.TransformDirection(wasdInputVector3) * _sprintSpeed;
-                    movementVector *= _stunned ? 0 : _speedMultiplier;
-                    movementVector *= CastingSpell ? _castingSpellMoveFactor : 1.0f;
-                    _isSprinting = true;
-                }
-            }
-            else{ // If we are not sprinting
-                float dotValue = Vector3.Dot(Vector2.up, _inputData.wasd);
-                dotValue = 1 - (dotValue + 1) * .5f;
-                float finalSpeed = _moveSpeed * _forwardMovementSpeedFactor.Evaluate(dotValue);
-                Vector3 wasdInputVector3 = new Vector3(_inputData.wasd.x, 0, _inputData.wasd.y);
-                movementVector += _ccTrans.TransformDirection(wasdInputVector3) * finalSpeed;
-                movementVector *= _stunned ? 0 : _speedMultiplier;
-                movementVector *= CastingSpell ? _castingSpellMoveFactor : 1.0f;
-                
-            }
+            // Set speed and effects and such
+            movementVector += worldMovementInput * (_isSprinting ? _sprintSpeed : _moveSpeed);
+            movementVector *= _stunned ? 0 : _speedMultiplier;
+            movementVector *= CastingSpell ? _castingSpellMoveFactor : 1.0f;
         }
 
         // Handle gravity

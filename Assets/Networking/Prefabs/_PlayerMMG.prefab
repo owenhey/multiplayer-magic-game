@@ -4265,12 +4265,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1671217387459391720}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.8, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8771216031366389187}
+  m_Father: {fileID: 5274439918284474655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1753738932550034400
 GameObject:
@@ -12957,7 +12957,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7081416051241051723}
-  - {fileID: 3893423418599009062}
   - {fileID: 1118673655525569032}
   - {fileID: 6336008043593946860}
   - {fileID: 7126771523519149474}
@@ -13083,7 +13082,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _rotateSpeed: 400
+  _rotateSpeed: 600
   _cc: {fileID: 3347838807021769093}
   _refs: {fileID: 1056872705930149825}
   RequireRightClickToMoveMouse: 1
@@ -13422,6 +13421,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8771216031366389187}
+  - {fileID: 3893423418599009062}
   - {fileID: 7185142775271302312}
   - {fileID: 8242032453053556660}
   - {fileID: 2309098055453420970}
@@ -13775,8 +13775,9 @@ MonoBehaviour:
   _playerMovement: {fileID: 6707716053342808154}
   _model: {fileID: 9214829115622678224}
   _camTarget: {fileID: 3893423418599009062}
-  _baseCamOffset: {x: 0.7, y: 1.5, z: 0}
-  AdjustCenterAsCameraTurns: 1
+  _baseCamOffset: {x: 0, y: 1.5, z: 0}
+  _cameraXOffset: 0.7
+  AdjustCenterAsCameraTurns: 0
   CMCam: {fileID: 0}
   Cam: {fileID: 0}
   CamHorizontal: {x: 0, y: 0, z: 0}
