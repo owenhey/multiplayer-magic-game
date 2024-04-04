@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 3369054429956147214}
   - component: {fileID: 2199746240752449716}
   - component: {fileID: 6028536380990000552}
+  - component: {fileID: 2514807144353378922}
   m_Layer: 6
   m_Name: SpellUISlot
   m_TagString: Untagged
@@ -243,6 +244,7 @@ RectTransform:
   - {fileID: 4904936992130058660}
   - {fileID: 1708796023943048469}
   - {fileID: 5453003769426929691}
+  - {fileID: 2478771969095295798}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -267,6 +269,7 @@ MonoBehaviour:
   _linePrefab: {fileID: -1785469687071180801, guid: 1953616aa7e5c824eb99735181a6d9d1,
     type: 3}
   _lineParent: {fileID: 5453003769426929691}
+  _hoverer: {fileID: 2514807144353378922}
 --- !u!225 &6028536380990000552
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -276,9 +279,27 @@ CanvasGroup:
   m_GameObject: {fileID: 3301593356028464793}
   m_Enabled: 1
   m_Alpha: 0.25
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &2514807144353378922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3301593356028464793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdde6bf2c60a49f284af7415663d8d3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrimaryText: Spell Slot
+  SecondaryText: 
+  TertiaryText: 
+  FourthText: 
+  FifthText: 
+  HoverPoint: {fileID: 2478771969095295798}
 --- !u!1 &5972622703659714009
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,8 +330,43 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3369054429956147214}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &9144566313443372204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2478771969095295798}
+  m_Layer: 6
+  m_Name: Hoverer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2478771969095295798
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9144566313443372204}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3369054429956147214}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -10, y: -10}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

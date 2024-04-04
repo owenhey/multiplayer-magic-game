@@ -13,6 +13,7 @@ namespace UI {
         [SerializeField] private TextMeshProUGUI _text;
         [SerializeField] private LineUI _linePrefab;
         [SerializeField] private RectTransform _lineParent;
+        [SerializeField] private HovererUI _hoverer;
 
         private SpellInstance _spellInstance;
 
@@ -23,6 +24,7 @@ namespace UI {
             
             DrawShape();
             _text.text = "";
+            _hoverer.SetText(spellInstance.SpellDefinition.SpellName);
 
             spellInstance.OnChange += UpdateUI;
             UpdateUI();
@@ -42,10 +44,9 @@ namespace UI {
         }
 
         private Vector2 TranslatePoint(Vector2 point, float factor) {
-            float newX = (1 - factor) * point.x + factor * 0.5f;
-            float newY = (1 - factor) * point.y + factor * 0.5f;
-
-            return new Vector2(newX, newY);
+            point -= new Vector2(.5f, .5f);
+            point *= factor;
+            return point;
         }
 
         private void UpdateUI() {
