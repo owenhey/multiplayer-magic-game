@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.EventSystems;
 namespace UI{
     public class HovererUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler

@@ -15,3 +15,6 @@ MonoBehaviour:
   _allClasses:
   - {fileID: 11400000, guid: 0f600fe5ff59b3a49bd1ab7db10ffa2a, type: 2}
   - {fileID: 11400000, guid: 4cb32f40eb73d7541bad439ee8987eb1, type: 2}
+  - {fileID: 11400000, guid: 2626ecef9479a6e4c92cd906fe8ae4b0, type: 2}
+  - {fileID: 11400000, guid: 191801fe03279ae4aa36ad262bd38463, type: 2}
+  - {fileID: 11400000, guid: fa86a94e8f764a44b9e556ca52346ce2, type: 2}

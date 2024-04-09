@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core.TeamScripts;
 using FishNet.Connection;
 using FishNet.Managing.Logging;
@@ -119,20 +120,19 @@ namespace PlayerScripts{
                 return true;
             }
             if (message.Message.StartsWith(classKey)) {
-                string newClass = message.Message.Substring(classKey.Length);
-                switch (newClass.ToLower()) {
-                    case "dps":
-                        _player.ServerSetClass(PlayerClass.DPS);
-                        ServerSendMessageToThisClient("Setting class to DPS");
-                        break;
-                    case "support":
-                        _player.ServerSetClass(PlayerClass.Support);
-                        ServerSendMessageToThisClient("Setting class to Support");
-                        break;
-                    default:
-                        ServerSendMessageToThisClient("Invalid class entered. Options are <dps, support>");
-                        break;
+                string newClass = message.Message.Substring(classKey.Length).ToLower();
+
+                foreach (var classDef in PlayerClassIDer.GetClassList()) {
+                    if (newClass == classDef.ClassId) {
+                        _player.ServerSetClass(classDef.PlayerClass);
+                        ServerSendMessageToThisClient($"Setting class to {classDef.ClassName}");
+                        return true;
+                    }
                 }
+
+                string csvClassList = string.Join(", ", PlayerClassIDer.GetClassList().Select(x => x.ClassId).ToList());
+                string invalidClassString = $"Invalid class entered, options are <{csvClassList}>";
+                ServerSendMessageToThisClient(invalidClassString);
                 return true;
             }
 

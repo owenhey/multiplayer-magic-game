@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cea9617d7424245bc7c3b55e8f23d6c, type: 3}
-  m_Name: DPS Class
+  m_Name: Support Class
   m_EditorClassIdentifier: 
-  ClassName: DPS
-  ClassId: dps
-  PlayerClass: 0
-  ClassColor: {r: 0.43086055, g: 0.735849, b: 0.3713955, a: 1}
+  ClassName: Shadow
+  ClassId: shadow
+  PlayerClass: 1
+  ClassColor: {r: 0.9137255, g: 0.7186505, b: 0.29803917, a: 1}
   _spellList:
   - {fileID: 11400000, guid: 4f0d4e0d7ec05924aa17a4be15167360, type: 2}
   - {fileID: 11400000, guid: b5269cd9971f5470e8196e681df7c7e2, type: 2}

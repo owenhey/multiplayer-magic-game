@@ -6,7 +6,10 @@ using UnityEngine;
 namespace PlayerScripts.Classes {
     public enum PlayerClass {
         DPS,
-        Support
+        Support,
+        Ice,
+        Shadow,
+        Fire
     }
     
     [CreateAssetMenu(fileName = "PlayerClassIDer", menuName = "ScriptableObjects/Singletons/PlayerClassIder", order = 0)]
@@ -31,5 +34,7 @@ namespace PlayerScripts.Classes {
             }
             return null;
         }
+
+        public static IReadOnlyList<PlayerClassDefinition> GetClassList() => _instance._allClasses.AsReadOnly();
     }
 }

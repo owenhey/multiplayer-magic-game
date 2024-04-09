@@ -10,7 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cea9617d7424245bc7c3b55e8f23d6c, type: 3}
-  m_Name: Support
+  m_Name: Ice Class
   m_EditorClassIdentifier: 
-  PlayerClass: 1
-  ClassColor: {r: 0.9137255, g: 0.7186505, b: 0.29803917, a: 1}
+  ClassName: Ice
+  ClassId: ice
+  PlayerClass: 2
+  ClassColor: {r: 0.29803917, g: 0.8263414, b: 0.9137255, a: 1}
+  _spellList:
+  - {fileID: 11400000, guid: 061618cc6aa12df41824b159e1093763, type: 2}
+  - {fileID: 11400000, guid: ac41e57798fe63846875d7780cef0caf, type: 2}
