@@ -39,7 +39,6 @@ namespace UI{
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            Debug.Log("Hello");
             if(!_active) return;
 
             _hovering = true;
@@ -51,7 +50,6 @@ namespace UI{
         }
         public void OnPointerExit(PointerEventData eventData)
         {
-            Debug.Log("Hello2");
             if(!_active) return;
             
             _hovering = false;

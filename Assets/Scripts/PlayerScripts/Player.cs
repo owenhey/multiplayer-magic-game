@@ -137,6 +137,11 @@ namespace PlayerScripts {
         
         private void HandleClassSelect(PlayerClass old, PlayerClass newClass, bool server) {
             PlayerReferences.PlayerModel.SetClassColors(newClass);
+            Debug.Log($"Is owner1? {IsOwner}");
+            if (IsOwner) { // Only deal with classes on the owner / client
+                PlayerClassDefinition classDef = PlayerClassIDer.GetClassDefinition(newClass);
+                PlayerReferences.PlayerSpells.SetSpells(classDef.GetSpellList());
+            }
         }
         
         public static Player GetPlayerFromClientId(int clientId) {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Helpers;
 using PlayerScripts;
 using Spells;
 using TMPro;
@@ -31,6 +32,8 @@ namespace UI {
         }
 
         private void DrawShape() {
+            _lineParent.transform.ForEachChild(x=>Destroy(x.gameObject));
+            
             var points = _spellInstance.SpellDefinition.Drawing.Points;
             for (int i = 0; i < points.Count - 1; i++) {
                 var rect = _lineParent.rect;

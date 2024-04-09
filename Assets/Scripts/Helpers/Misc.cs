@@ -50,5 +50,12 @@ namespace Helpers {
         public static RectTransform RT(this Transform transform) {
             return transform.gameObject.RT();
         }
+        
+        public static void ForEachChild(this Transform transform, System.Action<Transform> action){
+            if (transform == null || action == null) return;
+            for (int i = transform.childCount - 1; i >= 0; i--){
+                action(transform.GetChild(i));
+            }
+        }
     }
 }

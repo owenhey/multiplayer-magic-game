@@ -47,6 +47,7 @@ namespace PlayerScripts {
 
         public Action OnSpellMessUp;
         public Action<SpellInstance> OnOnCooldownSpellCast;
+        public Action OnSpellListSet;
 
         protected override void Awake() {
             base.Awake();
@@ -62,6 +63,8 @@ namespace PlayerScripts {
             }
 
             CastingType = SpellCastingType.Indicator;
+            
+            OnSpellListSet?.Invoke();
         }
 
         private void SetCastingType(SpellCastingType type) {
@@ -320,10 +323,13 @@ namespace PlayerScripts {
             _results = null;
             _stateManager.RemoveState(PlayerState.CastingSpell);
         }
-        
-        protected override void OnClientStart(bool isOwner) {
-            if (!isOwner) enabled = false;
 
+        public void SetSpells(IEnumerable<SpellDefinition> spells) {
+            var newSpellArray = spells.ToArray();
+            _spells = new List<SpellDefinition>(newSpellArray);
+            foreach (var spellDefinition in newSpellArray) {
+                _spells.Add(spellDefinition);
+            }
             Init();
         }
 

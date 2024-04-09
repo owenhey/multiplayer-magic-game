@@ -12,7 +12,7 @@ namespace PlayerScripts.Classes {
         public Color ClassColor;
         [Space(30)] 
         [SerializeField] private List<SpellDefinition> _spellList;
-        public IReadOnlyList<SpellDefinition> GetSpellList => _spellList.AsReadOnly();
+        public IReadOnlyList<SpellDefinition> GetSpellList() => _spellList.AsReadOnly();
         // Maybe some other stuff too, speed? health? 
     }
 }

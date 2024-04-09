@@ -26,22 +26,11 @@ namespace UI{
             _closeButton.onClick.AddListener(Close);
 
             Close();
-            TryInit();
+            _spells.OnSpellListSet += Init;
         }
 
-        private void TryInit() {
-            var spellInstances = _spells.SpellInstances;
-            if (spellInstances == null) {
-                StartCoroutine(DelayedInit());
-                return;
-            }
-
-            Init();
-        }
-        
-        private IEnumerator DelayedInit() {
-            yield return new WaitUntil(()=>_spells.SpellInstances != null);
-            Init();
+        private void OnDestroy() {
+            _spells.OnSpellListSet -= Init;
         }
 
         private void Init() {

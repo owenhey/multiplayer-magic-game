@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cea9617d7424245bc7c3b55e8f23d6c, type: 3}
   m_Name: Support Class
   m_EditorClassIdentifier: 
-  ClassName: Shadow
-  ClassId: shadow
+  ClassName: Support
+  ClassId: support
   PlayerClass: 1
   ClassColor: {r: 0.9137255, g: 0.7186505, b: 0.29803917, a: 1}
   _spellList:
