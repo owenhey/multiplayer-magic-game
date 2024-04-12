@@ -155,6 +155,10 @@ namespace PlayerScripts {
         #region Quickcast
 
         private void QuickcastTarget() {
+            if (_spellInstances == null || _spellInstances.Count == 0) {
+                ResetState();
+                return;
+            }
             var iDatas = _spellInstances.Select(x => x.SpellDefinition.IndicatorData).ToArray();
             _quickcastDrawIndicatorData = _indicatorHandler.GetCurrentTargetData(iDatas);
             
@@ -327,9 +331,6 @@ namespace PlayerScripts {
         public void SetSpells(IEnumerable<SpellDefinition> spells) {
             var newSpellArray = spells.ToArray();
             _spells = new List<SpellDefinition>(newSpellArray);
-            foreach (var spellDefinition in newSpellArray) {
-                _spells.Add(spellDefinition);
-            }
             Init();
         }
 

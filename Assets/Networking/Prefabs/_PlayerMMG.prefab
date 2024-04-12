@@ -13082,7 +13082,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _rotateSpeed: 600
+  _rotateSpeed: 900
   _cc: {fileID: 3347838807021769093}
   _refs: {fileID: 1056872705930149825}
   RequireRightClickToMoveMouse: 1
@@ -13447,7 +13447,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 3726133492282219349}
   PlayerReferences: {fileID: 1056872705930149825}
   PlayerName: 
-  PlayerTeam: 1
+  PlayerTeam: 0
   PlayerClass: 0
   NameDisplay: {fileID: 6640389976638504512}
   ServerConnected: 0

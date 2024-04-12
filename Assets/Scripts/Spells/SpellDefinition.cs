@@ -18,6 +18,7 @@ namespace Spells {
         [ReadOnly] public int SpellId;
         [Space(10)] 
         public string SpellName;
+        [TextArea(4, 4)] public string SpellDescription;
         public float SpellCooldown = 1.0f;
         public Sprite SpellIcon;
         public DefinedDrawing Drawing;

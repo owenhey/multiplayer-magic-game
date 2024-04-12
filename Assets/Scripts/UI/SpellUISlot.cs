@@ -25,7 +25,7 @@ namespace UI {
             
             DrawShape();
             _text.text = "";
-            _hoverer.SetText(spellInstance.SpellDefinition.SpellName);
+            _hoverer.SetText(new string[]{spellInstance.SpellDefinition.SpellName, spellInstance.SpellDefinition.SpellDescription});
 
             spellInstance.OnChange += UpdateUI;
             UpdateUI();

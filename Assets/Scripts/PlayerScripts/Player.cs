@@ -17,8 +17,9 @@ namespace PlayerScripts {
         public string PlayerName;
         [SyncVar(Channel = Channel.Reliable, OnChange = nameof(HandleTeamChange))]
         public Teams PlayerTeam = 0;
+
         [SyncVar(Channel = Channel.Reliable, OnChange = nameof(HandleClassSelect))]
-        public PlayerClass PlayerClass = 0;
+        public PlayerClass PlayerClass = PlayerClass.DPS;
 
         [SerializeField] 
         private TMPro.TextMeshProUGUI NameDisplay;
@@ -56,15 +57,21 @@ namespace PlayerScripts {
                     PlayerTeam = Teams.TeamD;
                     break;
             }
-
-            PlayerClass = (PlayerClass)(Random.Range(0, 2));
+            PlayerClass = (PlayerClass)(Random.Range(0, Enum.GetValues(typeof(PlayerClass)).Length - 1));
+            
+            HandleClassSelect(PlayerClass.Fire, PlayerClass, true);
+            HandleTeamChange(Teams.Objects, PlayerTeam, true);
         }
 
         public override void OnStartClient() {
             base.OnStartClient();
             _onClientStart.Invoke(IsOwner);
+            
+            HandleClassSelect(PlayerClass.Fire, PlayerClass, false);
+            HandleTeamChange(Teams.Objects, PlayerTeam, false);
         }
 
+        // TODO: HANDLE THIS BETTER
         private void Update() {
             if (Input.GetKeyDown(KeyCode.Mouse1)) {
                 PlayerReferences.PlayerStateManager.AddState(PlayerState.MovingCamera);
@@ -111,11 +118,6 @@ namespace PlayerScripts {
             if (string.IsNullOrEmpty(name)) return;
             PlayerName = name;
         }
-        
-        [ServerRpc]
-        private void ServerRpcSetTeam(Teams team) {
-            PlayerName = name;
-        }
 
         [Server]
         public void ServerSetTeam(Teams team) {
@@ -137,7 +139,6 @@ namespace PlayerScripts {
         
         private void HandleClassSelect(PlayerClass old, PlayerClass newClass, bool server) {
             PlayerReferences.PlayerModel.SetClassColors(newClass);
-            Debug.Log($"Is owner1? {IsOwner}");
             if (IsOwner) { // Only deal with classes on the owner / client
                 PlayerClassDefinition classDef = PlayerClassIDer.GetClassDefinition(newClass);
                 PlayerReferences.PlayerSpells.SetSpells(classDef.GetSpellList());

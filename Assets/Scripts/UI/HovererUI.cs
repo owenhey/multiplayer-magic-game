@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine.EventSystems;
 namespace UI{
     public class HovererUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -12,6 +14,8 @@ namespace UI{
         [SerializeField] string FifthText;
         [SerializeField] RectTransform HoverPoint;
         private bool _active = true;
+
+        private readonly static int maxLineLength = 20;
         
         public bool Active{
             get{
@@ -35,6 +39,49 @@ namespace UI{
                 }
                 return __canvas;
             }
+        }
+
+        private bool brokeUpLines = false;
+
+        private void Start() {
+            BreakUpLines();
+        }
+
+        private void BreakUpLines() {
+            if (brokeUpLines) return;
+            brokeUpLines = true;
+            
+            PrimaryText = BreakUpString(PrimaryText);
+            SecondaryText = BreakUpString(SecondaryText);
+            TertiaryText = BreakUpString(TertiaryText);
+            FourthText = BreakUpString(FourthText);
+            FifthText = BreakUpString(FifthText);
+        }
+
+        private string BreakUpString(string input) {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            var lines = new List<string>();
+            string[] tokens = input.Split(' ');
+            int currentIndex = 0;
+            StringBuilder currentLine = new();
+            while (currentIndex < tokens.Length) {
+                currentLine.Append(tokens[currentIndex]);
+                currentIndex++;
+                if (currentLine.Length > maxLineLength) {
+                    lines.Add(currentLine.ToString());
+                    currentLine.Clear();
+                    continue;
+                }
+                currentLine.Append(' ');
+            }
+            lines.Add(currentLine.ToString());
+
+            foreach (var v in lines) {
+                Debug.Log($"line: {v}");
+            }
+            return string.Join("<br>", lines);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -92,12 +139,16 @@ namespace UI{
 
         public void SetText(string primarytext) => SetText(new string[] { primarytext });
 
-        public void SetText(string primaryText, string secondaryText, string teriaryText, string fourthText, string fifthText){
+        public void SetText(string primaryText, string secondaryText, string teriaryText, string fourthText, string fifthText) {
+            brokeUpLines = false;
+            
             PrimaryText = primaryText;
             SecondaryText = secondaryText;
             TertiaryText = teriaryText;
             FourthText = fourthText;
             FifthText = fifthText;
+            
+            BreakUpLines();
         }
     }
 }

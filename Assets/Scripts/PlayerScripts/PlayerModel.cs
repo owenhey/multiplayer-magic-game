@@ -74,12 +74,6 @@ namespace PlayerScripts {
             SelectRandomColor();
         }
 
-        public override void OnStartNetwork() {
-            base.OnStartNetwork();
-            SetTeamColors(_player.PlayerTeam);
-            SetClassColors(_player.PlayerClass);
-        }
-
         public void SetTeamColors(Teams team) {
             TeamDefinition teamDef = TeamIDer.GetTeamDefinition(team);
             Color color = teamDef.TeamColor;

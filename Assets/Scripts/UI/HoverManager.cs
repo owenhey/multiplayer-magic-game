@@ -31,7 +31,7 @@ namespace UI{
         public static void Show(string primaryText, string secondaryText, string teriaryText, string fourthText, string fifthText, Vector2 position){
             _instance.ShowI(primaryText, secondaryText, teriaryText, fourthText, fifthText, position);
         }
-
+        
         private void ShowI(in string primaryText, in string secondaryText, in string teriaryText, in string fourthText, in string fifthText, in Vector2 position){
             if(!_shown){
                 _content.SetActive(true);
