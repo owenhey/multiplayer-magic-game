@@ -33,5 +33,9 @@ namespace PlayerScripts {
         public Vector3 GetPlayerPosition() {
             return PlayerMovement.GetCurrentPosition();
         }
+
+        public Vector3 GetAbovePlayerPosition() {
+            return GetPlayerPosition() + Vector3.up * 2.2f;
+        }
     }
 }

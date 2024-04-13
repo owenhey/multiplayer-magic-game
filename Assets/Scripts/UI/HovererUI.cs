@@ -77,10 +77,6 @@ namespace UI{
                 currentLine.Append(' ');
             }
             lines.Add(currentLine.ToString());
-
-            foreach (var v in lines) {
-                Debug.Log($"line: {v}");
-            }
             return string.Join("<br>", lines);
         }
 

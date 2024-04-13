@@ -7,6 +7,7 @@ using FishNet.Object.Synchronizing;
 using FishNet.Transporting;
 using PlayerScripts.Classes;
 using UnityEngine;
+using Visuals;
 using Random = UnityEngine.Random;
 
 namespace PlayerScripts {
@@ -79,6 +80,10 @@ namespace PlayerScripts {
 
             if (Input.GetKeyUp(KeyCode.Mouse1)) {
                 PlayerReferences.PlayerStateManager.RemoveState(PlayerState.MovingCamera);
+            }
+
+            if (Input.GetKeyDown(KeyCode.H)) {
+                WorldPopupManager.Instance.ShowPopup("Hello", Color.red, PlayerReferences.GetAbovePlayerPosition());
             }
         }
 
