@@ -10,11 +10,9 @@ namespace Core.Damage {
         void TakeDamage(int damage);
         void TakeKnockback(Vector3 knockback);
         void TakeDamageAndKnockback(int damage, Vector3 knockback);
-
-        void ApplyStatus(PlayerStatusEffect statusEffect);
         Teams GetTeam();
-
         Transform GetTransform();
+        IStatusable Statusable { get; }
     }
 
     public static class DamageableLayerMask {

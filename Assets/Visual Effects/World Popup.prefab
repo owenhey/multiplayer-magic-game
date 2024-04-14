@@ -49,7 +49,7 @@ MonoBehaviour:
   _textComponent: {fileID: 1275212548466582487}
   _lifespan: 1.25
   _gravity: -1
-  _initialYVelocity: 0.35
+  _initialYVelocity: 0.5
   _horizontalVelocityRange: 0.35
 --- !u!114 &6684019864879280372
 MonoBehaviour:
@@ -168,8 +168,7 @@ MonoBehaviour:
   m_text: Sample text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 704cedfd67e751b4fb57f45204d39710, type: 2}
-  m_sharedMaterial: {fileID: -4184807595123118346, guid: 704cedfd67e751b4fb57f45204d39710,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 7b65bdf8898b85f448026aeceae0115f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -73,7 +73,7 @@ namespace Spells {
             for (int i = 0; i < numHit; i++) {
                 var col = ColliderBuffer.Buffer[i];
                 if (col.TryGetComponent(out DamagableCollider dc)) {
-                    dc.Damagable.ApplyStatus(new PlayerStatusEffect("freeze_spell", PlayerStatusType.Stunned, 0, 2.0f));
+                    dc.Damagable.Statusable.ServerAddStatus(new StatusEffect("freeze_spell", StatusType.Stunned, 0, 2.0f));
                 }
             }
         }

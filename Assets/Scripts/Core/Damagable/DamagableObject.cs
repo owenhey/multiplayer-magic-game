@@ -1,3 +1,4 @@
+using System;
 using Core.TeamScripts;
 using DG.Tweening;
 using FishNet.Connection;
@@ -10,12 +11,26 @@ using UnityEngine;
 namespace Core.Damage {
     public class DamagableObject : NetworkBehaviour, IDamagable {
         [Min(0)] [SerializeField] private int _maxHealth;
+        [Header("Ensure this is IStatusable!!")]
+        [SerializeField] private MonoBehaviour _statusable;
          
         [SyncVar(ReadPermissions = ReadPermission.Observers, WritePermissions = WritePermission.ServerOnly, OnChange = nameof(OnHealthChangeHandler))] 
         [ReadOnly] private int _currentHealth;
 
         [SerializeField] private Transform _transform;
         
+        public IStatusable Statusable {
+            get {
+                if (_cachedStatusable == null) {
+                    _cachedStatusable = _statusable.GetComponent<IStatusable>();
+                }
+                return _cachedStatusable;
+            }
+        }
+
+        private IStatusable _cachedStatusable;
+        
+
         public override void OnSpawnServer(NetworkConnection connection) {
             base.OnSpawnServer(connection);
             _currentHealth = _maxHealth;
@@ -55,10 +70,6 @@ namespace Core.Damage {
 
         public Transform GetTransform() {
             return _transform;
-        }
-
-        public void ApplyStatus(PlayerStatusEffect statusEffect) {
-            // Don't have to do anything here
         }
 
         protected virtual void ServerOnDeath() {

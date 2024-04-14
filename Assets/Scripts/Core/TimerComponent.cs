@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-namespace PlayerScripts {
-    public class PlayerTimers : LocalPlayerScript {
+namespace Core {
+    public class TimerComponent : MonoBehaviour {
         [Serializable]
-        private class PlayerTimer {
+        private class TimerInstance {
             [SerializeField] [ReadOnly] private float _remainingDuration;
             public Action OnCompleteAction;
             private Action<float, float> _onTickAction;
@@ -14,7 +13,7 @@ namespace PlayerScripts {
             public bool AllowDuplicates { get; private set; }
             [field:SerializeField] public string Key { get; private set; }
 
-            public PlayerTimer(string key, bool allowDuplicates, float duration, Action onComplete, Action<float, float> onTickAction) {
+            public TimerInstance(string key, bool allowDuplicates, float duration, Action onComplete, Action<float, float> onTickAction) {
                 Key = key;
                 AllowDuplicates = allowDuplicates;
                 _remainingDuration = duration;
@@ -33,7 +32,7 @@ namespace PlayerScripts {
             }
         }
         
-        [SerializeField] private List<PlayerTimer> _activeTimers = new();
+        [SerializeField] private List<TimerInstance> _activeTimers = new();
 
         private void Update() {
             for (var index = 0; index < _activeTimers.Count; index++) {
@@ -57,7 +56,7 @@ namespace PlayerScripts {
         /// <param name="onTick"> Called every frame this timer is ticked, with the percentage
         /// of the way through the timer (like .65f == 65%), and how many seconds are left</param>
         public void RegisterTimer(string key, bool allowDuplicates, float duration, Action onComplete, Action<float, float> onTick) {
-            var newTimer = new PlayerTimer(key, allowDuplicates, duration, onComplete, onTick);
+            var newTimer = new TimerInstance(key, allowDuplicates, duration, onComplete, onTick);
             for (int i = 0; i < _activeTimers.Count; i++) {
                 if (_activeTimers[i].AllowDuplicates == false) {
                     if (_activeTimers[i].Key == key) {

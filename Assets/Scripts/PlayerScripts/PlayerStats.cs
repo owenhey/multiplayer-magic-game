@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core;
 using Core.Damage;
 using Core.TeamScripts;
 using FishNet.Connection;
@@ -8,8 +9,9 @@ using FishNet.Object.Synchronizing;
 using UnityEngine;
 
 namespace PlayerScripts {
-    public class PlayerStats : NetworkedPlayerScript, IDamagable{
+    public class PlayerStats : NetworkedPlayerScript, IDamagable {
         [SerializeField] private int _maxHealth = 1000;
+        [SerializeField] private BasicStatusHandler _basicStatusHandler;
         public int MaxHealth => _maxHealth;
 
         [SyncVar(ReadPermissions = ReadPermission.Observers, WritePermissions = WritePermission.ServerOnly, OnChange = nameof(OnHealthChangeHandler))] 
@@ -21,6 +23,7 @@ namespace PlayerScripts {
         public System.Action OnClientPlayerDeath;
         public System.Action OnServerPlayerSpawn;
         public System.Action OnClientPlayerSpawn;
+        public IStatusable Statusable => _basicStatusHandler;
         
         protected override void OnClientStart(bool isOwner) {
             base.OnClientStart(isOwner);
@@ -113,10 +116,6 @@ namespace PlayerScripts {
         public void TakeKnockback(Vector3 knockback) => throw new System.NotImplementedException();
 
         public void TakeDamageAndKnockback(int damage, Vector3 knockback) => DamageAndKnockback(damage, knockback);
-
-        public void ApplyStatus(PlayerStatusEffect statusEffect) {
-            _player.PlayerReferences.PlayerStatus.ServerAddStatus(statusEffect);
-        }
 
         public Transform GetTransform() {
             return _player.PlayerReferences.PlayerMovement.transform;

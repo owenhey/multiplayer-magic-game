@@ -1,4 +1,5 @@
 using Core;
+using Core.Damage;
 using PlayerScripts;
 using Visuals;
 
@@ -6,14 +7,12 @@ namespace Spells {
     [SpellEffect("Slow Enemy")]
     public class SlowEnemySpellEffect : SingleCastSpellEffect{
         public override void BeginSpell() {
-            if (TargetManager.GetTargetable(_spellCastData.TargetData.TargetId) is not PlayerTargetable) return;
-            
-            var targetPlayer = (TargetManager.GetTargetable(_spellCastData.TargetData.TargetId) as PlayerTargetable).Player;
+            var statusable = TargetManager.GetTargetable(_spellCastData.TargetData.TargetId).Damagable.Statusable;
             float amount = _spellCastData.SpellDefinition.GetAttributeValue("speed_factor");
             float duration = _spellCastData.SpellDefinition.GetAttributeValue("duration");
-            targetPlayer.PlayerReferences.PlayerStatus.ClientAddStatus(new PlayerStatusEffect(
+            statusable.ClientAddStatus(new StatusEffect(
                 "slow_down",
-                PlayerStatusType.SpeedMultiplier,
+                StatusType.SpeedMultiplier,
                 amount,
                 duration
             ));

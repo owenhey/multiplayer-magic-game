@@ -24,7 +24,6 @@ namespace Visuals{
         }
 
         private WorldPopup CreatePopup() {
-            Debug.Log($"Creating a popup");            
             var popup = Instantiate(_popupPrefab, transform);
             popup.gameObject.SetActive(false);
             popup.SetDisableCallback(ReleasePopupToPool);
@@ -32,7 +31,6 @@ namespace Visuals{
         }
 
         private void ReleasePopupToPool(WorldPopup popup) {
-            Debug.Log($"Releasing a popup");            
             popup.gameObject.SetActive(false);
             _popupPool.Enqueue(popup);
         }

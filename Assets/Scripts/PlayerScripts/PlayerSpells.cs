@@ -59,7 +59,7 @@ namespace PlayerScripts {
             // Create all the spell instances
             _spellInstances = new(_spells.Count);
             for (int i = 0; i < _spells.Count; i++) {
-                _spellInstances.Add(new SpellInstance(_spells[i], _player.PlayerReferences.PlayerTimers));
+                _spellInstances.Add(new SpellInstance(_spells[i], _player.PlayerReferences.Timer));
             }
 
             CastingType = SpellCastingType.Indicator;

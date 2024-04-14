@@ -396,7 +396,7 @@ namespace PlayerScripts {
                 Debug.Log("Spell has nothing");
                 return;
             }
-            _playerReferences.PlayerTimers.RegisterTimer(AUTOCAST_TIMER_NAME, false, AUTOCAST_TIME, Autocast, AutocastTimerHandler);
+            _playerReferences.Timer.RegisterTimer(AUTOCAST_TIMER_NAME, false, AUTOCAST_TIME, Autocast, AutocastTimerHandler);
             OnAutocastSet?.Invoke(true);
         }
 
@@ -405,7 +405,7 @@ namespace PlayerScripts {
         }
 
         private void CancelAutocast() {
-            _playerReferences.PlayerTimers.RemoveTimers(AUTOCAST_TIMER_NAME);
+            _playerReferences.Timer.RemoveTimers(AUTOCAST_TIMER_NAME);
             OnAutocastSet?.Invoke(false);
         }
 

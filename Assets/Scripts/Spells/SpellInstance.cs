@@ -1,3 +1,4 @@
+using Core;
 using PlayerScripts;
 
 namespace Spells {
@@ -9,19 +10,19 @@ namespace Spells {
         public float RemainingCooldown { get; private set;}
         public bool Ready => RemainingCooldown <= 0;
 
-        private PlayerTimers _timers;
+        private TimerComponent _timer;
 
         public System.Action OnChange;
 
-        public SpellInstance(SpellDefinition d, PlayerTimers timers) {
+        public SpellInstance(SpellDefinition d, TimerComponent timers) {
             SpellDefinition = d;
-            _timers = timers;
+            _timer = timers;
             
             RemainingCooldown = -1;
         }
 
         public void SetOnCooldown() {
-            _timers.RegisterTimer($"spell_cooldown_{SpellDefinition.SpellName}", false, SpellDefinition.SpellCooldown, FinishCooldown, OnCooldownTick);
+            _timer.RegisterTimer($"spell_cooldown_{SpellDefinition.SpellName}", false, SpellDefinition.SpellCooldown, FinishCooldown, OnCooldownTick);
             OnChange?.Invoke();
         }
 
