@@ -44,7 +44,7 @@ namespace PlayerScripts {
 
 
         private void OnStartDraw() {
-            if (_rigWeightTween != null) {
+            if (_rigWeightTween is { active: true }) {
                 _rigWeightTween.Kill();
             }
 
@@ -60,7 +60,7 @@ namespace PlayerScripts {
         }
 
         private void OnDrawCancelled() {
-            if (_rigWeightTween != null) {
+            if (_rigWeightTween is { active: true }) {
                 _rigWeightTween.Kill();
             }
             _trail.emitting = false;

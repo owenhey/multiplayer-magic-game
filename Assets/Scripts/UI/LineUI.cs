@@ -1,4 +1,4 @@
-using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +15,7 @@ namespace UI {
             angle -= 90;
             _rt.localRotation = Quaternion.Euler(0, 0, angle);
 
-            _rt.DOSizeDelta(new Vector2(width, (end-start).magnitude), .3f).SetEase(Ease.OutQuad);
+            _rt.sizeDelta = new Vector2(width, (end - start).magnitude);
         }
 
         public void SetColor(Color c) {
