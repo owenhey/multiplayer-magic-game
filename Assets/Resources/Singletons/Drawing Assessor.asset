@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56bb282fe8e086a40abc69eac3851673, type: 3}
   m_Name: Drawing Assessor
   m_EditorClassIdentifier: 
-  _assessorType: 1
+  _assessorType: 2

@@ -48,8 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _textComponent: {fileID: 1275212548466582487}
   _lifespan: 1.25
-  _gravity: -1
-  _initialYVelocity: 0.5
+  _gravity: -2
+  _initialYVelocity: 1
   _horizontalVelocityRange: 0.35
 --- !u!114 &6684019864879280372
 MonoBehaviour:
@@ -101,7 +101,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 2, y: 0.5}
+  m_SizeDelta: {x: 2.5, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2047951262431411787
 MeshRenderer:
@@ -192,8 +192,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 3
-  m_fontSizeBase: 3
+  m_fontSize: 4
+  m_fontSizeBase: 4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

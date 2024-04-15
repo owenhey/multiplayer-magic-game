@@ -24,7 +24,7 @@ namespace PlayerScripts {
         [field:SerializeField] public PlayerPrefabSpawner PlayerPrefabSpawner { get; private set; }
         
         [field:SerializeField] public PlayerCameraControls PlayerCameraControls { get; private set; }
-        [field: SerializeField] public IStatusable PlayerStatus => PlayerStats.Statusable;
+        public IStatusable PlayerStatus => PlayerStats.Statusable;
         [field:SerializeField] public PlayerTargetable PlayerTargetable { get; private set; }
         
         

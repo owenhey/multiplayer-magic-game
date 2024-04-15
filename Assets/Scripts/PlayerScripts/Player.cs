@@ -58,7 +58,9 @@ namespace PlayerScripts {
                     PlayerTeam = Teams.TeamD;
                     break;
             }
-            PlayerClass = (PlayerClass)(Random.Range(0, Enum.GetValues(typeof(PlayerClass)).Length - 1));
+
+            PlayerClass = PlayerClass.Ice;
+            // PlayerClass = (PlayerClass)(Random.Range(0, Enum.GetValues(typeof(PlayerClass)).Length - 1));
             
             HandleClassSelect(PlayerClass.Fire, PlayerClass, true);
             HandleTeamChange(Teams.Objects, PlayerTeam, true);
@@ -80,10 +82,6 @@ namespace PlayerScripts {
 
             if (Input.GetKeyUp(KeyCode.Mouse1)) {
                 PlayerReferences.PlayerStateManager.RemoveState(PlayerState.MovingCamera);
-            }
-
-            if (Input.GetKeyDown(KeyCode.H)) {
-                WorldPopupManager.Instance.ShowPopup("Hello", Color.red, PlayerReferences.GetAbovePlayerPosition());
             }
         }
 

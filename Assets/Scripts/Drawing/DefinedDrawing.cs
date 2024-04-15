@@ -38,6 +38,8 @@ public class DefinedDrawing : ScriptableObject
     [Space(20)] 
     public Sprite HelperImage;
 
+    [Range(.25f, 4.0f)] public float TargetAspectRatio = 1.0f;
+
     public Vector2 GetStartingPointOffsetInPixels(float canvasSize) {
         return canvasSize * (Points[0].Vector - Vector2.one * .5f);
     }

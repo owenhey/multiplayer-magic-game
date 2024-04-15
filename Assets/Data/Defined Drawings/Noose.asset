@@ -34,3 +34,4 @@ MonoBehaviour:
   PerfectScoreThreshold: 0.1
   FailCastThreshold: 0.2
   HelperImage: {fileID: 21300000, guid: 6027d9c411b560c4695d87a18707045d, type: 3}
+  TargetAspectRatio: 0.8

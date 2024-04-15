@@ -79,9 +79,12 @@ namespace Drawing{
                 }
             }
             average /= _targetDrawing.Points.Count;
+
+            // Calculate aspect ratio
+            float dY = (_maxBounds.y - _minBounds.y);
+            float aspectRatio = dY != 0 ? (_maxBounds.x - _minBounds.x) / dY : 1000;
             
-            // Debug.Log($"({_targetDrawing.name}) Target points count: " + _targetDrawing.Points.Count + ", Closest points count: " + closestPoints.Count +  $". {average}");
-            DrawingResults r = new DrawingResults(true, _targetDrawing, 0, average, 0, 0, hitAllPoints){
+            DrawingResults r = new DrawingResults(true, _targetDrawing, 0, average, 0, 0, hitAllPoints, aspectRatio:aspectRatio){
                 BottomLeftShapeSpace = _minBounds,
                 TopRightShapeSpace = _maxBounds
             };
