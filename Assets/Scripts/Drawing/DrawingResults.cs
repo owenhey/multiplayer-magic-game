@@ -59,7 +59,7 @@ public class DrawingResults{
     
     private float AvgDistanceWithAspectRatio() {
         float aspectRatioOff = Mathf.Abs(AspectRatio - Drawing.TargetAspectRatio) / Drawing.TargetAspectRatio;
-        // Anything better than 10% off is perfect, otherwise, remaps to a 50% punishment
+        // Anything better than 20% off is perfect, otherwise, remaps to a 50% punishment
         float aspectRatioPunishment = Misc.RemapClamp(aspectRatioOff, .2f, .75f, 1.0f, .5f);
         // if (Math.Abs(Drawing.TargetAspectRatio - 1) > .001f) {
         //     Debug.Log($"Aspect ratio: {AspectRatio}");
@@ -67,9 +67,8 @@ public class DrawingResults{
         //     Debug.Log($"Aspect ratio punishment: {aspectRatioPunishment}");
         // }
         
-        
-        float f = Misc.Remap(AverageDistance, Drawing.PerfectScoreThreshold, Drawing.FailCastThreshold, 1, 0) * aspectRatioPunishment;
-        return Mathf.Min(1, f);
+        float f = Misc.RemapClamp(AverageDistance, Drawing.PerfectScoreThreshold, Drawing.FailCastThreshold, 1, 0);
+        return Mathf.Min(1, f * aspectRatioPunishment);
     }
 
     public override string ToString() {

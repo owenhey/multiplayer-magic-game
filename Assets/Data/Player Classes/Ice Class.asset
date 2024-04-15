@@ -19,3 +19,4 @@ MonoBehaviour:
   _spellList:
   - {fileID: 11400000, guid: 061618cc6aa12df41824b159e1093763, type: 2}
   - {fileID: 11400000, guid: ac41e57798fe63846875d7780cef0caf, type: 2}
+  - {fileID: 11400000, guid: 91dba268d3ae04a4098823b132d95194, type: 2}
