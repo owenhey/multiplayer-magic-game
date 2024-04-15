@@ -13,28 +13,25 @@ MonoBehaviour:
   m_Name: Long F
   m_EditorClassIdentifier: 
   Points:
-  - X: 1
-    Y: 0.705
-    time: 0
-  - X: 0.497
-    Y: 1
-    time: 0
   - X: 0
-    Y: 0.591
-    time: 0
-  - X: 1
-    Y: 0.382
-    time: 0
-  - X: 0.537
     Y: 0
     time: 0
-  - X: 0
-    Y: 0.268
+  - X: 0.15
+    Y: 0.6
+    time: 0
+  - X: 0.25
+    Y: 1
+    time: 0
+  - X: 0.561
+    Y: 1
+    time: 0
+  - X: 1
+    Y: 1
     time: 0
   TotalDistance: 0
-  CalculatedDistance: 3.4487898
+  CalculatedDistance: 1.7807764
   TimeTarget: 0
   PerfectScoreThreshold: 0.12
   FailCastThreshold: 0.25
   HelperImage: {fileID: 0}
-  TargetAspectRatio: 1
+  TargetAspectRatio: 1.5
