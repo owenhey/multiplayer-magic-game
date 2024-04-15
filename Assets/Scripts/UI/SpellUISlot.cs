@@ -35,10 +35,19 @@ namespace UI {
             _lineParent.transform.ForEachChild(x=>Destroy(x.gameObject));
             
             var points = _spellInstance.SpellDefinition.Drawing.Points;
+            Vector2 aspectRatioFactor = Vector2.one;
+            float ar = _spellInstance.SpellDefinition.Drawing.TargetAspectRatio;
+            if (ar > 1) {
+                aspectRatioFactor.y /= ar;
+            }
+            if (ar < 1) {
+                aspectRatioFactor.x *= ar;
+            }
+            
             for (int i = 0; i < points.Count - 1; i++) {
                 var rect = _lineParent.rect;
-                Vector2 start = TranslatePoint(points[i].Vector, .75f) * ((rect.width + .125f) * .75f);
-                Vector2 end = TranslatePoint(points[i + 1].Vector, .75f) * ((rect.width + .125f) * .75f);
+                Vector2 start = TranslatePoint(points[i].Vector, .75f) * ((rect.width + .125f) * .75f * aspectRatioFactor);
+                Vector2 end = TranslatePoint(points[i + 1].Vector, .75f) * ((rect.width + .125f) * .75f * aspectRatioFactor);
                 
                 var line = Instantiate(_linePrefab, _lineParent);
                 line.Setup(start, end, 10);
