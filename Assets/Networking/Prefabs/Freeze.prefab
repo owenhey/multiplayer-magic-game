@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9170943389498672818}
   - component: {fileID: 1363597941473314440}
   - component: {fileID: 10027081455312790}
+  - component: {fileID: 6489032408301406265}
   m_Layer: 11
   m_Name: Content
   m_TagString: Untagged
@@ -57,7 +58,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &536663319133664962
 Rigidbody:
@@ -291,6 +292,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6489032408301406265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434036395541499595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81aeee70ba5e84cf0a53f0ee86b2fe5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collider: {fileID: 1302740676521153021}
 --- !u!1 &769109288688848143
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,7 +359,7 @@ MonoBehaviour:
   m_DecalLayerMask: 1
   m_ScaleMode: 0
   m_Offset: {x: 0, y: 0, z: 0}
-  m_Size: {x: 5, y: 5, z: 0.25}
+  m_Size: {x: 5, y: 5, z: 1}
   m_FadeFactor: 0
 --- !u!1 &2417084719198066091
 GameObject:
@@ -626,6 +640,7 @@ MonoBehaviour:
   _decalProjector: {fileID: 6888621423343704742}
   _spawnSound: {fileID: 1363597941473314440}
   _explosionSound: {fileID: 10027081455312790}
+  _trigger: {fileID: 9170943389498672818}
   _initData:
     CasterId: 0
     SpellId: 0

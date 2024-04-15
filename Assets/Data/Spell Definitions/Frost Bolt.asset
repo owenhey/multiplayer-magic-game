@@ -35,3 +35,7 @@ MonoBehaviour:
     Value: 0.5
   - Key: fire_delay
     Value: 0.5
+  - Key: slow_amount
+    Value: 0.75
+  - Key: slow_duration
+    Value: 0.5

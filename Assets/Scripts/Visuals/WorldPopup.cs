@@ -43,7 +43,6 @@ namespace Visuals {
         }
 
         private void Release() {
-            Debug.Log($"Releasing!!");
             _callback?.Invoke(this);
         }
     }

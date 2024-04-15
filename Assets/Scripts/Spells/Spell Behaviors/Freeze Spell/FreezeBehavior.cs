@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using Core.Damage;
 using DG.Tweening;
+using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Helpers;
@@ -21,12 +23,23 @@ namespace Spells {
         [SerializeField] private DecalProjector _decalProjector;
         [SerializeField] private AudioSource _spawnSound;
         [SerializeField] private AudioSource _explosionSound;
+        [SerializeField] private TriggerListener _trigger;
 
         [SyncVar] [ReadOnly]
         private SpawnablePrefabInitData _initData;
+
+        private int _randomInt;
+        private static int _randomIntCounter;
+
+        private List<IDamagable> _affectedDamagables = new();
         
         public void SetInitData(SpawnablePrefabInitData data) {
             _initData = data;
+        }
+
+        private void Awake() {
+            if(InstanceFinder.IsServer)
+                SetupTrigger();
         }
 
         public override void OnStartNetwork() {
@@ -35,7 +48,7 @@ namespace Spells {
             ClientEnableObject();
             Begin();
         }
-
+        
         public void ClientEnableObject() {
             _contentTransform.gameObject.SetActive(true);
         }
@@ -46,22 +59,49 @@ namespace Spells {
             _contentTransform.rotation = _initData.Rotation;
         }
 
+        private void SetupTrigger() {
+            _randomInt = ++_randomIntCounter;
+            _trigger.OnEnter += HandlePlayerEnter;
+            _trigger.OnExit += HandlePlayerExit;
+        }
+
+        private void HandlePlayerEnter(Collider c) {
+            if (c.TryGetComponent(out DamagableCollider dc)) {
+                StatusEffect effect = new(
+                    $"freeze_spell_{_randomInt}",
+                    StatusType.SpeedMultiplier,
+                    _initData.SpellDefinition.GetAttributeValue("slow_amount"),
+                    10.0f
+                );
+                dc.Damagable.Statusable.ServerAddStatus(effect);
+                _affectedDamagables.Add(dc.Damagable);
+            }
+        }
+
+        private void HandlePlayerExit(Collider c) {
+            if (c.TryGetComponent(out DamagableCollider dc)) {
+                dc.Damagable.Statusable.ServerRemoveStatus($"freeze_spell_{_randomInt}");
+                _affectedDamagables.Remove(dc.Damagable);
+            }
+        }
+
         private void Begin() {
             DOTween.To(()=> _decalProjector.fadeFactor, x=> _decalProjector.fadeFactor = x, 1.0f, .15f).From(0);
             _spawnSound.Play();
             float spellDelay = _initData.SpellDefinition.GetAttributeValue("spell_delay");
             _contentTransform.DOScale(Vector3.one, spellDelay).OnComplete(() => {
                 if (IsClient) {
-                    ClientFreeze();
+                    // ClientFreeze();
+                    ClientFadeOut();
+                }
+                
+                if (IsServer) {
+                    // FreezeInArea();
                 }
                 if (IsServer) {
-                    FreezeInArea();
+                    _contentTransform.DOScale(Vector3.one, _initData.SpellDefinition.GetAttributeValue("duration"))
+                    .OnComplete(DespawnObject);
                 }
-                _contentTransform.DOScale(Vector3.one, 3.0f).OnComplete(() => {
-                    if (IsServer) {
-                        DespawnObject();
-                    }
-                });
             });
         }
 
@@ -80,7 +120,18 @@ namespace Spells {
 
         private void DespawnObject() {
             // Only on server
+            foreach (var damagable in _affectedDamagables) {
+                if(damagable == null) continue;
+                damagable.Statusable.ServerRemoveStatus($"freeze_spell_{_randomInt}");
+            }
             Despawn(gameObject);
+        }
+        
+        private void ClientFadeOut() {
+            _contentTransform.DOScale(Vector3.one, _initData.SpellDefinition.GetAttributeValue("duration") - .5f).OnComplete(() => {
+                _smallIceEffect.Stop();
+                DOTween.To(() => _decalProjector.fadeFactor, x => _decalProjector.fadeFactor = x, 0, .45f);
+            });
         }
 
         private void ClientFreeze() {

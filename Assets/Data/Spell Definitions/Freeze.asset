@@ -15,6 +15,7 @@ MonoBehaviour:
   EffectId: Freeze
   SpellId: 7
   SpellName: Freeze
+  SpellDescription: 
   SpellCooldown: 8
   SpellIcon: {fileID: 21300000, guid: 2c1d799f1f10142dd96f918c50723688, type: 3}
   Drawing: {fileID: 11400000, guid: 44a364019bd3e5a40a8089d8c54f3b5d, type: 2}
@@ -29,3 +30,7 @@ MonoBehaviour:
     Value: 15
   - Key: spell_delay
     Value: 0.8
+  - Key: slow_amount
+    Value: 0.75
+  - Key: duration
+    Value: 3
