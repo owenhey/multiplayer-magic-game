@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Core.Damage {
     public enum StatusType {
         Stunned,
-        SpeedMultiplier
+        SpeedMultiplier,
     }
     
     public struct StatusesData {

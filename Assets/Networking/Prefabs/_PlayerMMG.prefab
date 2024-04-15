@@ -13054,7 +13054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be2d6d52cf143d040929aac0606574bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 5
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _player: {fileID: 8286632864543236906}
@@ -13171,7 +13171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 6
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _componentConfiguration: 0
@@ -13576,6 +13576,7 @@ MonoBehaviour:
   - {fileID: 6230999115221547090}
   - {fileID: 5901419383538486834}
   - {fileID: 309360326368588270}
+  - {fileID: 5263552798779682608}
   - {fileID: 6707716053342808154}
   - {fileID: 6749459404671944547}
   - {fileID: 6141569519624676420}
@@ -13691,6 +13692,9 @@ MonoBehaviour:
       type: 3}
   - _type: 5
     _prefab: {fileID: 5569929556040501193, guid: cd5649472a658374eb8a4f212f2a88f9,
+      type: 3}
+  - _type: 6
+    _prefab: {fileID: 5569929556040501193, guid: 19854bc6d971022479ea0d63986fa6e9,
       type: 3}
 --- !u!114 &5901419383538486834
 MonoBehaviour:
@@ -13823,9 +13827,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4f925d0258b0694784aa9bb2af2cf65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 3726133492282219349}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 3726133492282219349}
   _timer: {fileID: 8609868443885424695}
   _statusPopupPosition: {fileID: 1121620960597859775}
   <StatusList>k__BackingField: []
@@ -16371,7 +16375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aedf3ecd732425286db7e73366165cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 7
+  _componentIndexCache: 8
   _addedNetworkObject: {fileID: 3726133492282219349}
   _networkObjectCache: {fileID: 3726133492282219349}
   _targetableId: 0
