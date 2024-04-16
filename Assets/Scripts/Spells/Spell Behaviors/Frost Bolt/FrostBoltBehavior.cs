@@ -41,7 +41,7 @@ namespace Spells {
             if (c.CompareTag("Shield")) {
                 // Make sure it's not my own shield
                 if (c.GetComponentInParent<Player>().OwnerId != _initData.CasterId) {
-                    ServerOnContact(false);
+                    ServerOnContact(false, true);
                     c.GetComponentInParent<Player>().PlayerReferences.PlayerModel.ServerDisableShield(true);
                     return;
                 }
@@ -53,7 +53,7 @@ namespace Spells {
             // Check to make sure it isn't the casting player
             if (c.TryGetComponent(out DamagableCollider damagable)) {
                 if (damagable.Damagable == _target.Damagable) {
-                    ServerOnContact(true);
+                    ServerOnContact(true, true);
                     return;
                 }
 
@@ -62,7 +62,7 @@ namespace Spells {
             
             
             // Otherwise, hit a wall
-            ServerOnContact(false);
+            ServerOnContact(true, false);
         }
 
         private void Update() {
@@ -115,8 +115,8 @@ namespace Spells {
         }
 
         [Server]
-        private void ServerOnContact(bool explode) {
-            if (explode) {
+        private void ServerOnContact(bool explode, bool dealDamage) {
+            if (dealDamage) {
                 int damage = (int)_initData.SpellDefinition.GetAttributeValue("damage");
                 float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
                 Vector3 knockbackDirection = _direction;
