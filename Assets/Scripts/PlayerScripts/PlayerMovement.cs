@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using DG.Tweening;
 using FishNet.Object;
+using Helpers;
 using TMPro;
 using UnityEngine.Serialization;
 
@@ -20,6 +21,7 @@ namespace PlayerScripts {
             [SerializeField] private float _sprintSpeed = 6;
             [Tooltip("Based on the dot between the forward vector and the desired direction, what percentage of the max speed you get.")]
             [SerializeField] private AnimationCurve _forwardMovementSpeedFactor;
+            [SerializeField] private AnimationCurve _turnSpeedFactor;
             [SerializeField] private float _rotateSpeed = 360;
 
         [Header("Refs")]
@@ -183,7 +185,11 @@ namespace PlayerScripts {
             if(targetLookDirection == Vector3.zero) return;
             // Slowly turn towards the target look direction
             Quaternion targetRot = Quaternion.LookRotation(targetLookDirection);
-            Quaternion newRotation = Quaternion.RotateTowards(_ccTrans.rotation, targetRot, _rotateSpeed * Time.deltaTime);
+            var anglesBetween = Quaternion.Angle(targetRot, _ccTrans.rotation);
+            // float rotateSpeed = Misc.Remap(anglesBetween, 0, 180, .25f, 1.0f) * _rotateSpeed;
+            float rotateSpeed = _turnSpeedFactor.Evaluate(anglesBetween / 180.0f) * _rotateSpeed;
+            // Compare how 
+            Quaternion newRotation = Quaternion.RotateTowards(_ccTrans.rotation, targetRot, rotateSpeed * Time.deltaTime);
             
             _ccTrans.rotation = newRotation;
         }
