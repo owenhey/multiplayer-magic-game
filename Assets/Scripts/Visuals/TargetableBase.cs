@@ -34,7 +34,7 @@ namespace Visuals {
             base.OnStopNetwork();
             Unregister();
         }
-
+        
         public abstract bool IsValidTarget(Teams clientTeam, TargetTypes targetTypes);
         
         public abstract void SetSelected(bool selected);

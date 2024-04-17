@@ -5,9 +5,20 @@ using Visuals;
 namespace PlayerScripts {
     public class PlayerLockOn : LocalPlayerScript {
         [SerializeField] private LayerMask _targetableLayerMask;
-        [SerializeField] private GameObject _lockedOnIndicator;
+
+        private GameObject __lockedOnIndicator;
+        private GameObject _lockedOnIndicator {
+            get {
+                if (__lockedOnIndicator == null) {
+                    __lockedOnIndicator = Instantiate(_lockedOnIndicatorPrefab, transform);
+                }
+                return __lockedOnIndicator;
+            }
+        }
+
+        [SerializeField] private GameObject _lockedOnIndicatorPrefab;
         
-        public TargetableBase LockOn;
+        [ReadOnly] public TargetableBase LockOn;
 
         private void Update() {
             if (Clicking()) {

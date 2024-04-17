@@ -548,7 +548,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 869374898289095817}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Frost Bolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -583,7 +583,7 @@ GameObject:
   - component: {fileID: 8147554707289104848}
   - component: {fileID: 4759092375377271367}
   - component: {fileID: 657778676047679277}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

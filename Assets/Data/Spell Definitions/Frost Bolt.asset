@@ -21,7 +21,7 @@ MonoBehaviour:
   SpellIcon: {fileID: 0}
   Drawing: {fileID: 11400000, guid: 9624a93169fc16948a5b8c0c6d1793fc, type: 2}
   IndicatorData: {fileID: 11400000, guid: 3a662937262364a41820f4f7295d2eaa, type: 2}
-  TargetTypes: 4
+  TargetTypes: 12
   SpellPrefab: {fileID: 5569929556040501193, guid: 19854bc6d971022479ea0d63986fa6e9,
     type: 3}
   SpellAttributes:
@@ -34,7 +34,7 @@ MonoBehaviour:
   - Key: distance_in_front
     Value: 0.5
   - Key: fire_delay
-    Value: 0.5
+    Value: 0.75
   - Key: slow_amount
     Value: 0.75
   - Key: slow_duration

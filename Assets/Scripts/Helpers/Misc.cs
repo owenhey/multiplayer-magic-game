@@ -57,5 +57,9 @@ namespace Helpers {
                 action(transform.GetChild(i));
             }
         }
+
+        public static PlayerScripts.Player GetPlayerFromClientId(this int id) {
+            return PlayerScripts.Player.GetPlayerFromClientId(id);
+        }
     }
 }

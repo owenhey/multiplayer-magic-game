@@ -13,6 +13,8 @@ namespace Core.Damage {
         Teams GetTeam();
         Transform GetTransform();
         IStatusable Statusable { get; }
+        System.Action OnDeathServer { get; set; }
+        string GetName();
     }
 
     public static class DamageableLayerMask {

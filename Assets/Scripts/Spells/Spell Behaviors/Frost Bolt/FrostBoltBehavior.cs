@@ -1,5 +1,6 @@
 using Core;
 using Core.Damage;
+using Core.TeamScripts;
 using DG.Tweening;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -52,8 +53,9 @@ namespace Spells {
             }
             // Check to make sure it isn't the casting player
             if (c.TryGetComponent(out DamagableCollider damagable)) {
-                if (damagable.Damagable == _target.Damagable) {
-                    ServerOnContact(true, true);
+                Teams castingTeam = _initData.CasterId.GetPlayerFromClientId().PlayerTeam;
+                if (damagable.Damagable.CanDamage(castingTeam, _initData.SpellDefinition.TargetTypes)) {
+                    ServerOnContact(true, true, damagable.Damagable);
                     return;
                 }
 
@@ -115,19 +117,19 @@ namespace Spells {
         }
 
         [Server]
-        private void ServerOnContact(bool explode, bool dealDamage) {
+        private void ServerOnContact(bool explode, bool dealDamage, IDamagable target = null) {
             if (dealDamage) {
                 int damage = (int)_initData.SpellDefinition.GetAttributeValue("damage");
                 float knockback = _initData.SpellDefinition.GetAttributeValue("knockback");
                 Vector3 knockbackDirection = _direction;
-                _target.Damagable.TakeDamageAndKnockback(damage, knockback * knockbackDirection);
+                target.TakeDamageAndKnockback(damage, knockback * knockbackDirection);
                 StatusEffect effect = new(
                     "frost bolt",
                     StatusType.SpeedMultiplier,
                     _initData.SpellDefinition.GetAttributeValue("slow_amount"),
                     _initData.SpellDefinition.GetAttributeValue("slow_duration")
                 );
-                _target.Damagable.Statusable.ServerAddStatus(effect);
+                target.Statusable.ServerAddStatus(effect);
                 _projectile.SetActive(false);
             }
 

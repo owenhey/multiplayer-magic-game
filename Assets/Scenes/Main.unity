@@ -2299,6 +2299,7 @@ MonoBehaviour:
   _statusable: {fileID: 634224140}
   _currentHealth: 0
   _transform: {fileID: 634224137}
+  _name: Targetable Barrel
 --- !u!114 &634224140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5472,7 +5473,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.75
+  m_Radius: 0.54
   m_Height: 1.5503854
   m_Direction: 1
   m_Center: {x: 0, y: 0.7358466, z: 0}
@@ -6417,6 +6418,7 @@ MonoBehaviour:
   _statusable: {fileID: 1662500795}
   _currentHealth: 0
   _transform: {fileID: 1662500791}
+  _name: Damagable Barrel
 --- !u!114 &1662500794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8735,7 +8737,7 @@ GameObject:
   - component: {fileID: 2026575113}
   - component: {fileID: 2026575111}
   - component: {fileID: 2026575112}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9201,7 +9203,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.75
+  m_Radius: 0.53
   m_Height: 1.5503854
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -9554,7 +9556,7 @@ GameObject:
   - component: {fileID: 7166016218324072282}
   - component: {fileID: 7157977988931659432}
   - component: {fileID: 7166016218324072283}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

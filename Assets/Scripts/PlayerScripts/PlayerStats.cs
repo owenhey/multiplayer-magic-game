@@ -24,6 +24,9 @@ namespace PlayerScripts {
         public System.Action OnServerPlayerSpawn;
         public System.Action OnClientPlayerSpawn;
         public IStatusable Statusable => _basicStatusHandler;
+        public string GetName() => _player.PlayerName;
+
+        public System.Action OnDeathServer { get; set; }
         
         protected override void OnClientStart(bool isOwner) {
             base.OnClientStart(isOwner);

@@ -18,6 +18,11 @@ namespace Core.Damage {
         [ReadOnly] private int _currentHealth;
 
         [SerializeField] private Transform _transform;
+
+        [SerializeField] private string _name;
+        public string GetName() => _name;
+        
+        public System.Action OnDeathServer { get; set; }
         
         public IStatusable Statusable {
             get {
@@ -73,6 +78,7 @@ namespace Core.Damage {
         }
 
         protected virtual void ServerOnDeath() {
+            OnDeathServer?.Invoke();
             // Base thing just despawns it
             Despawn(gameObject, DespawnType.Destroy);
         }

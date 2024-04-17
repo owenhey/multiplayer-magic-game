@@ -21,9 +21,13 @@ MonoBehaviour:
   SpellIcon: {fileID: 0}
   Drawing: {fileID: 11400000, guid: dbc9f9af2a16c694d8284ad849a60085, type: 2}
   IndicatorData: {fileID: 11400000, guid: fcb1930f304eca34e8be4d3c225ed9fd, type: 2}
-  TargetTypes: 0
+  TargetTypes: 12
   SpellPrefab: {fileID: 2376978816892767402, guid: e99ef254384d1c4489469d319229022f,
     type: 3}
   SpellAttributes:
   - Key: duration
-    Value: 5
+    Value: 10
+  - Key: freeze_duration
+    Value: 2
+  - Key: radius
+    Value: 2
