@@ -13648,6 +13648,9 @@ MonoBehaviour:
   - _type: 7
     _prefab: {fileID: 2376978816892767402, guid: e99ef254384d1c4489469d319229022f,
       type: 3}
+  - _type: 8
+    _prefab: {fileID: 2376978816892767402, guid: 07adde85d8879084f8160c5ece2bf691,
+      type: 3}
 --- !u!114 &5901419383538486834
 MonoBehaviour:
   m_ObjectHideFlags: 0

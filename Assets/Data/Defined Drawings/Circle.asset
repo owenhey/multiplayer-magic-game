@@ -10,34 +10,40 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f37f03dec991b624687a900c30947a94, type: 3}
-  m_Name: Fourway
+  m_Name: Circle
   m_EditorClassIdentifier: 
   Points:
-  - X: 0
+  - X: 0.5
     Y: 1
+    time: 0
+  - X: 0.15
+    Y: 0.85
     time: 0
   - X: 0
     Y: 0.5
-    time: 0.142
-  - X: 0
-    Y: 0
-    time: 0.3333
+    time: 0
+  - X: 0.15
+    Y: 0.15
+    time: 0
   - X: 0.5
-    Y: 0.5
-    time: 0.5
-  - X: 1
-    Y: 1
-    time: 0.6666
-  - X: 1
-    Y: 0.5
-    time: 0.75
-  - X: 1
     Y: 0
-    time: 1
-  TotalDistance: 1.3656855
-  CalculatedDistance: 3.4142137
-  TimeTarget: 0.3
+    time: 0
+  - X: 0.85
+    Y: 0.15
+    time: 0
+  - X: 1
+    Y: 0.5
+    time: 0
+  - X: 0.85
+    Y: 0.85
+    time: 0
+  - X: 0.5
+    Y: 1
+    time: 0
+  TotalDistance: 0
+  CalculatedDistance: 3.0463092
+  TimeTarget: 0
   PerfectScoreThreshold: 0.1
-  FailCastThreshold: 0.18
-  HelperImage: {fileID: 21300000, guid: dc71c0e33b3a94343acfb604d31f3abc, type: 3}
+  FailCastThreshold: 0.2
+  HelperImage: {fileID: 0}
   TargetAspectRatio: 1

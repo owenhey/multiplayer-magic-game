@@ -25,7 +25,7 @@ MonoBehaviour:
     type: 3}
   SpellAttributes:
   - Key: radius
-    Value: 2
+    Value: 3
   - Key: max_distance
     Value: 15
   - Key: spell_delay

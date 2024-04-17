@@ -22,4 +22,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   MinimumRange: 0
-  Size: {x: 2, y: 2, z: 2}
+  Size: {x: 3, y: 2, z: 3}

@@ -89,7 +89,11 @@ namespace Spells {
             DOTween.To(()=> _decalProjector.fadeFactor, x=> _decalProjector.fadeFactor = x, 1.0f, .15f).From(0);
             _spawnSound.Play();
             float spellDelay = _initData.SpellDefinition.GetAttributeValue("spell_delay");
-            _contentTransform.DOScale(Vector3.one, spellDelay).OnComplete(() => {
+            
+            float radius = _initData.SpellDefinition.GetAttributeValue("radius");
+            _decalProjector.size = new Vector3(radius * 2.5f, radius * 2.5f, 1.0f);
+            Vector3 size = Vector3.one * (radius / 2.0f);
+            _contentTransform.DOScale(size, spellDelay).OnComplete(() => {
                 if (IsClient) {
                     // ClientFreeze();
                     ClientFadeOut();
@@ -99,7 +103,7 @@ namespace Spells {
                     // FreezeInArea();
                 }
                 if (IsServer) {
-                    _contentTransform.DOScale(Vector3.one, _initData.SpellDefinition.GetAttributeValue("duration"))
+                    _contentTransform.DOScale(size, _initData.SpellDefinition.GetAttributeValue("duration"))
                     .OnComplete(DespawnObject);
                 }
             });

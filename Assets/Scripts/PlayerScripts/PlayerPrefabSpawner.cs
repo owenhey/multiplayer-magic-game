@@ -16,7 +16,8 @@ namespace PlayerScripts {
         ChaosBolt,
         Lightning,
         FrostBolt,
-        FrozenWall
+        FrozenWall,
+        FrostBurst
     }
     
     public class PlayerPrefabSpawner : NetworkedPlayerScript {

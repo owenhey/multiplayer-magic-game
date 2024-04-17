@@ -32,8 +32,8 @@ public class DefinedDrawing : ScriptableObject
     [ReadOnly] public float CalculatedDistance;
     [Range(0, 2)] public float TimeTarget;
 
-    [Range(0,1f)] public float PerfectScoreThreshold = .05f;
-    [Range(0, 1f)] public float FailCastThreshold = .25f;
+    [Range(0,1f)] public float PerfectScoreThreshold = .1f;
+    [Range(0, 1f)] public float FailCastThreshold = .2f;
 
     [Space(20)] 
     public Sprite HelperImage;
