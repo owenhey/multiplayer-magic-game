@@ -26,7 +26,7 @@ namespace Visuals {
         public void InitBang(Vector3 position, float duration) {
             InitMaterial();
             transform.position = position;
-            
+            transform.localScale = new Vector3(5, 1, 5);
             
             float halfDuration = duration * .5f;
             _mat.DOFloat(1.0f, "_TopToBottomFade", duration).From(0);
