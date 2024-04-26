@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 7981944442084265869}
   - component: {fileID: 444937418717467440}
   - component: {fileID: 6334776059807724116}
+  - component: {fileID: 6569162159265709915}
   m_Layer: 0
   m_Name: Single Lightning
   m_TagString: Untagged
@@ -146,3 +147,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lightningMaterial: {fileID: 2100000, guid: ece6b7835d4205a478f0f234e0385b8e, type: 2}
   _mesh: {fileID: 4256885649619128572}
+  _timer: {fileID: 6569162159265709915}
+  _smallColor: {r: 0.8784317, g: 10.623875, b: 23.968628, a: 0}
+  _blastColor: {r: 3.5137267, g: 42.4955, b: 95.87451, a: 0}
+--- !u!114 &6569162159265709915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6069648467627440035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3a554ed950441f58db41d146d2be362, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activeTimers: []

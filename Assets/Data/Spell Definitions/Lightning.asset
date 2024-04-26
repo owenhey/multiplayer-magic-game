@@ -15,6 +15,7 @@ MonoBehaviour:
   EffectId: Lightning
   SpellId: 10
   SpellName: Lightning
+  SpellDescription: 
   SpellCooldown: 1
   SpellIcon: {fileID: 21300000, guid: b0e3851cadd1c0847bdf97afd3ab6be7, type: 3}
   Drawing: {fileID: 11400000, guid: 45030e23a7aa7df4283538a8710fcbe9, type: 2}
@@ -22,4 +23,12 @@ MonoBehaviour:
   TargetTypes: 4
   SpellPrefab: {fileID: 5569929556040501193, guid: cd5649472a658374eb8a4f212f2a88f9,
     type: 3}
-  SpellAttributes: []
+  SpellAttributes:
+  - Key: damage
+    Value: 100
+  - Key: radius
+    Value: 1
+  - Key: delay
+    Value: 1
+  - Key: knockback
+    Value: 20
